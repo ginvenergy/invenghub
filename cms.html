@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMS | Plataforma de Engenharia</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+:root{
+  --navy:#1a3c5e;--navy-deep:#0d1f30;--green:#78BE20;--green-dark:#5f9a17;
+  --orange:#F07E1A;--red:#C0392B;--amber:#B7791F;--blue:#1a5490;
+  --ess:#2196B4;--aur:#E6007E;
+  --border:#d8e3ee;--bg:#eef2f7;--card:#fff;--text:#1a2b3c;--muted:#607d8b;--muted-light:#8fa6b5;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font-family:inherit}
+
+.topbar{background:var(--navy);padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.tl{display:flex;align-items:center;gap:16px}
+.topbar-logo{height:27px;display:block}
+.tdiv{width:1px;height:22px;background:rgba(255,255,255,.25)}
+.ttitle{color:#fff;font-size:13.5px;font-weight:600}
+.ttitle span{color:var(--green);font-weight:700}
+.tr{display:flex;gap:10px}
+.tb{display:flex;align-items:center;gap:7px;color:rgba(255,255,255,.85);font-size:12.5px;font-weight:600;text-decoration:none;padding:7px 14px;border-radius:6px;border:1px solid rgba(255,255,255,.22);background:transparent;cursor:pointer}
+.tb:hover{background:rgba(255,255,255,.12);color:#fff}
+.tb.pri{background:var(--green);border-color:var(--green);color:#fff}
+.tb.pri:hover{background:var(--green-dark)}
+.tb:disabled{opacity:.45;cursor:not-allowed}
+
+.hero{position:relative;background:linear-gradient(135deg,var(--navy-deep) 0%,var(--navy) 62%,#24557f 100%);padding:26px 28px 0;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:52px 52px}
+.hero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--green) 0%,var(--green) 55%,var(--orange) 55%,var(--orange) 100%);z-index:4}
+.hin{position:relative;max-width:1320px;margin:0 auto;z-index:2}
+.bc{font-size:11px;color:rgba(255,255,255,.45);margin-bottom:11px;display:flex;gap:7px}
+.bc a{color:rgba(255,255,255,.62);text-decoration:none}
+.bc .cur{color:var(--green);font-weight:600}
+.hrow{display:flex;align-items:flex-end;justify-content:space-between;gap:22px;flex-wrap:wrap}
+.hero h1{color:#fff;font-size:25px;font-weight:800;letter-spacing:-.4px}
+.hero h1 em{font-style:normal;color:var(--green)}
+.hsub{color:rgba(255,255,255,.6);font-size:12.5px;margin-top:7px;font-weight:300}
+.hbox{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:9px;padding:10px 16px;color:rgba(255,255,255,.62);font-size:11px;line-height:1.6}
+.hbox b{color:#fff;font-weight:700}
+
+.kpis{position:relative;z-index:3;max-width:1320px;margin:22px auto 0;display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.kpi{background:rgba(255,255,255,.96);border-radius:10px 10px 0 0;padding:13px 15px 15px;position:relative;overflow:hidden;cursor:pointer;border:none;text-align:left;transition:background .15s}
+.kpi:hover{background:#fff}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--k,var(--muted-light))}
+.kl{font-size:9px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.kv{font-size:26px;font-weight:800;color:var(--navy);line-height:1;letter-spacing:-1px}
+.kv small{font-size:12px;font-weight:600;color:var(--muted);margin-left:3px;letter-spacing:0}
+.ks{font-size:10.5px;color:var(--muted-light);margin-top:6px;font-weight:500;line-height:1.4}
+.ks b{color:var(--muted);font-weight:700}
+
+.main{max-width:1320px;margin:0 auto;padding:28px 28px 70px}
+.sec{margin-bottom:30px}
+.sh{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:14px}
+.sh h2{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;color:var(--navy);display:flex;align-items:center;gap:10px}
+.sh h2::before{content:'';width:4px;height:15px;border-radius:2px;background:linear-gradient(180deg,var(--green) 55%,var(--orange) 55%)}
+.sh p{font-size:12px;color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:11px;box-shadow:0 1px 3px rgba(26,60,94,.05)}
+
+.vazio{padding:48px 30px;text-align:center}
+.vazio h3{font-size:18px;color:var(--navy);margin-bottom:8px}
+.vazio p{font-size:13px;color:var(--muted);line-height:1.6;max-width:560px;margin:0 auto 18px}
+
+.vd{border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:12.5px;line-height:1.55;display:flex;gap:11px;align-items:flex-start}
+.vd svg{flex-shrink:0;margin-top:2px}
+.vd-ok{background:#f0f8e8;border:1px solid #cfe7a8;color:#3f6b10}
+.vd-warn{background:#fff8e6;border:1px solid #f3d99b;color:#7a5600}
+.vd-warn svg{color:var(--amber)}
+.vd b{font-weight:700}
+.vd-t{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%}
+.vd-btn{background:transparent;border:1px solid currentColor;color:inherit;font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;cursor:pointer;opacity:.8;white-space:nowrap}
+.vd-btn:hover{opacity:1}
+.vd ul{margin:8px 0 0;padding-left:16px;display:none}
+.vd.open ul{display:block}
+.vd li{margin-bottom:4px}
+.lnk{color:inherit;font-weight:700;text-decoration:underline;cursor:pointer}
+
+/* movimentação */
+.mv{overflow:hidden}
+.mv-k{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--border)}
+.mvk{padding:14px 16px;border:none;border-right:1px solid var(--border);background:#fff;text-align:left;cursor:pointer;position:relative;transition:background .15s}
+.mvk:last-child{border-right:none}
+.mvk:hover{background:#f7fbff}
+.mvk.on{background:#eef4fa}
+.mvk.on::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--mc)}
+.mvk .l{font-size:9.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:6px}
+.mvk .l i{width:8px;height:8px;border-radius:50%;background:var(--mc);display:block}
+.mvk .v{font-size:24px;font-weight:800;color:var(--navy);margin-top:6px;letter-spacing:-.8px}
+.mvk .s{font-size:10.5px;color:var(--muted-light);margin-top:3px}
+.mv-t{max-height:320px;overflow:auto}
+.mv-t table{width:100%;border-collapse:collapse;min-width:820px}
+.mv-t th{position:sticky;top:0;background:#f7fafd;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);text-align:left;padding:9px 12px;border-bottom:1px solid var(--border)}
+.mv-t td{padding:9px 12px;font-size:12px;border-bottom:1px solid #f0f5f9;vertical-align:middle}
+.mv-t tr[data-i]{cursor:pointer}
+.mv-t tr[data-i]:hover{background:#f7fbff}
+.mt{display:inline-block;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:3px 8px;border-radius:4px;white-space:nowrap}
+.mt-n{background:#e8f6dc;color:#3f6b10}
+.mt-e{background:#eef2f7;color:#4a6880}
+.mt-u{background:#fde8e8;color:#a32020}
+.mt-d{background:#e5f0fb;color:var(--blue)}
+.mt-a{background:#fff3d6;color:#8a6200}
+.mv-v{padding:22px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.6}
+
+/* parques */
+.pk{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.pc{padding:15px 16px;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s}
+.pc:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(26,60,94,.1)}
+.pc.on{border-color:var(--navy);box-shadow:0 0 0 2px var(--navy) inset}
+.pc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.pc.ess::before{background:var(--ess)}
+.pc.aur::before{background:var(--aur)}
+.pc-c{font-size:8.5px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;margin-bottom:5px}
+.pc.ess .pc-c{color:#126A82}
+.pc.aur .pc-c{color:#A30059}
+.pc-n{font-size:14px;font-weight:800;color:var(--navy)}
+.pc-big{display:flex;align-items:baseline;gap:6px;margin:10px 0 8px}
+.pc-big b{font-size:26px;font-weight:800;color:var(--navy);letter-spacing:-1px;line-height:1}
+.pc-big span{font-size:11px;color:var(--muted);font-weight:600}
+.pc-bar{display:flex;height:6px;border-radius:3px;overflow:hidden;background:#eef2f7;margin-bottom:10px}
+.pc-bar i{display:block;height:100%}
+.pc-row{display:grid;grid-template-columns:1fr 1fr;gap:5px 10px;font-size:11px;color:var(--muted)}
+.pc-row b{color:var(--text);font-weight:700}
+.pc-row .r{color:var(--red)}
+
+.two{display:grid;grid-template-columns:1.35fr 1fr;gap:16px}
+.mx{padding:18px 20px;overflow-x:auto}
+.mx table{width:100%;border-collapse:separate;border-spacing:3px;min-width:560px}
+.mx th{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);padding:4px 6px;text-align:center}
+.mx th.l{text-align:left}
+.mx td{text-align:center;font-size:12.5px;font-weight:700;padding:8px 4px;border-radius:5px;cursor:pointer;transition:transform .1s}
+.mx td.l{text-align:left;font-weight:600;color:var(--text);background:transparent;cursor:default;font-size:12px;padding-left:2px;white-space:nowrap}
+.mx td.z{color:#c9d4de;background:#f7fafd;cursor:default;font-weight:500}
+.mx td.c:hover{transform:scale(1.06)}
+.mx td.tot{background:#eef2f7;color:var(--navy);cursor:default}
+.mx tr.ft td{background:#eef2f7;color:var(--navy);cursor:default}
+.cap{font-size:11px;color:var(--muted-light);margin-top:10px;line-height:1.5}
+
+.ag{padding:18px 20px}
+.agr{display:flex;align-items:center;gap:10px;margin-bottom:11px;cursor:pointer}
+.agl{width:78px;font-size:11.5px;font-weight:600;color:var(--muted);flex-shrink:0}
+.agb{flex:1;display:flex;height:22px;border-radius:5px;overflow:hidden;background:#f3f6f9}
+.agb i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10.5px;font-weight:700;color:#fff;min-width:0}
+.agn{width:34px;text-align:right;font-size:12.5px;font-weight:800;color:var(--navy)}
+.leg{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px}
+.leg span{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);font-weight:600}
+.leg i{width:11px;height:11px;border-radius:3px;display:block}
+
+.flt{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.seg{display:flex;background:#f0f4f8;padding:3px;border-radius:7px}
+.seg button{border:none;background:transparent;font-size:11.5px;font-weight:600;color:var(--muted);padding:6px 12px;border-radius:5px;cursor:pointer;white-space:nowrap}
+.seg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(26,60,94,.12)}
+.sel{border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:12px;color:var(--text);background:#fff;cursor:pointer}
+.src{flex:1;min-width:180px;border:1px solid var(--border);border-radius:7px;padding:7px 11px 7px 32px;font-size:12.5px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238fa6b5' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 10px center}
+.src:focus,.sel:focus,.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(120,190,32,.15)}
+.chips{padding:10px 16px 0;display:flex;gap:7px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;background:#e8eff6;color:var(--navy);font-size:11px;font-weight:600;padding:4px 6px 4px 10px;border-radius:14px}
+.chip button{border:none;background:rgba(26,60,94,.12);color:var(--navy);width:16px;height:16px;border-radius:50%;cursor:pointer;font-size:10px;line-height:1}
+.cnt{padding:10px 16px;font-size:11.5px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.cnt b{color:var(--navy)}
+.btn{font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:#f4f8fc;color:var(--text)}
+.tw{overflow-x:auto;max-height:680px;overflow-y:auto}
+table.t{width:100%;border-collapse:collapse;min-width:1180px}
+.t th{position:sticky;top:0;z-index:2;background:#f7fafd;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none}
+.t th:hover{color:var(--navy)}
+.t th.s::after{content:' ▾';color:var(--navy)}
+.t th.s.asc::after{content:' ▴'}
+.t td{padding:10px 12px;font-size:12px;border-bottom:1px solid #f0f5f9;vertical-align:middle}
+.t tbody tr{cursor:pointer}
+.t tbody tr:hover{background:#f7fbff}
+.t tbody tr.ins td{color:var(--muted)}
+.w{font-weight:800;color:var(--navy);white-space:nowrap}
+.ttl{font-weight:600;color:var(--text);max-width:260px}
+.sub{font-size:10.5px;color:var(--muted-light);margin-top:2px;font-weight:500}
+.pp{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:22px;border-radius:5px;font-size:11px;font-weight:800;color:#fff;padding:0 6px}
+.pv{display:block;font-size:9.5px;font-weight:700;margin-top:3px;white-space:nowrap}
+.pv.up{color:var(--red)}.pv.down{color:var(--blue)}
+.nb{display:inline-block;font-size:8.5px;font-weight:800;letter-spacing:.5px;background:#e8f6dc;color:#3f6b10;padding:2px 6px;border-radius:4px;margin-left:6px;vertical-align:middle}
+.nb.a{background:#fff3d6;color:#8a6200}
+.ev{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 7px;border-radius:4px;white-space:nowrap}
+.ev-a{background:#fdecea;color:var(--red)}
+.ev-w{background:#fff3d6;color:#8a6200}
+.ev-i{background:#e5f0fb;color:var(--blue)}
+.ev-x{background:#eef2f7;color:var(--muted)}
+.age{font-weight:800;white-space:nowrap}
+.a1{color:var(--muted)}.a2{color:var(--amber)}.a3{color:var(--orange)}.a4{color:var(--red)}
+.dl{white-space:nowrap;font-size:11.5px;font-weight:700}
+.dl.ven{color:var(--red)}.dl.pro{color:var(--orange)}.dl.ok{color:var(--green-dark)}.dl.na{color:var(--muted-light);font-weight:500}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--muted);white-space:nowrap}
+.flag{color:var(--amber);font-weight:800;margin-left:4px}
+.empty{padding:40px;text-align:center;color:var(--muted-light);font-size:13px}
+
+.pr{padding:16px 20px;display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.pri{border:1px solid var(--border);border-radius:8px;padding:10px 11px;background:#f7fafd}
+.pri-h{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.pri-t{font-size:11.5px;font-weight:700;color:var(--navy);line-height:1.3}
+.pri-s{font-size:10.5px;color:var(--muted);line-height:1.45}
+.pri-s b{color:var(--text)}
+
+.bd{position:fixed;inset:0;background:rgba(13,31,48,.5);display:none;z-index:9990}
+.bd.on{display:block}
+.dw{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:#fff;z-index:9991;transform:translateX(100%);transition:transform .22s ease;display:flex;flex-direction:column;box-shadow:-10px 0 40px rgba(0,0,0,.2)}
+.dw.on{transform:none}
+.dw-h{background:linear-gradient(135deg,var(--navy-deep),var(--navy));padding:20px 24px;position:relative;flex-shrink:0}
+.dw-h::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--green)}
+.dw-x{position:absolute;top:16px;right:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;width:28px;height:28px;border-radius:6px;cursor:pointer}
+.dw-e{font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:6px}
+.dw-t{color:#fff;font-size:20px;font-weight:800;letter-spacing:-.3px}
+.dw-s{color:rgba(255,255,255,.7);font-size:13px;margin-top:4px;padding-right:30px}
+.dw-b{padding:20px 24px;overflow-y:auto;flex:1}
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px}
+.dgi{background:#f7fafd;border:1px solid var(--border);border-radius:7px;padding:9px 12px}
+.dgl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted-light);margin-bottom:4px}
+.dgv{font-size:13px;font-weight:700;color:var(--navy)}
+.dh{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin:18px 0 9px;display:flex;align-items:center;gap:8px}
+.dh::before{content:'';width:3px;height:12px;border-radius:2px;background:var(--orange)}
+.dtx{font-size:12.5px;line-height:1.65;color:var(--text);background:#f7fafd;border:1px solid var(--border);border-left:3px solid var(--green);border-radius:7px;padding:12px 14px;white-space:pre-wrap;word-break:break-word}
+.dtx.na{color:var(--muted-light);border-left-color:var(--border)}
+.tl2{border-left:2px solid var(--border);margin-left:4px;padding-left:14px}
+.tli{font-size:12px;line-height:1.55;color:var(--muted);margin-bottom:9px;position:relative}
+.tli::before{content:'';position:absolute;left:-19px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--border)}
+.tli:first-child{color:var(--text);font-weight:500}
+.tli:first-child::before{background:var(--green)}
+.tli b{color:var(--navy);font-weight:700}
+.others{display:flex;flex-direction:column;gap:6px}
+.oth{display:flex;align-items:center;gap:9px;border:1px solid var(--border);border-radius:7px;padding:8px 11px;cursor:pointer;font-size:12px}
+.oth:hover{background:#f7fbff}
+
+.md-bd{position:fixed;inset:0;background:rgba(13,31,48,.62);display:none;align-items:center;justify-content:center;z-index:9995;padding:20px}
+.md-bd.on{display:flex}
+.md{background:#fff;border-radius:13px;max-width:560px;width:100%;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.md.lg{max-width:760px}
+.md-h{background:linear-gradient(135deg,var(--navy-deep),var(--navy));padding:20px 24px;position:relative;flex-shrink:0}
+.md-h::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--green) 55%,var(--orange) 55%)}
+.md-h h3{color:#fff;font-size:17px;font-weight:800}
+.md-h p{color:rgba(255,255,255,.55);font-size:12px;margin-top:5px}
+.md-b{padding:20px 24px;overflow-y:auto}
+.dz{border:2px dashed var(--border);border-radius:11px;padding:30px 20px;text-align:center;cursor:pointer;background:#f7fafd;transition:all .15s}
+.dz:hover,.dz.over{border-color:var(--green);background:#f3f9ec}
+.dz-t{font-size:14px;font-weight:700;color:var(--navy)}
+.dz-s{font-size:12px;color:var(--muted);margin-top:6px}
+.md-i{margin-top:14px;font-size:12px;color:var(--muted);line-height:1.6;background:#f7fafd;border:1px solid var(--border);border-left:3px solid var(--green);border-radius:7px;padding:11px 14px}
+.md-i b{color:var(--navy)}
+.md-r{margin-top:14px}
+.md-f{padding:14px 24px;border-top:1px solid var(--border);background:#f7fafd;display:flex;gap:10px;justify-content:flex-end;flex-shrink:0;flex-wrap:wrap}
+.bg{background:var(--green);color:#fff;border:none;font-weight:700;padding:8px 16px;border-radius:7px;cursor:pointer;font-size:12.5px}
+.bg:hover{background:var(--green-dark)}
+.bn{background:var(--navy);color:#fff;border:none;font-weight:700;padding:8px 16px;border-radius:7px;cursor:pointer;font-size:12.5px}
+.bn:hover{background:#12293f}
+.mvres{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}
+.mvres div{background:#fff;border:1px solid #cfe7a8;border-radius:6px;padding:7px 8px;text-align:center}
+.mvres b{display:block;font-size:17px;color:var(--navy)}
+.mvres span{font-size:9.5px;font-weight:700;text-transform:uppercase;color:var(--muted);letter-spacing:.4px}
+
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+.fld{display:flex;flex-direction:column;gap:5px}
+.fld.full{grid-column:1/-1}
+.fld label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--navy)}
+.fld input,.fld select,.fld textarea{border:1.5px solid var(--border);border-radius:7px;padding:8px 11px;font-size:13px;color:var(--text);background:#f7fafd}
+.fld textarea{resize:vertical;min-height:78px;line-height:1.5}
+.fld .h{font-size:10.5px;color:var(--muted-light);line-height:1.45}
+.ck{display:flex;gap:16px;flex-wrap:wrap}
+.ck label{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text);text-transform:none;letter-spacing:0;font-weight:500;cursor:pointer}
+.hist{margin-top:4px;border:1px solid var(--border);border-radius:7px;overflow:hidden}
+.hist table{width:100%;border-collapse:collapse;font-size:11.5px}
+.hist th{background:#f7fafd;text-align:left;padding:6px 9px;font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+.hist td{padding:6px 9px;border-top:1px solid #f0f5f9}
+.hint{font-size:11px;color:var(--muted);line-height:1.5;background:#fffaf0;border:1px solid #f3e1bd;border-radius:7px;padding:9px 12px;margin-top:12px}
+
+.prev{background:#fff8e6;border:1px solid #f3d99b;border-radius:10px;padding:11px 16px;margin-bottom:18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:12.5px;color:#7a5600}
+.prev span{flex:1;min-width:220px}
+
+.footer{border-top:1px solid var(--border);background:#fff;padding:20px 28px}
+.fin{max-width:1320px;margin:0 auto;font-size:11.5px;color:var(--muted);line-height:1.6;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.fin b{color:var(--navy)}
+
+@media(max-width:1180px){.kpis{grid-template-columns:repeat(3,1fr)}.pk{grid-template-columns:repeat(3,1fr)}.two{grid-template-columns:1fr}.pr{grid-template-columns:repeat(4,1fr)}.mv-k{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:720px){.kpis{grid-template-columns:repeat(2,1fr)}.pk{grid-template-columns:1fr 1fr}.pr{grid-template-columns:1fr 1fr}.topbar{padding:0 14px}.ttitle{display:none}.main{padding:20px 14px}.fg{grid-template-columns:1fr}.mv-k{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tl">
+    <img class="topbar-logo" id="tlogo" alt="Invenergy Services">
+    <div class="tdiv"></div>
+    <div class="ttitle">Plataforma de <span>Engenharia</span></div>
+  </div>
+  <div class="tr">
+    <button class="tb" id="b-rel">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Emitir relatório
+    </button>
+    <button class="tb pri" id="b-imp">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Atualizar com Excel
+    </button>
+    <a href="index.html" class="tb">← Plataforma</a>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hin">
+    <div class="bc"><a href="index.html">Plataforma</a><span>›</span><span>Estado da Frota</span><span>›</span><span class="cur">CMS</span></div>
+    <div class="hrow">
+      <div>
+        <h1>Monitoramento <em>CMS</em></h1>
+        <div class="hsub">Casos ativos sob acompanhamento · Chapada I, Chapada II+III, Asa Branca, Caetés e Alto Sertão II</div>
+      </div>
+      <div class="hbox" id="hbox"></div>
+    </div>
+  </div>
+  <div class="kpis" id="kpis"></div>
+</div>
+
+<div class="main">
+  <div id="prev"></div>
+  <div id="semBase" style="display:none" class="card vazio">
+    <h3>Nenhuma base publicada</h3>
+    <p>A página ainda não tem dados. Clique em <b>Atualizar com Excel</b> e selecione a planilha CMS Tracking — a aba <b>Events</b> é lida e os 5 parques do escopo aparecem na hora. Depois, baixe o <b>dados-cms.js</b> e publique junto com esta página.</p>
+    <button class="bg" onclick="abrirMd()">Atualizar com Excel</button>
+  </div>
+  <div id="conteudo">
+  <div id="qual"></div>
+
+  <div class="sec" id="sec-mov">
+    <div class="sh"><h2>Movimentação</h2><p id="mov-p"></p></div>
+    <div class="card mv" id="mv"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sh"><h2>Por parque</h2><p>Clique para filtrar a página inteira</p></div>
+    <div class="pk" id="pk"></div>
+  </div>
+
+  <div class="sec">
+    <div class="two">
+      <div>
+        <div class="sh"><h2>Componente × prioridade</h2><p>Somente danos (Alarm e Warning)</p></div>
+        <div class="card mx" id="mx"></div>
+      </div>
+      <div>
+        <div class="sh"><h2>Idade dos casos</h2><p>Dias desde a identificação</p></div>
+        <div class="card ag" id="ag"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec" id="sec-tab">
+    <div class="sh"><h2>Casos ativos</h2><p>Clique em uma linha para ver o caso completo</p></div>
+    <div class="card">
+      <div class="flt">
+        <div class="seg" id="f-tipo">
+          <button data-v="todos" class="on">Todos</button>
+          <button data-v="dano">Danos</button>
+          <button data-v="inst">Instrumentação</button>
+        </div>
+        <select class="sel" id="f-pq"></select>
+        <select class="sel" id="f-loc"></select>
+        <select class="sel" id="f-pr"></select>
+        <select class="sel" id="f-pz">
+          <option value="">Qualquer prazo</option>
+          <option value="ven">Prazo vencido</option>
+          <option value="pro">Vence em até 15 dias</option>
+          <option value="ok">Dentro do prazo</option>
+          <option value="na">Sem prazo definido</option>
+        </select>
+        <input class="src" id="f-q" placeholder="Buscar WTG, caso, SS, disposição…">
+      </div>
+      <div class="chips" id="chips"></div>
+      <div class="cnt"><span id="cnt"></span><button class="btn" id="b-csv">⬇ Exportar visão (CSV)</button></div>
+      <div class="tw"><table class="t" id="tb"></table></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sh"><h2>Premissas de prazo</h2><p>Janela de ação por prioridade, contada a partir da data do evento</p></div>
+    <div class="card pr" id="pr"></div>
+  </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="fin">
+    <div><b>Invenergy Services Brasil</b> · Plataforma de Engenharia · CMS<br>Referências: ISO 17359 · ISO 16079-2 · ISO 20816-21 · VDI 3834-1 · ISO 13381-1 · DNV-SE-0439</div>
+    <div id="fupd"></div>
+  </div>
+</div>
+
+<div class="bd" id="bd"></div>
+<div class="dw" id="dw"><div class="dw-h"><button class="dw-x" id="dw-x">✕</button><div id="dw-hd"></div></div><div class="dw-b" id="dw-b"></div></div>
+
+<!-- importação -->
+<div class="md-bd" id="md">
+  <div class="md">
+    <div class="md-h"><h3>Atualizar com a planilha</h3><p>Selecione o arquivo CMS Tracking (.xlsx)</p></div>
+    <div class="md-b">
+      <div class="dz" id="dz"><div class="dz-t">Arraste a planilha aqui</div><div class="dz-s">ou clique para selecionar · .xlsx</div></div>
+      <input type="file" id="file" accept=".xlsx" style="display:none">
+      <div class="md-i">A página lê <b>somente a aba Events</b> e <b>somente os 5 parques do escopo</b>. A planilha nova é comparada com a base publicada para apurar a <b>movimentação</b>: casos novos, encerrados, com prioridade alterada e atualizados. Nada é enviado para servidor.</div>
+      <div class="md-r" id="md-r"></div>
+    </div>
+    <div class="md-f"><button class="btn" id="md-x">Fechar</button><button class="bg" id="md-dl" style="display:none">Baixar dados-cms.js</button></div>
+  </div>
+</div>
+
+<!-- relatório -->
+<div class="md-bd" id="mr">
+  <div class="md lg">
+    <div class="md-h"><h3>Emitir relatório de CMS</h3><p>Documento no padrão da plataforma, gerado a partir da base carregada nesta página</p></div>
+    <div class="md-b">
+      <div class="fg">
+        <div class="fld"><label>Escopo</label>
+          <select id="r-esc"><option value="todos">Todos os parques (uso interno)</option><option value="Essentia">Essentia · Chapada I, II+III e Asa Branca</option><option value="Auren">Auren · Caetés e Alto Sertão II</option></select></div>
+        <div class="fld"><label>Competência</label><input type="month" id="r-comp"></div>
+        <div class="fld"><label>Responsável</label><input id="r-resp" placeholder="Nome de quem emite"></div>
+        <div class="fld"><label>Versão</label><input id="r-ver" readonly style="font-weight:700;color:var(--navy)"><div class="h" id="r-verh"></div></div>
+        <div class="fld full"><label>Descrição da emissão</label><input id="r-desc" placeholder="Ex.: Emissão mensal · Revisão após boroscopias da JOA15-14"></div>
+        <div class="fld full"><label>Destaques do período</label><textarea id="r-dest" placeholder="Um destaque por linha. Ex.: Troca da gearbox da EBR05-13 concluída em 02/10."></textarea><div class="h">Cada linha vira um item. Fica guardado para esta competência e escopo.</div></div>
+        <div class="fld full"><label>Considerações finais</label><textarea id="r-cons" placeholder="Parecer da engenharia, riscos e próximos passos."></textarea></div>
+        <div class="fld full"><label>Conteúdo</label>
+          <div class="ck">
+            <label><input type="checkbox" id="r-mov" checked> Movimentação</label>
+            <label><input type="checkbox" id="r-ins" checked> Tabela de instrumentação</label>
+            <label><input type="checkbox" id="r-qual" checked> Qualidade da base</label>
+            <label><input type="checkbox" id="r-anx" checked> Anexo de premissas</label>
+          </div></div>
+        <div class="fld full" id="r-histw"><label>Emissões anteriores deste escopo e competência</label><div class="hist" id="r-hist"></div></div>
+      </div>
+      <div class="hint">O controle de versões fica guardado neste navegador e sai impresso no próprio documento, que é o registro oficial. <b>Pré-visualizar</b> não consome versão; <b>Emitir</b> registra a versão e abre o documento para salvar em PDF.</div>
+    </div>
+    <div class="md-f"><button class="btn" id="mr-x">Fechar</button><button class="bn" id="mr-pv">Pré-visualizar</button><button class="bg" id="mr-em">Emitir e abrir</button></div>
+  </div>
+</div>
+
+<!-- ===== logos.js (embutido) ===== -->
+<script>
+/* =====================================================================
+   LOGOS — marcas usadas nas páginas e nos relatórios da plataforma
+   invenergy ........ versão colorida, para fundo branco (relatórios)
+   invenergyBranca .. versão branca, para a barra superior
+   essentia / auren . preencher com data:image/png;base64,... quando
+                      disponível. Enquanto null, o relatório usa o nome.
+   ===================================================================== */
+var LOGOS = {
+  invenergy: "data:image/png;base64,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",
+  invenergyRatio: 3.4884,
+  invenergyBranca: "data:image/png;base64,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",
+  essentia: null,
+  essentiaRatio: 3.2,
+  auren: null,
+  aurenRatio: 3.2
+};
+
+</script>
+<!-- ===== xlsx-lite.js (embutido) ===== -->
+<script>
+/* =====================================================================
+   XLSX-LITE — leitor mínimo de arquivos .xlsx, 100% local
+   Plataforma de Engenharia · Invenergy Services Brasil
+   Sem dependência externa, sem CDN, sem envio de dados.
+   Uso:  XLSXLite.read(arrayBuffer) -> { nomes:[], aba(nome) -> [[...]] }
+   ===================================================================== */
+var XLSXLite = (function () {
+  'use strict';
+
+  function Bits(buf, pos) { this.b = buf; this.p = pos; this.bit = 0; this.cur = 0; }
+  Bits.prototype.get = function (n) {
+    var v = 0, i = 0;
+    while (i < n) {
+      if (this.bit === 0) { this.cur = this.b[this.p++]; this.bit = 8; }
+      var take = Math.min(n - i, this.bit);
+      v |= ((this.cur & ((1 << take) - 1)) << i);
+      this.cur >>= take; this.bit -= take; i += take;
+    }
+    return v >>> 0;
+  };
+  Bits.prototype.align = function () { this.bit = 0; };
+
+  function buildTree(lens) {
+    var i, count = new Int32Array(16);
+    for (i = 0; i < lens.length; i++) count[lens[i]]++;
+    count[0] = 0;
+    var offs = new Int32Array(17);
+    for (i = 1; i <= 15; i++) offs[i + 1] = offs[i] + count[i];
+    var symbol = new Int32Array(lens.length);
+    for (i = 0; i < lens.length; i++) if (lens[i]) symbol[offs[lens[i]]++] = i;
+    return { count: count, symbol: symbol };
+  }
+  function decodeSym(br, t) {
+    var code = 0, first = 0, index = 0, len, count;
+    for (len = 1; len <= 15; len++) {
+      code |= br.get(1);
+      count = t.count[len];
+      if (code - first < count) return t.symbol[index + (code - first)];
+      index += count; first += count; first <<= 1; code <<= 1;
+    }
+    throw new Error('Fluxo comprimido corrompido');
+  }
+
+  var LBASE = [3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258];
+  var LEXT  = [0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,0];
+  var DBASE = [1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577];
+  var DEXT  = [0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13];
+  var ORD   = [16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15];
+
+  function inflateRaw(buf, start, expected) {
+    var br = new Bits(buf, start);
+    var out = new Uint8Array(expected > 0 ? expected : 65536), o = 0;
+    function push(b) {
+      if (o >= out.length) { var t = new Uint8Array(out.length * 2); t.set(out); out = t; }
+      out[o++] = b;
+    }
+    var fixL = null, fixD = null;
+    for (;;) {
+      var last = br.get(1), type = br.get(2);
+      if (type === 0) {
+        br.align();
+        var len = buf[br.p] | (buf[br.p + 1] << 8); br.p += 4;
+        for (var i = 0; i < len; i++) push(buf[br.p++]);
+      } else {
+        var lt, dt;
+        if (type === 1) {
+          if (!fixL) {
+            var l = new Uint8Array(288), k;
+            for (k = 0; k < 144; k++) l[k] = 8;
+            for (; k < 256; k++) l[k] = 9;
+            for (; k < 280; k++) l[k] = 7;
+            for (; k < 288; k++) l[k] = 8;
+            fixL = buildTree(l);
+            var d = new Uint8Array(30); for (k = 0; k < 30; k++) d[k] = 5;
+            fixD = buildTree(d);
+          }
+          lt = fixL; dt = fixD;
+        } else if (type === 2) {
+          var nlen = br.get(5) + 257, ndist = br.get(5) + 1, ncode = br.get(4) + 4;
+          var cl = new Uint8Array(19), j;
+          for (j = 0; j < ncode; j++) cl[ORD[j]] = br.get(3);
+          var clt = buildTree(cl);
+          var lens = new Uint8Array(nlen + ndist), n = 0;
+          while (n < nlen + ndist) {
+            var s = decodeSym(br, clt), rep, val;
+            if (s < 16) { lens[n++] = s; }
+            else if (s === 16) { val = lens[n - 1]; rep = 3 + br.get(2); while (rep--) lens[n++] = val; }
+            else if (s === 17) { rep = 3 + br.get(3); while (rep--) lens[n++] = 0; }
+            else { rep = 11 + br.get(7); while (rep--) lens[n++] = 0; }
+          }
+          lt = buildTree(lens.subarray(0, nlen));
+          dt = buildTree(lens.subarray(nlen));
+        } else throw new Error('Bloco deflate inválido');
+        for (;;) {
+          var sym = decodeSym(br, lt);
+          if (sym === 256) break;
+          if (sym < 256) push(sym);
+          else {
+            sym -= 257;
+            var length = LBASE[sym] + br.get(LEXT[sym]);
+            var ds = decodeSym(br, dt);
+            var dist = DBASE[ds] + br.get(DEXT[ds]);
+            for (var c = 0; c < length; c++) push(out[o - dist]);
+          }
+        }
+      }
+      if (last) break;
+    }
+    return out.subarray(0, o);
+  }
+
+  function lerZip(ab) {
+    var b = new Uint8Array(ab), dv = new DataView(ab), i, eocd = -1;
+    for (i = b.length - 22; i >= 0 && i > b.length - 66000; i--) {
+      if (dv.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+    }
+    if (eocd < 0) throw new Error('Arquivo não é um .xlsx válido.');
+    var nEnt = dv.getUint16(eocd + 10, true), p = dv.getUint32(eocd + 16, true), arq = {};
+    for (i = 0; i < nEnt; i++) {
+      if (dv.getUint32(p, true) !== 0x02014b50) break;
+      var nLen = dv.getUint16(p + 28, true), eLen = dv.getUint16(p + 30, true), cLen = dv.getUint16(p + 32, true);
+      var nome = '';
+      for (var k = 0; k < nLen; k++) nome += String.fromCharCode(b[p + 46 + k]);
+      arq[nome] = { metodo: dv.getUint16(p + 10, true), off: dv.getUint32(p + 42, true), orig: dv.getUint32(p + 24, true) };
+      p += 46 + nLen + eLen + cLen;
+    }
+    return {
+      tem: function (n) { return !!arq[n]; },
+      lista: function () { return Object.keys(arq); },
+      texto: function (nome) {
+        var e = arq[nome]; if (!e) return null;
+        var ini = e.off + 30 + dv.getUint16(e.off + 26, true) + dv.getUint16(e.off + 28, true);
+        var dados = e.metodo === 0 ? b.subarray(ini, ini + e.orig) : inflateRaw(b, ini, e.orig);
+        return new TextDecoder('utf-8').decode(dados);
+      }
+    };
+  }
+
+  function desescapa(s) {
+    return s.replace(/&#(\d+);/g, function (_, d) { return String.fromCharCode(+d); })
+            .replace(/&#x([0-9a-f]+);/gi, function (_, h) { return String.fromCharCode(parseInt(h, 16)); })
+            .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, '&');
+  }
+  function colNum(ref) {
+    var m = /^([A-Z]+)/.exec(ref); if (!m) return 0;
+    var n = 0, s = m[1];
+    for (var i = 0; i < s.length; i++) n = n * 26 + (s.charCodeAt(i) - 64);
+    return n - 1;
+  }
+  function serialParaData(n) {
+    var d = new Date(Math.round((n - 25569) * 86400000));
+    return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+  }
+  function attr(s, nome) { var m = new RegExp('\\b' + nome + '="([^"]*)"').exec(s); return m ? m[1] : null; }
+
+  function read(ab) {
+    var z = lerZip(ab), sst = [];
+    if (z.tem('xl/sharedStrings.xml')) {
+      var xs = z.texto('xl/sharedStrings.xml'), re = /<si\b[^>]*>([\s\S]*?)<\/si>/g, m;
+      while ((m = re.exec(xs))) {
+        var txt = '', rt = /<t\b[^>]*>([\s\S]*?)<\/t>/g, t;
+        while ((t = rt.exec(m[1]))) txt += t[1];
+        sst.push(desescapa(txt));
+      }
+    }
+    var ehData = {};
+    if (z.tem('xl/styles.xml')) {
+      var st = z.texto('xl/styles.xml'), fmt = {}, rf = /<numFmt\b([^>]*)\/?>/g, f;
+      while ((f = rf.exec(st))) fmt[attr(f[1], 'numFmtId')] = desescapa(attr(f[1], 'formatCode') || '');
+      var mc = /<cellXfs[^>]*>([\s\S]*?)<\/cellXfs>/.exec(st);
+      if (mc) {
+        var rx = /<xf\b([^>]*)>/g, x, i = 0;
+        while ((x = rx.exec(mc[1]))) {
+          var id = +attr(x[1], 'numFmtId'), code = (fmt[id] || '').replace(/\[[^\]]*\]/g, '').replace(/"[^"]*"/g, '');
+          ehData[i++] = (id >= 14 && id <= 22) || (id >= 45 && id <= 47) || (/[dy]/i.test(code) && /[dmy]/i.test(code));
+        }
+      }
+    }
+    var rels = {};
+    if (z.tem('xl/_rels/workbook.xml.rels')) {
+      var xr = z.texto('xl/_rels/workbook.xml.rels'), rr = /<Relationship\b([^>]*)\/?>/g, r;
+      while ((r = rr.exec(xr))) {
+        var idR = attr(r[1], 'Id'), tg = attr(r[1], 'Target');
+        if (idR && tg) rels[idR] = tg.replace(/^\/?xl\//, '').replace(/^\//, '');
+      }
+    }
+    var abas = [], nomes = [], wb = z.texto('xl/workbook.xml') || '', rs = /<sheet\b([^>]*)\/?>/g, s2;
+    while ((s2 = rs.exec(wb))) {
+      var nm = attr(s2[1], 'name'), rid = attr(s2[1], 'r:id');
+      if (!nm || !rid || !rels[rid]) continue;
+      nomes.push(desescapa(nm)); abas.push({ nome: desescapa(nm), alvo: rels[rid] });
+    }
+    function aba(nomeAba) {
+      var alvo = null;
+      for (var i = 0; i < abas.length; i++) if (abas[i].nome === nomeAba) alvo = abas[i].alvo;
+      if (!alvo) return null;
+      var caminho = 'xl/' + alvo;
+      if (!z.tem(caminho)) return null;
+      var xml = z.texto(caminho), linhas = [], rr2 = /<row\b([^>]*)>([\s\S]*?)<\/row>/g, rw;
+      while ((rw = rr2.exec(xml))) {
+        var ri = attr(rw[1], 'r'), idx = ri ? (+ri - 1) : linhas.length, cels = [];
+        var rc = /<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g, c;
+        while ((c = rc.exec(rw[2]))) {
+          var at = c[1], corpo = c[2] || '', ref = attr(at, 'r');
+          var ci = ref ? colNum(ref) : cels.length, tp = attr(at, 't') || 'n', sIdx = attr(at, 's'), val = null;
+          if (tp === 'inlineStr') {
+            var it = '', ri2 = /<t\b[^>]*>([\s\S]*?)<\/t>/g, tt;
+            while ((tt = ri2.exec(corpo))) it += tt[1];
+            val = desescapa(it);
+          } else {
+            var mv = /<v\b[^>]*>([\s\S]*?)<\/v>/.exec(corpo);
+            if (mv) {
+              var raw = mv[1];
+              if (tp === 's') val = sst[+raw] != null ? sst[+raw] : '';
+              else if (tp === 'str' || tp === 'e') val = desescapa(raw);
+              else if (tp === 'b') val = raw === '1';
+              else {
+                var num = parseFloat(raw);
+                val = (sIdx != null && ehData[+sIdx] && num > 20000 && num < 80000) ? serialParaData(num) : num;
+              }
+            }
+          }
+          cels[ci] = val;
+        }
+        for (var q = 0; q < cels.length; q++) if (cels[q] === undefined) cels[q] = null;
+        linhas[idx] = cels;
+      }
+      for (var w = 0; w < linhas.length; w++) if (!linhas[w]) linhas[w] = [];
+      return linhas;
+    }
+    return { nomes: nomes, aba: aba };
+  }
+  return { read: read };
+})();
+if (typeof module !== 'undefined') module.exports = XLSXLite;
+
+</script>
+<!-- ===== cms-import.js (embutido) ===== -->
+<script>
+/* =====================================================================
+   CMS-IMPORT — converte a aba "Events" do CMS Tracking em CMS_DADOS
+   e compara a planilha nova com a base publicada (movimentação).
+   Plataforma de Engenharia · Invenergy Services Brasil
+   Lê SOMENTE a aba "Events" e SOMENTE os parques do escopo Brasil.
+   Todo o processamento ocorre no navegador.
+   ===================================================================== */
+var CMSImport = (function () {
+  'use strict';
+
+  var PARQUES = [
+    { id: 'CH23', nome: 'Chapada II+III', cliente: 'Essentia', aceita: ['chapada ii+iii', 'chapada ii + iii', 'chapada 2+3'] },
+    { id: 'CH1',  nome: 'Chapada I',      cliente: 'Essentia', aceita: ['chapada i', 'chapada 1'] },
+    { id: 'ASB',  nome: 'Asa Branca',     cliente: 'Essentia', aceita: ['asa branca'] },
+    { id: 'CAE',  nome: 'Caetés',         cliente: 'Auren',    aceita: ['caetes'] },
+    { id: 'AS2',  nome: 'Alto Sertão II', cliente: 'Auren',    aceita: ['alto sertao ii', 'alto sertao 2'] }
+  ];
+
+  var COLS = {
+    site: ['site'], status: ['case status'], wtg: ['wtg'], titulo: ['case title'],
+    evento: ['event'], local: ['location'], data: ['event date'], followup: ['follow up date'],
+    prioridade: ['priority'], disposicao: ['disposition'], acao: ['action'],
+    wo: ['wo tracking2', 'wo tracking'], woStatus: ['wo status'], trocaPrev: ['estimated replacement date'],
+    resolvido: ['date resolved'], notas: ['notes'], desfecho: ['case outcome']
+  };
+
+  /* campos acompanhados na movimentação (além da prioridade) */
+  var CAMPOS_MOV = [
+    ['disposicao', 'Disposição'], ['acao', 'Ação'], ['wo', 'SS / WO'], ['woStatus', 'Status da WO'],
+    ['data', 'Data do evento'], ['desfecho', 'Desfecho'], ['notas', 'Notas'], ['trocaPrev', 'Troca estimada']
+  ];
+
+  function norm(s) {
+    return String(s == null ? '' : s).trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, ' ').replace(/[:\s]+$/, '');
+  }
+  function txt(v) { return v == null ? '' : String(v).replace(/\u00a0/g, ' ').trim(); }
+  function pad(n) { return ('0' + n).slice(-2); }
+  function iso(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+
+  function lerData(v) {
+    if (v == null || v === '') return { iso: null, fonte: 'vazio' };
+    if (v instanceof Date && !isNaN(v)) return { iso: iso(v), fonte: 'data' };
+    if (typeof v === 'number' && v > 20000 && v < 80000) {
+      var d = new Date(Math.round((v - 25569) * 86400000));
+      return { iso: d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()), fonte: 'serial' };
+    }
+    var s = String(v).trim(), m;
+    if ((m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(s))) {
+      var dd = new Date(+m[3], +m[2] - 1, +m[1]);
+      if (dd.getDate() === +m[1]) return { iso: iso(dd), fonte: 'texto' };
+    }
+    if ((m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s))) return { iso: m[1] + '-' + m[2] + '-' + m[3], fonte: 'texto' };
+    return { iso: null, fonte: 'invalido', bruto: s };
+  }
+
+  function parqueDe(site) {
+    var n = norm(site);
+    for (var i = 0; i < PARQUES.length; i++) if (PARQUES[i].aceita.indexOf(n) >= 0) return PARQUES[i];
+    return null;
+  }
+
+  function mapear(cab) {
+    var idx = {};
+    for (var c = 0; c < cab.length; c++) {
+      var h = norm(cab[c]);
+      if (!h) continue;
+      for (var k in COLS) if (idx[k] == null && COLS[k].indexOf(h) >= 0) idx[k] = c;
+    }
+    return idx;
+  }
+
+  /* ---------------- identidade do caso ----------------
+     A aba Events não tem ID de caso. A identidade é
+     parque + WTG + componente + título + tipo de evento.
+     Casos repetidos com a mesma identidade recebem #2, #3… */
+  function chaveBase(c) {
+    return [c.parque, norm(c.wtg), norm(c.local), norm(c.titulo), norm(c.evento)].join('|');
+  }
+  function chaveSuave(c) {
+    return [c.parque, norm(c.wtg), norm(c.local), norm(c.evento)].join('|');
+  }
+  function atribuirChaves(casos) {
+    var cont = {};
+    (casos || []).forEach(function (c) {
+      var b = chaveBase(c);
+      cont[b] = (cont[b] || 0) + 1;
+      c.chave = cont[b] > 1 ? b + '#' + cont[b] : b;
+    });
+    return casos;
+  }
+  function semSufixo(k) { return String(k || '').replace(/#\d+$/, ''); }
+
+  /* ---------------- leitura da planilha ---------------- */
+  function processar(arrayBuffer, baseAnterior) {
+    var wb = XLSXLite.read(arrayBuffer);
+    var nomeAba = null;
+    for (var i = 0; i < wb.nomes.length; i++) if (norm(wb.nomes[i]) === 'events') nomeAba = wb.nomes[i];
+    if (!nomeAba) throw new Error('A aba "Events" não foi encontrada. Abas disponíveis: ' + wb.nomes.join(', '));
+
+    var L = wb.aba(nomeAba);
+    if (!L || !L.length) throw new Error('A aba "Events" está vazia.');
+
+    var linhaCab = -1, idx = null;
+    for (var r = 0; r < Math.min(L.length, 10); r++) {
+      var t = mapear(L[r] || []);
+      if (t.site != null && t.status != null && t.wtg != null) { linhaCab = r; idx = t; break; }
+    }
+    if (!idx) throw new Error('Cabeçalho da aba "Events" não reconhecido (esperado Site, Case Status e WTG).');
+
+    var faltando = Object.keys(COLS).filter(function (k) { return idx[k] == null; });
+    var casos = [], resolvidosLista = [], resolvidos = {}, foraEscopo = 0, semSite = 0;
+    PARQUES.forEach(function (p) { resolvidos[p.id] = 0; });
+
+    for (var j = linhaCab + 1; j < L.length; j++) {
+      var R = L[j]; if (!R || !R.length) continue;
+      var site = txt(R[idx.site]);
+      if (!site) { if (txt(R[idx.wtg])) semSite++; continue; }
+      var pq = parqueDe(site);
+      if (!pq) { foraEscopo++; continue; }
+
+      var status = norm(R[idx.status]);
+      var dt = lerData(idx.data != null ? R[idx.data] : null);
+
+      if (status === 'resolved') {
+        resolvidos[pq.id]++;
+        var rv = { parque: pq.id, wtg: txt(R[idx.wtg]).toUpperCase(), titulo: txt(R[idx.titulo]),
+                   evento: txt(R[idx.evento]), local: txt(R[idx.local]), data: dt.iso,
+                   resolvido: idx.resolvido != null ? lerData(R[idx.resolvido]).iso : null,
+                   desfecho: (function (v) { v = txt(v); return /^-?\d+$/.test(v) ? '' : v; })(R[idx.desfecho]) };
+        rv.chave = chaveBase(rv);
+        resolvidosLista.push(rv);
+        continue;
+      }
+      if (status !== 'active') continue;
+
+      var pr = idx.prioridade != null ? R[idx.prioridade] : null;
+      var prN = (pr === '' || pr == null) ? null : parseInt(pr, 10);
+      if (prN != null && (isNaN(prN) || prN < 1 || prN > 6)) prN = null;
+
+      casos.push({
+        linha: j + 1,
+        parque: pq.id,
+        wtg: txt(R[idx.wtg]).toUpperCase(),
+        titulo: txt(R[idx.titulo]),
+        evento: txt(R[idx.evento]) || '',
+        local: txt(R[idx.local]) || '',
+        data: dt.iso,
+        dataFonte: dt.fonte,
+        dataBruta: dt.bruto || null,
+        prioridade: prN,
+        disposicao: txt(R[idx.disposicao]),
+        acao: txt(R[idx.acao]),
+        wo: txt(R[idx.wo]),
+        woStatus: txt(R[idx.woStatus]),
+        trocaPrev: idx.trocaPrev != null ? lerData(R[idx.trocaPrev]).iso : null,
+        notas: txt(R[idx.notas]),
+        desfecho: (function (v) { v = txt(v); return /^-?\d+$/.test(v) ? '' : v; })(R[idx.desfecho])
+      });
+    }
+    atribuirChaves(casos);
+
+    var d = {
+      gerado: iso(new Date()),
+      origem: 'CMS Tracking · aba ' + nomeAba,
+      parques: PARQUES.map(function (p) { return { id: p.id, nome: p.nome, cliente: p.cliente }; }),
+      casos: casos,
+      resolvidos: resolvidos,
+      resolvidosLista: resolvidosLista,
+      meta: { linhasLidas: L.length - linhaCab - 1, foraEscopo: foraEscopo, semSite: semSite, colunasAusentes: faltando }
+    };
+    d.movimento = comparar(baseAnterior, d);
+    return d;
+  }
+
+  /* ---------------- movimentação ---------------- */
+  function resumoCaso(c) {
+    return { chave: c.chave, parque: c.parque, wtg: c.wtg, titulo: c.titulo, local: c.local,
+             evento: c.evento, prioridade: c.prioridade == null ? null : c.prioridade, data: c.data || null };
+  }
+  function rank(p) { return p == null ? 7 : p; }
+
+  function comparar(prev, curr) {
+    if (!prev || !prev.casos || !prev.casos.length) return null;
+    var antes = prev.casos.map(function (c) { var x = {}; for (var k in c) x[k] = c[k]; return x; });
+    atribuirChaves(antes);
+    var agora = curr.casos;
+
+    var A = {}, B = {};
+    antes.forEach(function (c) { A[c.chave] = c; });
+    agora.forEach(function (c) { B[c.chave] = c; });
+
+    var novos = agora.filter(function (c) { return !A[c.chave]; });
+    var sairam = antes.filter(function (c) { return !B[c.chave]; });
+
+    /* resolvidos na planilha nova, indexados pela identidade sem sufixo */
+    var RES = {};
+    (curr.resolvidosLista || []).forEach(function (r) { (RES[r.chave] = RES[r.chave] || []).push(r); });
+
+    /* 2ª passada: título editado — mesmo parque, WTG, componente e evento,
+       com par único dos dois lados e sem registro de resolução */
+    var pares = [];
+    var gN = {}, gS = {};
+    novos.forEach(function (c) { (gN[chaveSuave(c)] = gN[chaveSuave(c)] || []).push(c); });
+    sairam.forEach(function (c) { if (!RES[semSufixo(c.chave)]) (gS[chaveSuave(c)] = gS[chaveSuave(c)] || []).push(c); });
+    Object.keys(gN).forEach(function (k) {
+      if (gN[k].length === 1 && gS[k] && gS[k].length === 1) pares.push([gS[k][0], gN[k][0]]);
+    });
+    var usadosN = {}, usadosS = {};
+    pares.forEach(function (p) { usadosS[p[0].chave] = 1; usadosN[p[1].chave] = 1; });
+    novos = novos.filter(function (c) { return !usadosN[c.chave]; });
+    sairam = sairam.filter(function (c) { return !usadosS[c.chave]; });
+
+    var mesmos = [];
+    agora.forEach(function (c) { if (A[c.chave]) mesmos.push([A[c.chave], c]); });
+    pares.forEach(function (p) { mesmos.push([p[0], p[1], true]); });
+
+    var prioridade = [], alterados = [];
+    mesmos.forEach(function (m) {
+      var a = m[0], b = m[1], tituloMudou = !!m[2];
+      if (rank(a.prioridade) !== rank(b.prioridade)) {
+        var x = resumoCaso(b);
+        x.de = a.prioridade == null ? null : a.prioridade;
+        x.para = b.prioridade == null ? null : b.prioridade;
+        x.sentido = rank(b.prioridade) < rank(a.prioridade) ? 'up' : 'down';
+        prioridade.push(x);
+      }
+      var campos = [];
+      if (tituloMudou) campos.push('Título');
+      CAMPOS_MOV.forEach(function (f) { if (txt(a[f[0]]) !== txt(b[f[0]])) campos.push(f[1]); });
+      if (campos.length) {
+        var y = resumoCaso(b);
+        y.campos = campos;
+        if (tituloMudou) y.tituloAnterior = a.titulo;
+        alterados.push(y);
+      }
+    });
+
+    var encerrados = sairam.map(function (c) {
+      var x = resumoCaso(c), r = RES[semSufixo(c.chave)];
+      if (r && r.length) {
+        var rr = r[r.length - 1];
+        x.motivo = 'resolvido'; x.resolvido = rr.resolvido || null; x.desfecho = rr.desfecho || '';
+      } else x.motivo = 'removido';
+      return x;
+    });
+
+    var mov = {
+      baseAnterior: prev.gerado || null,
+      baseAtual: curr.gerado,
+      novos: novos.map(resumoCaso),
+      encerrados: encerrados,
+      prioridade: prioridade,
+      alterados: alterados
+    };
+    var total = mov.novos.length + mov.encerrados.length + mov.prioridade.length + mov.alterados.length;
+
+    /* reimportação sem nenhuma mudança: mantém a movimentação já publicada */
+    if (!total && prev.movimento) {
+      var keep = JSON.parse(JSON.stringify(prev.movimento));
+      keep.mantida = true;
+      keep.conferidoEm = curr.gerado;
+      return keep;
+    }
+    return mov;
+  }
+
+  function gerarArquivo(d) {
+    return '/* =====================================================================\n' +
+      '   CMS — BASE DE DADOS (gerada automaticamente)\n' +
+      '   Origem: ' + d.origem + '\n' +
+      '   Gerado em: ' + d.gerado + '\n' +
+      (d.movimento ? '   Movimentação apurada contra a base de ' + (d.movimento.baseAnterior || '—') + '\n' : '') +
+      '   Não edite à mão: reimporte a planilha pela página CMS.\n' +
+      '   ===================================================================== */\n' +
+      'var CMS_DADOS = ' + JSON.stringify(d, null, 1) + ';\n';
+  }
+
+  return { processar: processar, comparar: comparar, atribuirChaves: atribuirChaves,
+           gerarArquivo: gerarArquivo, PARQUES: PARQUES };
+})();
+if (typeof module !== 'undefined') module.exports = CMSImport;
+
+</script>
+<!-- ===== relatorio.js (embutido) ===== -->
+<script>
+/* =====================================================================
+   RELATÓRIO — motor padrão de relatórios da Plataforma de Engenharia
+   Invenergy Services Brasil
+   ---------------------------------------------------------------------
+   Um único padrão visual para todos os módulos:
+     · cabeçalho com a marca Invenergy e a do cliente em todas as páginas
+     · bloco de identificação (competência, base, versão, responsável)
+     · controle de revisões e sumário automáticos
+     · seções numeradas, tabelas e figuras numeradas
+     · rodapé "Página X de Y"
+   Saída: documento pronto para "Imprimir → Salvar como PDF".
+   Sem biblioteca externa e sem envio de dados.
+
+   Uso:
+     Relatorio.abrir({
+       titulo, subtitulo, modulo, arquivo,
+       cliente: 'Essentia' | 'Auren' | null,
+       meta: [['Competência','Setembro/2026'], ...],
+       versao, dataEmissao, responsavel,
+       revisoes: [{versao, data, responsavel, descricao}],
+       secoes: [{ num, titulo, blocos:[...], sub:[...] }],
+       rodape
+     });
+
+   Blocos aceitos:
+     {tipo:'p', html}                          parágrafo (aceita <b>)
+     {tipo:'kpis', itens:[{v, l, cor}]}        quadro de indicadores
+     {tipo:'tabela', cab:[], linhas:[[]], legenda, larg:[], vazio, compacta}
+        célula: texto ou {t, cls, html}
+     {tipo:'figura', html, legenda}            figura em HTML/SVG
+     {tipo:'lista', itens:[html]}
+     {tipo:'nota', html}
+     {tipo:'quebra'}                           nova página
+   ===================================================================== */
+var Relatorio = (function () {
+  'use strict';
+
+  var LS = 'plataformaEng.relatorios.v1';
+
+  /* ---------------- utilidades de texto ---------------- */
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function pad(n) { return ('0' + n).slice(-2); }
+  function hojeISO() { var d = new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function fBR(iso) { if (!iso) return '—'; var p = String(iso).slice(0, 10).split('-'); return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : String(iso); }
+  function plural(n, s, p) { return n === 1 ? s : p; }
+  function juntar(a) {
+    a = (a || []).filter(function (x) { return x !== '' && x != null; });
+    if (a.length < 2) return a.join('');
+    return a.slice(0, -1).join(', ') + ' e ' + a[a.length - 1];
+  }
+  function pct(a, b) { return b ? Math.round(a / b * 100) : 0; }
+  function n(v) { return Number(v || 0).toLocaleString('pt-BR'); }
+  var MESES = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  function competenciaTexto(ym) {
+    if (!ym) return '—';
+    var p = ym.split('-'); var m = MESES[parseInt(p[1], 10) - 1] || '';
+    return m.charAt(0).toUpperCase() + m.slice(1) + '/' + p[0];
+  }
+
+  /* ---------------- histórico de emissões ----------------
+     Guardado no navegador de quem emite. O próprio documento
+     leva o controle de revisões impresso, que é o registro oficial. */
+  function ler() { try { return JSON.parse(localStorage.getItem(LS)) || {}; } catch (e) { return {}; } }
+  function gravar(o) { try { localStorage.setItem(LS, JSON.stringify(o)); return true; } catch (e) { return false; } }
+  function historico(chave) { var o = ler(); return ((o[chave] && o[chave].emissoes) || []).slice(); }
+  function proximaVersao(chave) {
+    var h = historico(chave);
+    if (!h.length) return '00';
+    return String(Math.max.apply(null, h.map(function (e) { return parseInt(e.versao, 10) || 0; })) + 1).padStart(2, '0');
+  }
+  function registrar(chave, em) {
+    var o = ler(); o[chave] = o[chave] || {};
+    var l = (o[chave].emissoes || []).filter(function (e) { return e.versao !== em.versao; });
+    l.push(em); l.sort(function (a, b) { return (parseInt(a.versao, 10) || 0) - (parseInt(b.versao, 10) || 0); });
+    o[chave].emissoes = l;
+    return gravar(o);
+  }
+  function textos(chave) { var o = ler(); return (o[chave] && o[chave].textos) || {}; }
+  function salvarTextos(chave, t) { var o = ler(); o[chave] = o[chave] || {}; o[chave].textos = t; gravar(o); }
+  function preferencia(k, v) {
+    var o = ler(); o.__pref = o.__pref || {};
+    if (arguments.length > 1) { o.__pref[k] = v; gravar(o); }
+    return o.__pref[k];
+  }
+
+  /* ---------------- estilo do documento ---------------- */
+  function estilo(rodape) {
+    var r = String(rodape || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+    return '' +
+'@page{size:A4;margin:9mm 14mm 17mm 14mm;' +
+  '@bottom-left{content:"' + r + '";font:7.5pt Arial,Helvetica,sans-serif;color:#7d8682;vertical-align:top;padding-top:4mm}' +
+  '@bottom-right{content:"Página " counter(page) " de " counter(pages);font:7.5pt Arial,Helvetica,sans-serif;color:#7d8682;vertical-align:top;padding-top:4mm}}' +
+'*{box-sizing:border-box;margin:0;padding:0}' +
+'html{-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+'body{font:9.6pt/1.5 Arial,Helvetica,sans-serif;color:#1e2a24;background:#e9edeb}' +
+'.bar{position:sticky;top:0;z-index:10;background:#1a3c5e;color:#fff;padding:10px 18px;display:flex;align-items:center;gap:14px;font:13px Arial,sans-serif}' +
+'.bar b{font-size:14px}.bar span{opacity:.75;font-size:12px;flex:1}' +
+'.bar button{background:#78BE20;color:#fff;border:none;border-radius:6px;padding:9px 16px;font:700 13px Arial,sans-serif;cursor:pointer}' +
+'.bar button.sec{background:transparent;border:1px solid rgba(255,255,255,.35)}' +
+'.folha{background:#fff;width:210mm;margin:18px auto;padding:10mm 14mm 16mm;box-shadow:0 2px 14px rgba(0,0,0,.12)}' +
+'.hdr{display:flex;align-items:center;justify-content:space-between;height:14mm;border-bottom:.8pt solid #d6deda;margin-bottom:6mm}' +
+'.hdr .l{display:flex;align-items:center;gap:10px}.hdr img{display:block}' +
+'.hdr .tt{font-size:7.6pt;color:#7d8682;text-align:right;line-height:1.35}.hdr .tt b{color:#118751;font-size:8pt}' +
+'.hdr .cli{display:flex;align-items:center;gap:8px}.hdr .cli .sep{width:.8pt;height:9mm;background:#d6deda}' +
+'.hdr .cli .nm{font:700 10pt Arial,sans-serif;color:#1a3c5e;letter-spacing:.2px}' +
+'@media print{body{background:#fff}.bar{display:none}.folha{width:auto;margin:0;padding:0;box-shadow:none}}' +
+'table.pg{width:100%;border-collapse:collapse;margin:0;font-size:inherit}' +
+'table.pg>thead>tr>td,table.pg>tbody>tr>td{border:none;padding:0;background:none!important;vertical-align:top}' +
+'table.pg>tbody>tr{break-inside:auto;page-break-inside:auto}' +
+'.capa{border-left:3pt solid #118751;padding:2mm 0 2mm 5mm;margin-bottom:6mm}' +
+'.capa .mod{font-size:7.8pt;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#118751}' +
+'.capa h1{font-size:19pt;line-height:1.15;color:#1a3c5e;margin:1.5mm 0}' +
+'.capa .sub{font-size:10pt;color:#5f6964}' +
+'.meta{display:grid;grid-template-columns:repeat(3,1fr);border:.6pt solid #d6deda;border-radius:2mm;overflow:hidden;margin-bottom:5mm}' +
+'.meta div{padding:2.2mm 3mm;border-right:.6pt solid #e6ebe8;border-bottom:.6pt solid #e6ebe8}' +
+'.meta div:nth-child(3n){border-right:none}' +
+'.meta i{display:block;font-style:normal;font-size:6.8pt;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#8a948f}' +
+'.meta b{font-size:9.2pt;color:#1a3c5e}' +
+'h2{font-size:12.5pt;color:#118751;margin:7mm 0 2.5mm;padding-bottom:1.2mm;border-bottom:.8pt solid #cfe0d6;break-after:avoid;page-break-after:avoid}' +
+'h3{font-size:10.6pt;color:#1a3c5e;margin:5mm 0 2mm;break-after:avoid;page-break-after:avoid}' +
+'h2 .nu,h3 .nu{display:inline-block;min-width:9mm}' +
+'p{margin:0 0 2.4mm;text-align:justify}' +
+'.kp{display:grid;gap:2mm;margin:2mm 0 3.5mm;break-inside:avoid}' +
+'.kp div{border:.6pt solid #d6deda;border-top:2pt solid #118751;border-radius:1.5mm;padding:2mm 2.5mm;background:#f7faf8}' +
+'.kp b{display:block;font-size:15pt;line-height:1.1;color:#1a3c5e}.kp span{font-size:7.4pt;color:#5f6964;line-height:1.3;display:block;margin-top:.6mm}' +
+'.kp .vm b{color:#c0392b}.kp .vm{border-top-color:#c0392b}.kp .am b{color:#b7791f}.kp .am{border-top-color:#e67e22}.kp .az{border-top-color:#1a5490}' +
+'.leg{font-size:7.8pt;font-weight:700;color:#5f6964;margin:3mm 0 1.2mm}' +
+'.leg.f{text-align:center;margin:1.5mm 0 3mm}' +
+'table{width:100%;border-collapse:collapse;margin-bottom:3mm;font-size:8pt}' +
+'thead{display:table-header-group}tr{break-inside:avoid;page-break-inside:avoid}' +
+'th{background:#1a3c5e;color:#fff;font-size:7.2pt;font-weight:700;text-transform:uppercase;letter-spacing:.4px;text-align:left;padding:1.6mm 2mm;border:.4pt solid #1a3c5e}' +
+'td{padding:1.5mm 2mm;border:.4pt solid #dfe5e2;vertical-align:top}' +
+'tbody tr:nth-child(even) td{background:#f7faf8}' +
+'table.c td,table.c th{padding:1.1mm 1.6mm;font-size:7.4pt}' +
+'td.n{text-align:center;white-space:nowrap}td.r{text-align:right;white-space:nowrap}td.b{font-weight:700;color:#1a3c5e;white-space:nowrap}' +
+'td.vm{color:#c0392b;font-weight:700}td.am{color:#b7791f;font-weight:700}td.vd{color:#4a7d11;font-weight:700}td.mu{color:#8a948f}' +
+'.pp{display:inline-block;min-width:5.5mm;text-align:center;border-radius:1mm;color:#fff;font-weight:700;font-size:7.2pt;padding:.3mm 1mm}' +
+'.fig{break-inside:avoid;margin:2mm 0}' +
+'ul.li{margin:0 0 3mm 5mm}ul.li li{margin-bottom:1.2mm}' +
+'.nota{border:.6pt solid #d6deda;border-left:2pt solid #F07E1A;background:#fbf8f3;border-radius:1.5mm;padding:2.2mm 3mm;margin:2mm 0 3mm;font-size:8.4pt;color:#4a4f4c}' +
+'.vz{color:#8a948f;font-style:italic;padding:2mm 0}' +
+'.toc{margin:1mm 0 4mm}.toc div{display:flex;gap:2mm;font-size:9pt;padding:.7mm 0;border-bottom:.4pt dotted #cfd8d3}' +
+'.toc .n2{padding-left:8mm;font-size:8.6pt;color:#4a4f4c}.toc .nu{min-width:10mm;font-weight:700;color:#118751}' +
+'.pb{break-before:page;page-break-before:always;height:0}';
+  }
+
+  /* ---------------- blocos ---------------- */
+  function cel(c) {
+    if (c == null || c === '') return { t: '—', cls: 'mu' };
+    if (typeof c === 'object' && !Array.isArray(c)) return c;
+    return { t: String(c) };
+  }
+  function blocoHTML(b, ctx) {
+    var h = '';
+    switch (b.tipo) {
+      case 'p': return '<p>' + b.html + '</p>';
+      case 'kpis':
+        var it = (b.itens || []).slice(0, 6);
+        if (!it.length) return '';
+        return '<div class="kp" style="grid-template-columns:repeat(' + it.length + ',1fr)">' +
+          it.map(function (k) { return '<div class="' + (k.cor || '') + '"><b>' + esc(k.v) + '</b><span>' + esc(k.l) + '</span></div>'; }).join('') + '</div>';
+      case 'tabela':
+        if (b.legenda) h += '<div class="leg">Tabela ' + (++ctx.nTab) + ' – ' + esc(b.legenda) + '</div>';
+        if (!b.linhas || !b.linhas.length) return h + '<div class="vz">' + esc(b.vazio || 'Sem registros.') + '</div>';
+        h += '<table' + (b.compacta ? ' class="c"' : '') + '>';
+        if (b.larg) h += '<colgroup>' + b.larg.map(function (w) { return '<col style="width:' + w + '">'; }).join('') + '</colgroup>';
+        h += '<thead><tr>' + b.cab.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>';
+        b.linhas.forEach(function (l) {
+          h += '<tr>' + l.map(function (c) { c = cel(c); return '<td' + (c.cls ? ' class="' + c.cls + '"' : '') + (c.st ? ' style="' + c.st + '"' : '') + '>' + (c.html != null ? c.html : esc(c.t)) + '</td>'; }).join('') + '</tr>';
+        });
+        return h + '</tbody></table>' + (b.rodape ? '<div class="nota" style="margin-top:-1mm">' + b.rodape + '</div>' : '');
+      case 'figura':
+        ctx.nFig++;
+        return '<div class="fig">' + b.html + (b.legenda ? '<div class="leg f">Figura ' + ctx.nFig + ' – ' + esc(b.legenda) + '</div>' : '') + '</div>';
+      case 'lista':
+        return (b.itens && b.itens.length) ? '<ul class="li">' + b.itens.map(function (i) { return '<li>' + i + '</li>'; }).join('') + '</ul>' : '';
+      case 'nota': return '<div class="nota">' + b.html + '</div>';
+      case 'quebra': return '<div class="pb"></div>';
+    }
+    return '';
+  }
+  function secaoHTML(s, ctx, nivel) {
+    var h = (s.quebra ? '<div class="pb"></div>' : '') +
+      '<h' + (nivel + 1) + '><span class="nu">' + esc(s.num) + (String(s.num).indexOf('.') < 0 && !/^[A-Z]/.test(s.num) ? '.' : '') + '</span>' + esc(s.titulo) + '</h' + (nivel + 1) + '>';
+    (s.blocos || []).forEach(function (b) { h += blocoHTML(b, ctx); });
+    (s.sub || []).forEach(function (x) { h += secaoHTML(x, ctx, nivel + 1); });
+    return h;
+  }
+  function sumario(secoes) {
+    var h = '';
+    secoes.forEach(function (s) {
+      h += '<div><span class="nu">' + esc(s.num) + '</span>' + esc(s.titulo) + '</div>';
+      (s.sub || []).forEach(function (x) { h += '<div class="n2"><span class="nu">' + esc(x.num) + '</span>' + esc(x.titulo) + '</div>'; });
+    });
+    return '<div class="toc">' + h + '</div>';
+  }
+
+  /* ---------------- cabeçalho com marcas ---------------- */
+  function logoCliente(nome) {
+    var L = (typeof LOGOS !== 'undefined') ? LOGOS : {};
+    var k = String(nome || '').toLowerCase();
+    if (L[k]) return '<img src="' + L[k] + '" style="height:8.5mm;width:auto" alt="' + esc(nome) + '">';
+    return '<span class="nm">' + esc(nome) + '</span>';
+  }
+  function cabecalho(doc) {
+    var L = (typeof LOGOS !== 'undefined') ? LOGOS : {};
+    var inv = L.invenergy ? '<img src="' + L.invenergy + '" style="height:9.5mm;width:auto" alt="Invenergy Services">' : '<span class="nm">Invenergy Services</span>';
+    var clientes = doc.clientes || (doc.cliente ? [doc.cliente] : []);
+    var cli = clientes.length ? '<div class="cli"><div class="sep"></div>' + clientes.map(logoCliente).join('<div class="sep"></div>') + '</div>' : '';
+    return '<div class="hdr"><div class="l">' + inv + cli + '</div>' +
+      '<div class="tt"><b>' + esc(doc.titulo) + '</b><br>' + esc(doc.cabecalhoInfo || '') + '</div></div>';
+  }
+
+  /* ---------------- documento ---------------- */
+  function montar(doc) {
+    var ctx = { nTab: 0, nFig: 0 };
+    var meta = (doc.meta || []).concat([
+      ['Versão', doc.versao || '00'],
+      ['Data de emissão', fBR(doc.dataEmissao || hojeISO())],
+      ['Responsável', doc.responsavel || '—']
+    ]);
+    while (meta.length % 3) meta.push(['', '']);
+
+    var rev = (doc.revisoes || []).map(function (r) {
+      return [{ t: r.versao, cls: 'n b' }, { t: fBR(r.data), cls: 'n' }, r.responsavel || '—', r.descricao || '—'];
+    });
+
+    var corpo = '';
+    corpo += '<div class="capa"><div class="mod">' + esc(doc.modulo || 'Plataforma de Engenharia') + '</div>' +
+      '<h1>' + esc(doc.titulo) + '</h1>' + (doc.subtitulo ? '<div class="sub">' + esc(doc.subtitulo) + '</div>' : '') + '</div>';
+    corpo += '<div class="meta">' + meta.map(function (m) { return '<div><i>' + esc(m[0]) + '</i><b>' + esc(m[1]) + '</b></div>'; }).join('') + '</div>';
+    corpo += blocoHTML({ tipo: 'tabela', legenda: 'Controle de revisões', cab: ['Versão', 'Data', 'Responsável', 'Descrição'],
+      larg: ['12%', '14%', '24%', '50%'], linhas: rev, vazio: 'Primeira emissão.', compacta: true }, { nTab: -1 }).replace('Tabela 0 – ', '');
+    if (doc.sumario !== false) corpo += '<h2 style="margin-top:4mm">Sumário</h2>' + sumario(doc.secoes || []);
+    (doc.secoes || []).forEach(function (s) { corpo += secaoHTML(s, ctx, 1); });
+
+    var titulo = doc.arquivo || doc.titulo;
+    return '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>' + esc(titulo) + '</title>' +
+      '<style>' + estilo(doc.rodape || ('Invenergy Services Brasil · Plataforma de Engenharia · ' + (doc.modulo || ''))) + '</style></head><body>' +
+      '<div class="bar"><b>' + esc(doc.titulo) + '</b><span>Pré-visualização · Na janela de impressão, escolha <u>Salvar como PDF</u>. ' +
+      'Se aparecerem data e endereço no topo das páginas, desmarque <u>Cabeçalhos e rodapés</u>.</span>' +
+      '<button class="sec" onclick="window.close()">Fechar</button><button onclick="window.print()">Imprimir / Salvar PDF</button></div>' +
+      '<div class="folha"><table class="pg"><thead><tr><td>' + cabecalho(doc) + '</td></tr></thead>' +
+      '<tbody><tr><td>' + corpo + '</td></tr></tbody></table></div></body></html>';
+  }
+
+  function abrir(doc) {
+    var html = montar(doc);
+    var w = window.open('', '_blank');
+    if (!w) { alert('O navegador bloqueou a nova janela. Permita pop-ups para esta página e tente novamente.'); return null; }
+    w.document.open(); w.document.write(html); w.document.close();
+    return w;
+  }
+
+  return {
+    abrir: abrir, montar: montar,
+    historico: historico, proximaVersao: proximaVersao, registrar: registrar,
+    textos: textos, salvarTextos: salvarTextos, preferencia: preferencia,
+    util: { esc: esc, fBR: fBR, plural: plural, juntar: juntar, pct: pct, n: n, hojeISO: hojeISO, competenciaTexto: competenciaTexto }
+  };
+})();
+if (typeof module !== 'undefined') module.exports = Relatorio;
+
+</script>
+<script src="dados-cms.js"></script>
+<script>
+"use strict";
+/* =====================================================================
+   CONFIGURAÇÃO — premissas de prazo (dias a partir da data do evento)
+   ===================================================================== */
+var PRAZO = { 1: 7, 2: 30, 3: 60, 4: 180, 5: 365, 6: null };
+var PRAZO_ALERTA = 15;
+var IDADE_SUSPEITA = 5*365;
+
+var PRIO = {
+  1:{n:'Immediate Action Needed',h:'#8f1d12'},
+  2:{n:'Action Needed Soon',h:'#C0392B'},
+  3:{n:'Action within 2 months',h:'#E67E22'},
+  4:{n:'Action within 6 months',h:'#D4A017'},
+  5:{n:'Next Climb',h:'#5b8fb9'},
+  6:{n:'Monitor',h:'#8fa6b5'},
+  0:{n:'Sem prioridade',h:'#b8c4ce'}
+};
+var LOCAL = {
+  '1st Planetary Stage':'Estágio planetário','Helical Intermediate Stage':'Estágio intermediário',
+  'Helical High Speed Stage':'Estágio de alta (HSS)','Main Bearing':'Main bearing',
+  'Generator Inboard':'Gerador · lado acoplado','Generator Outboard':'Gerador · lado oposto',
+  'CMS Monitor':'Monitor CMS','Keyphasor':'Keyphasor','':'Não informado'
+};
+var ORD_LOCAL = ['1st Planetary Stage','Helical Intermediate Stage','Helical High Speed Stage','Main Bearing','Generator Inboard','Generator Outboard','CMS Monitor','Keyphasor',''];
+var FAIXAS = [[0,30,'0–30 d'],[30,60,'30–60 d'],[60,90,'60–90 d'],[90,180,'90–180 d'],[180,365,'180–365 d'],[365,1e9,'> 1 ano']];
+var MOVT = {
+  novos:{l:'Novos',c:'#5f9a17',cls:'mt-n',t:'Novo'},
+  encerrados:{l:'Encerrados',c:'#607d8b',cls:'mt-e',t:'Encerrado'},
+  up:{l:'Prioridade elevada',c:'#C0392B',cls:'mt-u',t:'Prioridade ↑'},
+  down:{l:'Prioridade reduzida',c:'#1a5490',cls:'mt-d',t:'Prioridade ↓'},
+  alterados:{l:'Atualizados',c:'#B7791F',cls:'mt-a',t:'Atualizado'}
+};
+
+/* ===================================================================== */
+var $=function(i){return document.getElementById(i);};
+var esc=function(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');};
+if(typeof LOGOS!=='undefined'&&LOGOS.invenergyBranca)$('tlogo').src=LOGOS.invenergyBranca;
+
+var VAZIA={gerado:null,origem:'—',parques:CMSImport.PARQUES.map(function(p){return{id:p.id,nome:p.nome,cliente:p.cliente};}),casos:[],resolvidos:{},meta:null,movimento:null};
+var BASE=(typeof CMS_DADOS!=='undefined')?CMS_DADOS:null, D=BASE||VAZIA, PREVIA=false;
+
+var HOJE=(function(){var d=new Date();d.setHours(0,0,0,0);return d;})();
+function dISO(s){if(!s)return null;var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
+function fBR(s){if(!s)return '—';var p=String(s).slice(0,10).split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function diasEntre(a,b){return Math.round((b-a)/86400000);}
+function tipoDe(ev){return (ev||'').toLowerCase()==='instrumentation'?'inst':'dano';}
+function evCls(ev){ev=(ev||'').toLowerCase();return ev==='alarm'?'ev-a':ev==='warning'?'ev-w':ev==='instrumentation'?'ev-i':'ev-x';}
+function ageCls(d){return d==null?'a1':d>=365?'a4':d>=180?'a3':d>=90?'a2':'a1';}
+function isoData(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
+
+var C=[], PQ={}, ALERTAS=[], MOV=null, MOVK={};
+function preparar(){
+  C=[];PQ={};ALERTAS=[];MOVK={};
+  D.parques.forEach(function(p){PQ[p.id]=p;});
+  CMSImport.atribuirChaves(D.casos);
+  var chave={};
+  D.casos.forEach(function(c,i){
+    var x={}; for(var k in c)x[k]=c[k];
+    x.i=i; x.tipo=tipoDe(c.evento); x.p=c.prioridade||0;
+    var d=dISO(c.data);
+    x.idade=d?diasEntre(d,HOJE):null;
+    var jan=c.prioridade?PRAZO[c.prioridade]:undefined;
+    if(!c.prioridade){x.pz='na';x.pzTxt='Sem prioridade';x.rest=null;}
+    else if(jan==null){x.pz='na';x.pzTxt='Monitor';x.rest=null;}
+    else if(x.idade==null){x.pz='na';x.pzTxt='Sem data';x.rest=null;}
+    else{x.rest=jan-x.idade; x.pz=x.rest<0?'ven':(x.rest<=PRAZO_ALERTA?'pro':'ok'); x.lim=new Date(d.getTime()+jan*86400000);}
+    x.q=[c.wtg,c.titulo,c.local,c.evento,c.disposicao,c.wo,c.acao,c.notas,PQ[c.parque].nome].join(' ').toLowerCase();
+    x.flags=[];
+    if(!c.data){x.flags.push('Sem data do evento');ALERTAS.push({k:'data',c:x,m:'sem data do evento'});}
+    else if(c.dataFonte==='texto'){x.flags.push('Data digitada como texto');ALERTAS.push({k:'txt',c:x,m:'data digitada como texto ('+fBR(c.data)+')'});}
+    if(x.idade!=null&&x.idade>IDADE_SUSPEITA){x.flags.push('Data muito antiga, possível erro de digitação');ALERTAS.push({k:'old',c:x,m:'data de '+fBR(c.data)+' ('+Math.round(x.idade/365)+' anos)'});}
+    if(!c.prioridade&&x.tipo==='dano'){x.flags.push('Dano sem prioridade');ALERTAS.push({k:'pri',c:x,m:'dano sem prioridade'});}
+    if(!c.evento){x.flags.push('Tipo de evento não informado');ALERTAS.push({k:'ev',c:x,m:'tipo de evento vazio'});}
+    var kk=c.wtg+'|'+c.local+'|'+c.titulo;
+    if(chave[kk]!=null){x.flags.push('Possível duplicidade');ALERTAS.push({k:'dup',c:x,m:'mesmo WTG, componente e título de outro caso ativo'});}
+    chave[kk]=i;
+    C.push(x);
+  });
+  /* movimentação indexada pela chave do caso */
+  MOV=D.movimento||null;
+  if(MOV){
+    (MOV.novos||[]).forEach(function(m){MOVK[m.chave]={tipo:'novos',m:m};});
+    (MOV.prioridade||[]).forEach(function(m){MOVK[m.chave]={tipo:m.sentido,m:m,alt:MOVK[m.chave]};});
+    (MOV.alterados||[]).forEach(function(m){ if(MOVK[m.chave]) MOVK[m.chave].campos=m.campos; else MOVK[m.chave]={tipo:'alterados',m:m,campos:m.campos}; });
+  }
+  C.forEach(function(x){x.mv=MOVK[x.chave]||null;});
+}
+function idsPorChaves(ks){var s={};ks.forEach(function(k){s[k]=1;});return C.filter(function(x){return s[x.chave];}).map(function(x){return x.i;});}
+
+/* ---------- filtros ---------- */
+var F={tipo:'todos',pq:'',loc:'',pr:'',pz:'',q:'',faixa:null,ids:null,idsNome:''};
+var SORT={k:'p',asc:true};
+var MVSEL='';
+function filtrar(ign){
+  ign=ign||{};
+  return C.filter(function(x){
+    if(!ign.pq&&F.pq&&x.parque!==F.pq)return false;
+    if(!ign.tipo&&F.tipo!=='todos'&&x.tipo!==F.tipo)return false;
+    if(F.loc!==''&&x.local!==F.loc)return false;
+    if(F.pr!==''&&String(x.p)!==F.pr)return false;
+    if(F.pz&&x.pz!==F.pz)return false;
+    if(F.faixa!=null){var fx=FAIXAS[F.faixa];if(x.idade==null||x.idade<fx[0]||x.idade>=fx[1])return false;}
+    if(F.ids&&F.ids.indexOf(x.i)<0)return false;
+    if(F.q&&x.q.indexOf(F.q)<0)return false;
+    return true;
+  });
+}
+function mediana(a){if(!a.length)return 0;a=a.slice().sort(function(x,y){return x-y;});var m=a.length>>1;return a.length%2?a[m]:Math.round((a[m-1]+a[m])/2);}
+
+/* ---------- render ---------- */
+function renderHero(){
+  $('hbox').innerHTML=D.gerado?'Base: <b>'+esc(D.origem)+'</b><br>Gerada em <b>'+fBR(D.gerado)+'</b> · '+D.casos.length+' casos ativos no escopo':'Sem base publicada';
+  $('fupd').innerHTML=D.gerado?'Base gerada em '+fBR(D.gerado)+(D.meta?' · '+D.meta.linhasLidas+' linhas lidas, '+D.meta.foraEscopo+' fora do escopo':''):'';
+  var base=F.pq?C.filter(function(x){return x.parque===F.pq;}):C;
+  var dano=base.filter(function(x){return x.tipo==='dano';}), ins=base.filter(function(x){return x.tipo==='inst';});
+  var crit=dano.filter(function(x){return x.p===1||x.p===2;});
+  var ven=base.filter(function(x){return x.pz==='ven';}), venD=ven.filter(function(x){return x.tipo==='dano';});
+  var ids=dano.map(function(x){return x.idade;}).filter(function(v){return v!=null;});
+  var semp=dano.filter(function(x){return !x.prioridade;});
+  var p1=dano.filter(function(x){return x.p===1;}).length;
+  var escopo=F.pq?PQ[F.pq].nome:'5 parques';
+  function k(cor,l,v,s,act){return '<button class="kpi" style="--k:'+cor+'" data-a="'+act+'"><div class="kl">'+l+'</div><div class="kv">'+v+'</div><div class="ks">'+s+'</div></button>';}
+  $('kpis').innerHTML=
+    k('var(--navy)','Danos ativos',dano.length,'Alarm + Warning · '+escopo,'dano')+
+    k('var(--red)','Críticos · P1 + P2',crit.length,'<b>'+p1+'</b> em Immediate Action','crit')+
+    k('var(--red)','Prazo vencido',ven.length,'<b>'+venD.length+'</b> danos · '+(ven.length-venD.length)+' instrumentação','ven')+
+    k('var(--orange)','Idade dos danos',mediana(ids)+'<small>d</small>','Mediana · máxima <b>'+(ids.length?Math.max.apply(null,ids):0)+'</b> dias','idade')+
+    k('var(--blue)','Instrumentação',ins.length,'Pontos cegos: sensor sem leitura confiável','inst')+
+    k('var(--muted-light)','Danos sem prioridade',semp.length,'Não entram no cálculo de prazo','semp');
+}
+
+function renderQual(){
+  var box=$('qual');
+  var base=F.pq?ALERTAS.filter(function(a){return a.c.parque===F.pq;}):ALERTAS;
+  if(!base.length){box.innerHTML=C.length?'<div class="vd vd-ok"><b>Base consistente.</b> Datas, prioridades e tipos de evento preenchidos.</div>':'';return;}
+  var g={};base.forEach(function(a){(g[a.k]=g[a.k]||[]).push(a);});
+  var nomes={data:'sem data do evento',txt:'com data digitada como texto',old:'com data suspeita (mais de 5 anos)',pri:'danos sem prioridade',ev:'sem tipo de evento',dup:'possíveis duplicidades'};
+  var resumo=Object.keys(g).map(function(k){return '<b>'+g[k].length+'</b> '+nomes[k];}).join(' · ');
+  var itens=base.map(function(a){return '<li><span class="lnk" data-i="'+a.c.i+'">'+esc(a.c.wtg)+'</span> · '+esc(PQ[a.c.parque].nome)+' · '+esc(a.c.titulo||a.c.local)+' — '+esc(a.m)+' <span style="opacity:.7">(linha '+a.c.linha+' da aba Events)</span></li>';}).join('');
+  box.innerHTML='<div class="vd vd-warn" id="vdq"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><div style="flex:1"><div class="vd-t"><span><b>Qualidade da base:</b> '+resumo+'. Corrija na planilha para que os prazos fiquem corretos.</span><button class="vd-btn" id="vdq-b">Ver casos</button></div><ul>'+itens+'</ul></div></div>';
+  $('vdq-b').onclick=function(){var v=$('vdq');v.classList.toggle('open');this.textContent=v.classList.contains('open')?'Ocultar':'Ver casos';};
+}
+
+/* ---------- movimentação ---------- */
+function movLinhas(){
+  if(!MOV)return [];
+  var L=[];
+  (MOV.novos||[]).forEach(function(m){L.push({g:'novos',m:m,det:'Entrou na base'+(m.prioridade?' como P'+m.prioridade:' sem prioridade')+(m.data?' · evento em '+fBR(m.data):'')});});
+  (MOV.encerrados||[]).forEach(function(m){L.push({g:'encerrados',m:m,det:m.motivo==='resolvido'?'Resolvido'+(m.resolvido?' em '+fBR(m.resolvido):'')+(m.desfecho?' · '+m.desfecho:''):'Saiu da lista de ativos sem registro de resolução'});});
+  (MOV.prioridade||[]).forEach(function(m){L.push({g:m.sentido,m:m,det:(m.de?'P'+m.de:'Sem prioridade')+' → '+(m.para?'P'+m.para:'Sem prioridade')});});
+  (MOV.alterados||[]).forEach(function(m){L.push({g:'alterados',m:m,det:'Alterado: '+m.campos.join(', ')+(m.tituloAnterior?' (antes: "'+m.tituloAnterior+'")':'')});});
+  return L;
+}
+function renderMov(){
+  var box=$('mv');
+  if(!D.casos.length){ $('sec-mov').style.display='none'; return; }
+  $('sec-mov').style.display='';
+  if(!MOV){
+    $('mov-p').textContent='';
+    box.innerHTML='<div class="mv-v"><b>A movimentação aparece a partir da próxima importação.</b><br>Ela compara a planilha nova com a base publicada e mostra os casos novos, encerrados, com prioridade alterada e atualizados.</div>';
+    return;
+  }
+  $('mov-p').innerHTML='Desde a base de <b>'+fBR(MOV.baseAnterior)+'</b>'+(MOV.mantida?' · reimportação sem mudanças em '+fBR(MOV.conferidoEm):'');
+  var L=movLinhas().filter(function(l){return !F.pq||l.m.parque===F.pq;});
+  var cnt={novos:0,encerrados:0,up:0,down:0,alterados:0};
+  L.forEach(function(l){cnt[l.g]++;});
+  var res=L.filter(function(l){return l.g==='encerrados'&&l.m.motivo==='resolvido';}).length;
+  var subs={novos:'casos ativos que não estavam na base',encerrados:res+' resolvidos · '+(cnt.encerrados-res)+' removidos',up:'urgência aumentou',down:'urgência diminuiu',alterados:'disposição, ação, SS ou data'};
+  var k='<div class="mv-k">'+['novos','encerrados','up','down','alterados'].map(function(g){
+    return '<button class="mvk'+(MVSEL===g?' on':'')+'" style="--mc:'+MOVT[g].c+'" data-g="'+g+'"><div class="l"><i></i>'+MOVT[g].l+'</div><div class="v">'+cnt[g]+'</div><div class="s">'+subs[g]+'</div></button>';
+  }).join('')+'</div>';
+  var LL=MVSEL?L.filter(function(l){return l.g===MVSEL;}):L;
+  var idx={};C.forEach(function(x){idx[x.chave]=x.i;});
+  var t;
+  if(!LL.length){t='<div class="mv-v">'+(L.length?'Nenhum caso nesta categoria.':'Nenhuma mudança desde a base anterior.')+'</div>';}
+  else{
+    t='<div class="mv-t"><table><thead><tr><th>Tipo</th><th>WTG</th><th>Parque</th><th>Caso / Componente</th><th>Prio.</th><th>Detalhe</th></tr></thead><tbody>'+
+      LL.map(function(l){var m=l.m,i=idx[m.chave],p=m.para!==undefined?m.para:m.prioridade,pr=PRIO[p||0];
+        return '<tr'+(i!=null?' data-i="'+i+'"':'')+'><td><span class="mt '+MOVT[l.g].cls+'">'+MOVT[l.g].t+'</span></td><td class="w">'+esc(m.wtg)+'</td><td>'+esc(PQ[m.parque]?PQ[m.parque].nome:m.parque)+'</td>'+
+          '<td><div class="ttl">'+esc(m.titulo||'—')+'</div><div class="sub">'+esc(LOCAL[m.local]||m.local||'—')+'</div></td>'+
+          '<td><span class="pp" style="background:'+pr.h+'">'+(p||'–')+'</span></td><td style="color:var(--muted)">'+esc(l.det)+'</td></tr>';}).join('')+
+      '</tbody></table></div>';
+  }
+  box.innerHTML=k+t;
+}
+
+function renderParques(){
+  $('pk').innerHTML=D.parques.map(function(p){
+    var xs=C.filter(function(x){return x.parque===p.id;});
+    var dn=xs.filter(function(x){return x.tipo==='dano';});
+    var ins=xs.length-dn.length;
+    var ven=xs.filter(function(x){return x.pz==='ven';}).length;
+    var cr=dn.filter(function(x){return x.p===1||x.p===2;}).length;
+    var ids=dn.map(function(x){return x.idade;}).filter(function(v){return v!=null;});
+    var bar=[1,2,3,4,5,6,0].map(function(pr){var n=dn.filter(function(x){return x.p===pr;}).length;return n?'<i style="width:'+(n/Math.max(dn.length,1)*100)+'%;background:'+PRIO[pr].h+'" title="P'+(pr||'–')+': '+n+'"></i>':'';}).join('');
+    return '<div class="card pc '+(p.cliente==='Auren'?'aur':'ess')+(F.pq===p.id?' on':'')+'" data-pq="'+p.id+'">'+
+      '<div class="pc-c">'+p.cliente+'</div><div class="pc-n">'+esc(p.nome)+'</div>'+
+      '<div class="pc-big"><b>'+xs.length+'</b><span>casos ativos</span></div>'+
+      '<div class="pc-bar">'+bar+'</div>'+
+      '<div class="pc-row"><span>Danos <b>'+dn.length+'</b></span><span>Instrum. <b>'+ins+'</b></span>'+
+      '<span>P1+P2 <b'+(cr?' class="r"':'')+'>'+cr+'</b></span><span>Vencidos <b'+(ven?' class="r"':'')+'>'+ven+'</b></span>'+
+      '<span>Idade máx <b>'+(ids.length?Math.max.apply(null,ids):'—')+'</b></span><span>Resolvidos <b>'+((D.resolvidos&&D.resolvidos[p.id])||0)+'</b></span></div></div>';
+  }).join('');
+}
+
+function corPrio(p,a){var hx=PRIO[p].h;return 'rgba('+parseInt(hx.substr(1,2),16)+','+parseInt(hx.substr(3,2),16)+','+parseInt(hx.substr(5,2),16)+','+a.toFixed(2)+')';}
+function matrizDados(xs){
+  var pr=[1,2,3,4,5,6,0];
+  var locs=ORD_LOCAL.filter(function(l){return xs.some(function(x){return x.local===l;});});
+  xs.forEach(function(x){if(locs.indexOf(x.local)<0)locs.push(x.local);});
+  var max=0,M={};
+  locs.forEach(function(l){M[l]={};pr.forEach(function(p){var n=xs.filter(function(x){return x.local===l&&x.p===p;}).length;M[l][p]=n;if(n>max)max=n;});});
+  return {pr:pr,locs:locs,M:M,max:max};
+}
+function renderMatriz(){
+  var xs=filtrar({tipo:true}).filter(function(x){return x.tipo==='dano';});
+  if(!xs.length){$('mx').innerHTML='<div class="empty">Nenhum dano ativo no filtro atual.</div>';return;}
+  var m=matrizDados(xs);
+  var h='<table><thead><tr><th class="l">Componente</th>'+m.pr.map(function(p){return '<th title="'+PRIO[p].n+'">'+(p?'P'+p:'S/P')+'</th>';}).join('')+'<th>Total</th></tr></thead><tbody>';
+  m.locs.forEach(function(l){
+    var tot=0;
+    h+='<tr><td class="l">'+esc(LOCAL[l]||l)+'</td>';
+    m.pr.forEach(function(p){
+      var n=m.M[l][p];tot+=n;
+      if(!n){h+='<td class="z">·</td>';return;}
+      var a=0.22+0.78*(n/m.max);
+      h+='<td class="c" data-loc="'+esc(l)+'" data-pr="'+p+'" style="background:'+corPrio(p,a)+';color:'+(a>=0.55?'#fff':'#1a2b3c')+'" title="'+esc(LOCAL[l]||l)+' · '+PRIO[p].n+': '+n+'">'+n+'</td>';
+    });
+    h+='<td class="tot">'+tot+'</td></tr>';
+  });
+  h+='<tr class="ft"><td class="l" style="color:var(--navy);font-weight:700">Total</td>'+m.pr.map(function(p){return '<td>'+xs.filter(function(x){return x.p===p;}).length+'</td>';}).join('')+'<td>'+xs.length+'</td></tr></tbody></table>';
+  $('mx').innerHTML=h+'<div class="cap">Intensidade da cor proporcional à quantidade. Clique numa célula para filtrar a tabela.</div>';
+}
+
+function faixasDados(xs){
+  return FAIXAS.map(function(f,i){
+    var inf=xs.filter(function(x){return x.idade!=null&&x.idade>=f[0]&&x.idade<f[1];});
+    var d=inf.filter(function(x){return x.tipo==='dano';}).length;
+    return {i:i,l:f[2],d:d,n:inf.length-d,t:inf.length};
+  });
+}
+function renderIdade(){
+  var rows=faixasDados(filtrar({}));
+  var mx=Math.max.apply(null,rows.map(function(r){return r.t;}).concat([1]));
+  $('ag').innerHTML=rows.map(function(r){
+    return '<div class="agr" data-f="'+r.i+'"><div class="agl">'+r.l+'</div><div class="agb">'+
+      (r.d?'<i style="width:'+(r.d/mx*100)+'%;background:var(--navy)">'+(r.d>1?r.d:'')+'</i>':'')+
+      (r.n?'<i style="width:'+(r.n/mx*100)+'%;background:#7fa6cc">'+(r.n>1?r.n:'')+'</i>':'')+
+      '</div><div class="agn">'+r.t+'</div></div>';
+  }).join('')+'<div class="leg"><span><i style="background:var(--navy)"></i>Danos</span><span><i style="background:#7fa6cc"></i>Instrumentação</span></div>'+
+  '<div class="cap">A idade conta desde a data do evento e não reinicia quando a prioridade muda. Clique numa faixa para filtrar.</div>';
+}
+
+var COLS=[{k:'wtg',l:'WTG'},{k:'pq',l:'Parque'},{k:'titulo',l:'Caso / Componente'},{k:'evento',l:'Evento'},{k:'p',l:'Prio.'},{k:'data',l:'Identificado em'},{k:'idade',l:'Idade'},{k:'rest',l:'Prazo'},{k:'acao',l:'Ação'},{k:'wo',l:'SS / WO'}];
+function valSort(x,k){
+  if(k==='pq')return PQ[x.parque].nome;
+  if(k==='p')return x.p||99;
+  if(k==='idade')return x.idade==null?-1:x.idade;
+  if(k==='rest')return x.rest==null?1e9:x.rest;
+  if(k==='data')return x.data||'';
+  return (x[k]||'').toString().toLowerCase();
+}
+function prazoTxt(x){return x.pz==='na'?x.pzTxt:x.pz==='ven'?'Vencido há '+(-x.rest)+' d':'Faltam '+x.rest+' d';}
+function renderTabela(){
+  var xs=filtrar({});
+  xs.sort(function(a,b){var va=valSort(a,SORT.k),vb=valSort(b,SORT.k);var r=va<vb?-1:va>vb?1:0;if(r===0)r=(b.idade||0)-(a.idade||0);return SORT.asc?r:-r;});
+  var nd=xs.filter(function(x){return x.tipo==='dano';}).length;
+  $('cnt').innerHTML='<b>'+xs.length+'</b> caso'+(xs.length===1?'':'s')+' · '+nd+' danos · '+(xs.length-nd)+' instrumentação';
+  if(!xs.length){$('tb').innerHTML='<tbody><tr><td class="empty">Nenhum caso no filtro atual.</td></tr></tbody>';return;}
+  var h='<thead><tr>'+COLS.map(function(c){return '<th data-k="'+c.k+'" class="'+(SORT.k===c.k?'s'+(SORT.asc?' asc':''):'')+'">'+c.l+'</th>';}).join('')+'</tr></thead><tbody>';
+  xs.forEach(function(x){
+    var pr=PRIO[x.p], mv=x.mv;
+    var badge=mv?(mv.tipo==='novos'?'<span class="nb">NOVO</span>':(mv.tipo==='alterados'||mv.campos?'<span class="nb a" title="'+esc((mv.campos||[]).join(', '))+'">ATUALIZADO</span>':'')):'';
+    var pv=mv&&(mv.tipo==='up'||mv.tipo==='down')?'<span class="pv '+mv.tipo+'">'+(mv.tipo==='up'?'↑':'↓')+' de '+(mv.m.de?'P'+mv.m.de:'S/P')+'</span>':'';
+    h+='<tr class="'+(x.tipo==='inst'?'ins':'')+'" data-i="'+x.i+'">'+
+      '<td class="w">'+esc(x.wtg)+(x.flags.length?'<span class="flag" title="'+esc(x.flags.join(' · '))+'">⚠</span>':'')+badge+'</td>'+
+      '<td>'+esc(PQ[x.parque].nome)+'</td>'+
+      '<td><div class="ttl">'+esc(x.titulo||'—')+'</div><div class="sub">'+esc(LOCAL[x.local]||x.local||'—')+'</div></td>'+
+      '<td><span class="ev '+evCls(x.evento)+'">'+esc(x.evento||'—')+'</span></td>'+
+      '<td><span class="pp" style="background:'+pr.h+'" title="'+pr.n+'">'+(x.p||'–')+'</span>'+pv+'</td>'+
+      '<td style="white-space:nowrap">'+fBR(x.data)+'</td>'+
+      '<td><span class="age '+ageCls(x.idade)+'">'+(x.idade==null?'—':x.idade+' d')+'</span></td>'+
+      '<td><span class="dl '+x.pz+'">'+prazoTxt(x)+'</span></td>'+
+      '<td class="mono">'+esc(x.acao||'—')+'</td><td class="mono">'+esc(x.wo||'—')+'</td></tr>';
+  });
+  $('tb').innerHTML=h+'</tbody>';
+}
+
+function renderChips(){
+  var c=[];
+  if(F.pq)c.push(['pq','Parque: '+PQ[F.pq].nome]);
+  if(F.loc!=='')c.push(['loc','Componente: '+(LOCAL[F.loc]||F.loc)]);
+  if(F.pr!=='')c.push(['pr','Prioridade: '+(F.pr==='0'?'Sem prioridade':'P'+F.pr)]);
+  if(F.pz)c.push(['pz','Prazo: '+$('f-pz').selectedOptions[0].text]);
+  if(F.faixa!=null)c.push(['faixa','Idade: '+FAIXAS[F.faixa][2]]);
+  if(F.ids)c.push(['ids',(F.idsNome||'Seleção')+': '+F.ids.length+' casos']);
+  $('chips').innerHTML=c.map(function(x){return '<span class="chip">'+esc(x[1])+'<button data-c="'+x[0]+'">✕</button></span>';}).join('')+
+    (c.length>1?'<span class="chip" style="background:transparent"><button data-c="all" style="width:auto;padding:0 8px;border-radius:10px">limpar tudo</button></span>':'');
+}
+function renderPremissas(){
+  $('pr').innerHTML=[1,2,3,4,5,6,0].map(function(p){
+    var j=p?PRAZO[p]:undefined;
+    var t=p===0?'Não entra no cálculo de prazo. Aparece na qualidade da base.':(j==null?'Sem prazo. Acompanha apenas a idade do caso.':'<b>'+j+' dias</b> a partir da data do evento.');
+    if(p===5)t+=' Referência: ciclo anual de preventiva.';
+    return '<div class="pri"><div class="pri-h"><span class="pp" style="background:'+PRIO[p].h+'">'+(p||'–')+'</span><div class="pri-t">'+PRIO[p].n+'</div></div><div class="pri-s">'+t+'</div></div>';
+  }).join('');
+}
+function renderPrev(){
+  $('prev').innerHTML=PREVIA?'<div class="prev"><span>Você está vendo uma <b>prévia da planilha importada</b>. Para publicar ao time, baixe o arquivo e faça commit.</span><button class="bg" id="pv-dl">Baixar dados-cms.js</button><button class="btn" id="pv-x">Descartar</button></div>':'';
+  if(PREVIA){$('pv-dl').onclick=baixar;$('pv-x').onclick=function(){D=BASE||VAZIA;PREVIA=false;tudo();};}
+}
+function popularSelects(){
+  $('f-pq').innerHTML='<option value="">Todos os parques</option>'+D.parques.map(function(p){return '<option value="'+p.id+'">'+esc(p.nome)+'</option>';}).join('');
+  var locs=ORD_LOCAL.filter(function(l){return C.some(function(x){return x.local===l;});});
+  $('f-loc').innerHTML='<option value="">Todos os componentes</option>'+locs.map(function(l){return '<option value="'+esc(l)+'">'+esc(LOCAL[l]||l)+'</option>';}).join('');
+  $('f-pr').innerHTML='<option value="">Todas as prioridades</option>'+[1,2,3,4,5,6,0].map(function(p){return '<option value="'+p+'">'+(p?'P'+p+' · ':'')+PRIO[p].n+'</option>';}).join('');
+}
+function sincSelects(){
+  $('f-pq').value=F.pq;$('f-loc').value=F.loc;$('f-pr').value=F.pr;$('f-pz').value=F.pz;
+  [].forEach.call($('f-tipo').children,function(b){b.classList.toggle('on',b.dataset.v===F.tipo);});
+}
+function atualizar(){sincSelects();renderHero();renderQual();renderMov();renderParques();renderMatriz();renderIdade();renderChips();renderTabela();}
+function tudo(){
+  preparar();popularSelects();renderPremissas();renderPrev();
+  var tem=D.casos.length>0;
+  $('semBase').style.display=tem?'none':'';
+  $('conteudo').style.display=tem?'':'none';
+  $('b-rel').disabled=!tem;
+  atualizar();
+}
+function irTabela(){$('sec-tab').scrollIntoView({behavior:'smooth',block:'start'});}
+function limparF(){F={tipo:F.tipo,pq:F.pq,loc:'',pr:'',pz:'',q:F.q,faixa:null,ids:null,idsNome:''};}
+
+/* ---------- eventos ---------- */
+$('f-tipo').onclick=function(e){var b=e.target.closest('button');if(!b)return;F.tipo=b.dataset.v;atualizar();};
+$('f-pq').onchange=function(){F.pq=this.value;atualizar();};
+$('f-loc').onchange=function(){F.loc=this.value;atualizar();};
+$('f-pr').onchange=function(){F.pr=this.value;atualizar();};
+$('f-pz').onchange=function(){F.pz=this.value;atualizar();};
+var tq;$('f-q').oninput=function(){var v=this.value;clearTimeout(tq);tq=setTimeout(function(){F.q=v.trim().toLowerCase();renderChips();renderTabela();},150);};
+$('chips').onclick=function(e){var b=e.target.closest('button');if(!b)return;var c=b.dataset.c;
+  if(c==='all'){F={tipo:F.tipo,pq:'',loc:'',pr:'',pz:'',q:F.q,faixa:null,ids:null,idsNome:''};MVSEL='';}
+  else if(c==='ids'){F.ids=null;F.idsNome='';MVSEL='';}
+  else F[c]=(c==='faixa')?null:'';
+  atualizar();};
+$('pk').onclick=function(e){var c=e.target.closest('.pc');if(!c)return;F.pq=F.pq===c.dataset.pq?'':c.dataset.pq;atualizar();};
+$('mx').onclick=function(e){var t=e.target.closest('td.c');if(!t)return;F.tipo='dano';F.loc=t.dataset.loc;F.pr=t.dataset.pr;atualizar();irTabela();};
+$('ag').onclick=function(e){var r=e.target.closest('.agr');if(!r)return;F.faixa=+r.dataset.f;SORT={k:'idade',asc:false};atualizar();irTabela();};
+$('kpis').onclick=function(e){var k=e.target.closest('.kpi');if(!k)return;var a=k.dataset.a;
+  limparF();MVSEL='';
+  if(a==='dano'){F.tipo='dano';SORT={k:'p',asc:true};}
+  else if(a==='crit'){F.tipo='dano';F.ids=C.filter(function(x){return x.tipo==='dano'&&(x.p===1||x.p===2);}).map(function(x){return x.i;});F.idsNome='Críticos';SORT={k:'p',asc:true};}
+  else if(a==='ven'){F.tipo='todos';F.pz='ven';SORT={k:'rest',asc:true};}
+  else if(a==='idade'){F.tipo='dano';SORT={k:'idade',asc:false};}
+  else if(a==='inst'){F.tipo='inst';SORT={k:'idade',asc:false};}
+  else if(a==='semp'){F.tipo='dano';F.pr='0';}
+  atualizar();irTabela();};
+$('mv').onclick=function(e){
+  var k=e.target.closest('.mvk');
+  if(k){var g=k.dataset.g;MVSEL=MVSEL===g?'':g;
+    limparF();
+    if(MVSEL&&g!=='encerrados'){
+      var L=movLinhas().filter(function(l){return l.g===g;});
+      F.tipo='todos';F.ids=idsPorChaves(L.map(function(l){return l.m.chave;}));F.idsNome=MOVT[g].l;
+    }
+    atualizar();return;}
+  var tr=e.target.closest('tr[data-i]');if(tr)abrir(+tr.dataset.i);
+};
+$('tb').onclick=function(e){var th=e.target.closest('th');if(th){var k=th.dataset.k;SORT=SORT.k===k?{k:k,asc:!SORT.asc}:{k:k,asc:k!=='idade'};renderTabela();return;}
+  var tr=e.target.closest('tr[data-i]');if(tr)abrir(+tr.dataset.i);};
+$('qual').onclick=function(e){var l=e.target.closest('.lnk');if(l)abrir(+l.dataset.i);};
+
+/* ---------- drawer ---------- */
+function linhaTempo(txt){
+  var partes=String(txt||'').split(/(?=\b\d{1,2}\/\d{1,2}\/\d{2,4}\s*[-–:])/).map(function(s){return s.trim();}).filter(Boolean);
+  if(partes.length<2)return null;
+  return '<div class="tl2">'+partes.map(function(p){var m=p.match(/^(\d{1,2}\/\d{1,2}\/\d{2,4})\s*[-–:]\s*([\s\S]*)$/);return '<div class="tli">'+(m?'<b>'+esc(m[1])+'</b> · '+esc(m[2]):esc(p))+'</div>';}).join('')+'</div>';
+}
+function abrir(i){
+  var x=C.filter(function(y){return y.i===i;})[0];if(!x)return;
+  var pr=PRIO[x.p];
+  $('dw-hd').innerHTML='<div class="dw-e">'+esc(PQ[x.parque].nome)+' · '+esc(PQ[x.parque].cliente)+'</div><div class="dw-t">'+esc(x.wtg)+'</div><div class="dw-s">'+esc(x.titulo||'Sem título')+'</div>';
+  var h='<div class="dg">'+
+    '<div class="dgi"><div class="dgl">Componente</div><div class="dgv">'+esc(LOCAL[x.local]||x.local||'—')+'</div></div>'+
+    '<div class="dgi"><div class="dgl">Tipo de evento</div><div class="dgv"><span class="ev '+evCls(x.evento)+'">'+esc(x.evento||'—')+'</span></div></div>'+
+    '<div class="dgi"><div class="dgl">Prioridade</div><div class="dgv"><span class="pp" style="background:'+pr.h+'">'+(x.p||'–')+'</span> '+pr.n+'</div></div>'+
+    '<div class="dgi"><div class="dgl">Identificado em</div><div class="dgv">'+fBR(x.data)+'</div></div>'+
+    '<div class="dgi"><div class="dgl">Idade do caso</div><div class="dgv '+ageCls(x.idade)+'">'+(x.idade==null?'—':x.idade+' dias')+'</div></div>'+
+    '<div class="dgi"><div class="dgl">Prazo de ação</div><div class="dgv"><span class="dl '+x.pz+'">'+prazoTxt(x)+'</span>'+(x.lim?'<div class="sub">limite '+fBR(isoData(x.lim))+'</div>':'')+'</div></div>'+
+    '<div class="dgi"><div class="dgl">Ação</div><div class="dgv mono" style="font-size:12px">'+esc(x.acao||'—')+'</div></div>'+
+    '<div class="dgi"><div class="dgl">SS / WO</div><div class="dgv mono" style="font-size:12px">'+esc(x.wo||'—')+(x.woStatus?' · '+esc(x.woStatus):'')+'</div></div></div>';
+  if(x.mv){
+    var t=x.mv.tipo==='novos'?'Caso novo nesta base.':(x.mv.tipo==='up'||x.mv.tipo==='down')?'Prioridade alterada de '+(x.mv.m.de?'P'+x.mv.m.de:'sem prioridade')+' para '+(x.mv.m.para?'P'+x.mv.m.para:'sem prioridade')+'.':'';
+    if(x.mv.campos)t+=(t?' ':'')+'Campos atualizados: '+x.mv.campos.join(', ')+'.';
+    h+='<div class="vd vd-ok" style="margin-bottom:12px"><div><b>Movimentação desde '+fBR(MOV.baseAnterior)+':</b> '+esc(t)+'</div></div>';
+  }
+  if(x.desfecho||x.trocaPrev)h+='<div class="dg">'+(x.desfecho?'<div class="dgi"><div class="dgl">Desfecho</div><div class="dgv" style="font-size:12px">'+esc(x.desfecho)+'</div></div>':'')+(x.trocaPrev?'<div class="dgi"><div class="dgl">Troca estimada</div><div class="dgv">'+fBR(x.trocaPrev)+'</div></div>':'')+'</div>';
+  if(x.flags.length)h+='<div class="vd vd-warn" style="margin-bottom:0"><div><b>Atenção na base:</b> '+esc(x.flags.join(' · '))+' <span style="opacity:.7">(linha '+x.linha+')</span></div></div>';
+  h+='<div class="dh">Disposição / Recomendação</div>';
+  h+=linhaTempo(x.disposicao)||('<div class="dtx'+(x.disposicao?'':' na')+'">'+esc(x.disposicao||'Sem disposição registrada.')+'</div>');
+  if(x.notas)h+='<div class="dh">Notas</div><div class="dtx">'+esc(x.notas)+'</div>';
+  var out=C.filter(function(y){return y.wtg===x.wtg&&y.i!==x.i;});
+  if(out.length)h+='<div class="dh">Outros casos ativos nesta turbina ('+out.length+')</div><div class="others">'+out.map(function(y){return '<div class="oth" data-i="'+y.i+'"><span class="pp" style="background:'+PRIO[y.p].h+'">'+(y.p||'–')+'</span><span style="flex:1"><b style="color:var(--navy)">'+esc(y.titulo||'—')+'</b><div class="sub">'+esc(LOCAL[y.local]||y.local)+' · '+esc(y.evento)+' · '+(y.idade==null?'—':y.idade+' d')+'</div></span></div>';}).join('')+'</div>';
+  $('dw-b').innerHTML=h;$('dw-b').scrollTop=0;
+  $('bd').classList.add('on');$('dw').classList.add('on');
+}
+function fecharDw(){$('bd').classList.remove('on');$('dw').classList.remove('on');}
+$('dw-x').onclick=fecharDw;$('bd').onclick=fecharDw;
+$('dw-b').onclick=function(e){var o=e.target.closest('.oth');if(o)abrir(+o.dataset.i);};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){fecharDw();fecharMd();fecharMr();}});
+
+/* ---------- CSV ---------- */
+$('b-csv').onclick=function(){
+  var xs=filtrar({});
+  var cab=['Parque','Cliente','WTG','Caso','Componente','Evento','Prioridade','Identificado em','Idade (d)','Prazo','Dias restantes','Acao','SS/WO','Movimentacao','Disposicao'];
+  var q=function(v){v=String(v==null?'':v).replace(/"/g,'""').replace(/\r?\n/g,' ');return '"'+v+'"';};
+  var l=[cab.join(';')].concat(xs.map(function(x){return [PQ[x.parque].nome,PQ[x.parque].cliente,x.wtg,x.titulo,LOCAL[x.local]||x.local,x.evento,x.p||'',fBR(x.data),x.idade==null?'':x.idade,x.pz==='na'?x.pzTxt:x.pz==='ven'?'Vencido':'No prazo',x.rest==null?'':x.rest,x.acao,x.wo,x.mv?MOVT[x.mv.tipo].t:'',x.disposicao].map(q).join(';');}));
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+l.join('\r\n')],{type:'text/csv;charset=utf-8'}));
+  a.download='CMS_casos_ativos_'+(D.gerado||'sem-base')+'.csv';document.body.appendChild(a);a.click();a.remove();
+};
+
+/* ---------- importação ---------- */
+function baixar(){
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([CMSImport.gerarArquivo(D)],{type:'text/javascript;charset=utf-8'}));
+  a.download='dados-cms.js';document.body.appendChild(a);a.click();a.remove();
+}
+function abrirMd(){$('md').classList.add('on');}
+function fecharMd(){$('md').classList.remove('on');}
+$('b-imp').onclick=abrirMd;$('md-x').onclick=fecharMd;
+$('md').onclick=function(e){if(e.target===this)fecharMd();};
+$('dz').onclick=function(){$('file').click();};
+$('file').onchange=function(e){if(e.target.files[0])importar(e.target.files[0]);};
+['dragenter','dragover'].forEach(function(v){$('dz').addEventListener(v,function(e){e.preventDefault();this.classList.add('over');});});
+['dragleave','drop'].forEach(function(v){$('dz').addEventListener(v,function(e){e.preventDefault();this.classList.remove('over');});});
+$('dz').addEventListener('drop',function(e){var f=e.dataTransfer.files[0];if(f)importar(f);});
+function importar(f){
+  var r=$('md-r');
+  if(!/\.xlsx$/i.test(f.name)){r.innerHTML='<div class="vd vd-warn"><b>Selecione um arquivo .xlsx.</b></div>';return;}
+  r.innerHTML='<div style="font-size:12.5px;color:var(--muted);font-weight:600">Lendo a planilha…</div>';
+  var fr=new FileReader();
+  fr.onload=function(){setTimeout(function(){
+    try{
+      var nd=CMSImport.processar(fr.result, BASE);
+      D=nd;PREVIA=true;F={tipo:'todos',pq:'',loc:'',pr:'',pz:'',q:'',faixa:null,ids:null,idsNome:''};MVSEL='';tudo();
+      var by={};nd.casos.forEach(function(c){by[c.parque]=(by[c.parque]||0)+1;});
+      var mv=nd.movimento, mvh='';
+      if(mv){
+        var up=mv.prioridade.filter(function(x){return x.sentido==='up';}).length;
+        mvh='<div style="margin-top:8px"><b>Movimentação desde '+fBR(mv.baseAnterior)+(mv.mantida?' (sem mudanças; mantida a anterior)':'')+':</b></div><div class="mvres">'+
+          [['Novos',mv.novos.length],['Encerrados',mv.encerrados.length],['Prio. ↑',up],['Prio. ↓',mv.prioridade.length-up],['Atualizados',mv.alterados.length]]
+          .map(function(k){return '<div><b>'+k[1]+'</b><span>'+k[0]+'</span></div>';}).join('')+'</div>';
+      } else mvh='<div style="margin-top:6px">Primeira base: a movimentação passa a ser apurada na próxima importação.</div>';
+      r.innerHTML='<div class="vd vd-ok" style="margin:0;display:block"><b>Planilha importada.</b> '+nd.casos.length+' casos ativos no escopo ('+nd.parques.map(function(p){return esc(p.nome)+': '+(by[p.id]||0);}).join(' · ')+'). '+nd.meta.foraEscopo+' linhas de outros sites descartadas.'+(nd.meta.colunasAusentes.length?'<br>Colunas ausentes: '+esc(nd.meta.colunasAusentes.join(', ')):'')+mvh+'</div>';
+      $('md-dl').style.display='inline-block';$('md-dl').onclick=function(){baixar();fecharMd();};
+    }catch(err){r.innerHTML='<div class="vd vd-warn" style="margin:0"><div><b>Não foi possível importar.</b><br>'+esc(err.message||err)+'</div></div>';}
+    $('file').value='';
+  },40);};
+  fr.readAsArrayBuffer(f);
+}
+
+/* =====================================================================
+   RELATÓRIO DE CMS — conteúdo montado sobre o motor padrão (relatorio.js)
+   ===================================================================== */
+var U=Relatorio.util;
+function relChave(){return 'cms|'+$('r-esc').value+'|'+($('r-comp').value||'');}
+function relCarregarTextos(){
+  var t=Relatorio.textos(relChave());
+  $('r-dest').value=t.destaques||'';$('r-cons').value=t.consideracoes||'';
+  var ver=Relatorio.proximaVersao(relChave());$('r-ver').value=ver;
+  var h=Relatorio.historico(relChave());
+  $('r-verh').textContent=h.length?'Próxima revisão desta competência.':'Primeira emissão desta competência.';
+  $('r-desc').value=h.length?'Revisão':'Emissão mensal';
+  $('r-histw').style.display=h.length?'':'none';
+  $('r-hist').innerHTML=h.length?'<table><thead><tr><th>Versão</th><th>Data</th><th>Responsável</th><th>Descrição</th></tr></thead><tbody>'+h.map(function(e){return '<tr><td><b>'+esc(e.versao)+'</b></td><td>'+fBR(e.data)+'</td><td>'+esc(e.responsavel)+'</td><td>'+esc(e.descricao)+'</td></tr>';}).join('')+'</tbody></table>':'';
+}
+function relSalvarTextos(){Relatorio.salvarTextos(relChave(),{destaques:$('r-dest').value,consideracoes:$('r-cons').value});}
+function abrirMr(){
+  var d=D.gerado?dISO(D.gerado):HOJE;
+  $('r-comp').value=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2);
+  $('r-resp').value=Relatorio.preferencia('responsavel')||'';
+  relCarregarTextos();
+  $('mr').classList.add('on');
+}
+function fecharMr(){relSalvarTextos();$('mr').classList.remove('on');}
+$('b-rel').onclick=abrirMr;$('mr-x').onclick=fecharMr;
+$('mr').onclick=function(e){if(e.target===this)fecharMr();};
+$('r-esc').onchange=relCarregarTextos;$('r-comp').onchange=relCarregarTextos;
+$('r-dest').onchange=relSalvarTextos;$('r-cons').onchange=relSalvarTextos;
+$('mr-pv').onclick=function(){gerarRelatorio(false);};
+$('mr-em').onclick=function(){
+  if(!$('r-resp').value.trim()){alert('Informe o responsável pela emissão.');$('r-resp').focus();return;}
+  gerarRelatorio(true);
+};
+
+function pill(p){return {html:'<span class="pp" style="background:'+PRIO[p||0].h+'">'+(p||'–')+'</span>',cls:'n'};}
+function gerarRelatorio(emitir){
+  relSalvarTextos();
+  var esc_=$('r-esc').value, comp=$('r-comp').value, resp=$('r-resp').value.trim();
+  Relatorio.preferencia('responsavel',resp);
+  var chave=relChave(), versao=$('r-ver').value, hoje=U.hojeISO();
+  var pqs=D.parques.filter(function(p){return esc_==='todos'||p.cliente===esc_;});
+  var ids={};pqs.forEach(function(p){ids[p.id]=1;});
+  var XS=C.filter(function(x){return ids[x.parque];});
+  var dano=XS.filter(function(x){return x.tipo==='dano';}), ins=XS.filter(function(x){return x.tipo==='inst';});
+  var crit=dano.filter(function(x){return x.p===1||x.p===2;}), p1=dano.filter(function(x){return x.p===1;});
+  var ven=XS.filter(function(x){return x.pz==='ven';}), venD=ven.filter(function(x){return x.tipo==='dano';});
+  var idades=dano.map(function(x){return x.idade;}).filter(function(v){return v!=null;});
+  var med=mediana(idades), mx=idades.length?Math.max.apply(null,idades):0;
+  var nomesPq=U.juntar(pqs.map(function(p){return p.nome;}));
+  var compTxt=U.competenciaTexto(comp);
+  var cli=esc_==='todos'?null:esc_;
+  var b=function(v){return '<b>'+v+'</b>';};
+
+  var revisoes=Relatorio.historico(chave).slice();
+  if(emitir) revisoes=revisoes.filter(function(e){return e.versao!==versao;}).concat([{versao:versao,data:hoje,responsavel:resp,descricao:$('r-desc').value||'Emissão'}]);
+
+  var S=[];
+  /* 1 Objetivo */
+  S.push({num:'1',titulo:'Objetivo',blocos:[
+    {tipo:'p',html:'Este relatório consolida a condição dos casos de monitoramento por vibração (CMS) ativos em '+esc(nomesPq)+', com base na aba Events da planilha CMS Tracking atualizada em '+fBR(D.gerado)+'. Apresenta os danos sob acompanhamento, a prioridade de ação recomendada pela engenharia, a idade de cada caso desde a identificação, o cumprimento das janelas de ação'+($('r-mov').checked&&MOV?' e a movimentação desde a base anterior':'')+'.'},
+    {tipo:'p',html:'Os casos classificados como <i>Instrumentation</i> correspondem a falhas de sensor ou de monitor e são tratados em seção própria: não representam dano ao componente, mas indicam trechos da frota sem cobertura de monitoramento.'}
+  ]});
+
+  /* 2 Visão geral */
+  var mdados=matrizDados(dano);
+  var topLoc=mdados.locs.map(function(l){var t=0;mdados.pr.forEach(function(p){t+=mdados.M[l][p];});return [l,t];}).sort(function(a,z){return z[1]-a[1];})[0];
+  var p2=[];
+  p2.push('Na data de referência há '+b(XS.length)+' '+U.plural(XS.length,'caso ativo','casos ativos')+': '+b(dano.length)+' de dano (Alarm e Warning) e '+b(ins.length)+' de instrumentação.');
+  p2.push(crit.length?'Dos danos, '+b(crit.length)+' '+U.plural(crit.length,'está classificado','estão classificados')+' como críticos (P1 ou P2)'+(p1.length?', sendo '+b(p1.length)+' em Immediate Action Needed':'')+'.':'Nenhum dano está classificado como crítico (P1 ou P2).');
+  p2.push(ven.length?b(ven.length)+' '+U.plural(ven.length,'caso ultrapassou','casos ultrapassaram')+' a janela de ação da sua prioridade ('+venD.length+' de dano e '+(ven.length-venD.length)+' de instrumentação).':'Todos os casos com prazo definido estão dentro da janela de ação.');
+  if(idades.length)p2.push('A idade mediana dos danos é de '+b(med+' dias')+' e o caso mais antigo soma '+b(mx+' dias')+'.');
+  if(topLoc&&topLoc[1])p2.push('O componente com maior concentração de danos é o '+esc((LOCAL[topLoc[0]]||topLoc[0]).toLowerCase())+', com '+b(topLoc[1])+' '+U.plural(topLoc[1],'caso','casos')+' ('+U.pct(topLoc[1],dano.length)+'% do total).');
+  var mxH='<table class="c"><thead><tr><th>Componente</th>'+mdados.pr.map(function(p){return '<th style="text-align:center">'+(p?'P'+p:'S/P')+'</th>';}).join('')+'<th style="text-align:center">Total</th></tr></thead><tbody>'+
+    mdados.locs.map(function(l){var t=0;return '<tr><td><b>'+esc(LOCAL[l]||l)+'</b></td>'+mdados.pr.map(function(p){var n=mdados.M[l][p];t+=n;if(!n)return '<td style="text-align:center;color:#c9d4de">·</td>';var a=0.22+0.78*(n/mdados.max);return '<td style="text-align:center;font-weight:700;background:'+corPrio(p,a)+';color:'+(a>=0.55?'#fff':'#1a2b3c')+'">'+n+'</td>';}).join('')+'<td style="text-align:center;font-weight:700">'+t+'</td></tr>';}).join('')+
+    '<tr><td><b>Total</b></td>'+mdados.pr.map(function(p){return '<td style="text-align:center;font-weight:700">'+dano.filter(function(x){return x.p===p;}).length+'</td>';}).join('')+'<td style="text-align:center;font-weight:700">'+dano.length+'</td></tr></tbody></table>';
+  var fx=faixasDados(XS), fmx=Math.max.apply(null,fx.map(function(r){return r.t;}).concat([1]));
+  var agH='<div style="padding:1mm 0">'+fx.map(function(r){return '<div style="display:flex;align-items:center;gap:3mm;margin-bottom:1.6mm;font-size:8pt"><div style="width:20mm;color:#5f6964;font-weight:700">'+r.l+'</div><div style="flex:1;display:flex;height:4.5mm;background:#f1f4f2;border-radius:1mm;overflow:hidden">'+(r.d?'<div style="width:'+(r.d/fmx*100)+'%;background:#1a3c5e"></div>':'')+(r.n?'<div style="width:'+(r.n/fmx*100)+'%;background:#7fa6cc"></div>':'')+'</div><div style="width:18mm;text-align:right"><b>'+r.t+'</b> <span style="color:#8a948f">('+r.d+' / '+r.n+')</span></div></div>';}).join('')+
+    '<div style="font-size:7.4pt;color:#8a948f;margin-top:1mm">Barra escura: danos · barra clara: instrumentação · entre parênteses: danos / instrumentação</div></div>';
+  S.push({num:'2',titulo:'Visão geral',blocos:[
+    {tipo:'kpis',itens:[{v:dano.length,l:'Danos ativos'},{v:crit.length,l:'Críticos (P1 + P2)',cor:crit.length?'vm':''},{v:ven.length,l:'Prazo vencido',cor:ven.length?'vm':''},{v:med+' d',l:'Idade mediana dos danos',cor:'am'},{v:ins.length,l:'Instrumentação',cor:'az'}]},
+    {tipo:'p',html:p2.join(' ')},
+    {tipo:'figura',html:mxH,legenda:'Danos ativos por componente e prioridade'},
+    {tipo:'figura',html:agH,legenda:'Distribuição dos casos por idade desde a identificação'}
+  ]});
+
+  var num=3;
+  /* 3 Movimentação */
+  if($('r-mov').checked){
+    var L=movLinhas().filter(function(l){return ids[l.m.parque];});
+    var cnt={novos:0,encerrados:0,up:0,down:0,alterados:0};L.forEach(function(l){cnt[l.g]++;});
+    var res=L.filter(function(l){return l.g==='encerrados'&&l.m.motivo==='resolvido';}).length;
+    var bl=[];
+    if(!MOV){bl.push({tipo:'nota',html:'Esta é a primeira base registrada na plataforma. A movimentação passa a ser apurada a partir da próxima importação da planilha.'});}
+    else{
+      bl.push({tipo:'kpis',itens:[{v:cnt.novos,l:'Novos casos'},{v:cnt.encerrados,l:'Encerrados'},{v:cnt.up,l:'Prioridade elevada',cor:cnt.up?'vm':''},{v:cnt.down,l:'Prioridade reduzida',cor:'az'},{v:cnt.alterados,l:'Atualizados',cor:'am'}]});
+      bl.push({tipo:'p',html:'Em relação à base de '+fBR(MOV.baseAnterior)+', '+(L.length?
+        (cnt.novos?b(cnt.novos)+' '+U.plural(cnt.novos,'caso entrou','casos entraram')+' em acompanhamento':'nenhum caso novo entrou em acompanhamento')+' e '+
+        (cnt.encerrados?b(cnt.encerrados)+' '+U.plural(cnt.encerrados,'foi encerrado','foram encerrados')+' ('+res+' '+U.plural(res,'resolvido','resolvidos')+' e '+(cnt.encerrados-res)+' '+U.plural(cnt.encerrados-res,'removido','removidos')+' da lista sem registro de resolução)':'nenhum foi encerrado')+'. '+
+        (cnt.up||cnt.down?b(cnt.up)+' '+U.plural(cnt.up,'caso teve','casos tiveram')+' a prioridade elevada e '+b(cnt.down)+' '+U.plural(cnt.down,'teve','tiveram')+' a prioridade reduzida. ':'Não houve alteração de prioridade. ')+
+        (cnt.alterados?'Outros '+b(cnt.alterados)+' '+U.plural(cnt.alterados,'caso teve','casos tiveram')+' disposição, ação, SS ou data atualizada.':'')
+        :'não houve mudança nos casos do escopo.')+(MOV.mantida?' A planilha foi reimportada em '+fBR(MOV.conferidoEm)+' sem alterações.':'')});
+      var ord={up:0,novos:1,down:2,encerrados:3,alterados:4};
+      L.sort(function(a,z){return ord[a.g]-ord[z.g];});
+      bl.push({tipo:'tabela',legenda:'Movimentação dos casos desde '+fBR(MOV.baseAnterior),compacta:true,larg:['13%','10%','14%','27%','7%','29%'],
+        cab:['Tipo','WTG','Parque','Caso / Componente','Prio.','Detalhe'],vazio:'Nenhuma mudança no escopo.',
+        linhas:L.map(function(l){var m=l.m,p=m.para!==undefined?m.para:m.prioridade;return [{t:MOVT[l.g].t,cls:'b'},{t:m.wtg,cls:'b'},PQ[m.parque].nome,{html:'<b>'+esc(m.titulo||'—')+'</b><br><span style="color:#8a948f">'+esc(LOCAL[m.local]||m.local||'—')+'</span>'},pill(p),l.det];})});
+    }
+    S.push({num:String(num++),titulo:'Movimentação desde a base anterior',blocos:bl});
+  }
+
+  /* Casos por parque */
+  var sub=[];
+  pqs.forEach(function(p,ix){
+    var xs=XS.filter(function(x){return x.parque===p.id;});
+    var dn=xs.filter(function(x){return x.tipo==='dano';}).sort(function(a,z){return (a.p||9)-(z.p||9)||(z.idade||0)-(a.idade||0);});
+    var cr=dn.filter(function(x){return x.p===1||x.p===2;}).length, vn=dn.filter(function(x){return x.pz==='ven';}).length;
+    var velho=dn.filter(function(x){return x.idade!=null;}).sort(function(a,z){return z.idade-a.idade;})[0];
+    var txt=esc(p.nome)+' tem '+b(xs.length)+' '+U.plural(xs.length,'caso ativo','casos ativos')+': '+b(dn.length)+' de dano e '+b(xs.length-dn.length)+' de instrumentação.';
+    if(dn.length){
+      txt+=' '+(cr?b(cr)+' '+U.plural(cr,'dano é crítico','danos são críticos')+' (P1 ou P2)':'Nenhum dano crítico')+' e '+(vn?b(vn)+' '+U.plural(vn,'está','estão')+' com o prazo de ação vencido':'nenhum está com prazo vencido')+'.';
+      if(velho)txt+=' O caso mais antigo é '+esc(velho.titulo||'—')+' na '+esc(velho.wtg)+', com '+velho.idade+' dias.';
+    }
+    sub.push({num:num+'.'+(ix+1),titulo:p.nome+' · '+p.cliente,blocos:[
+      {tipo:'kpis',itens:[{v:dn.length,l:'Danos ativos'},{v:cr,l:'Críticos',cor:cr?'vm':''},{v:vn,l:'Danos vencidos',cor:vn?'vm':''},{v:xs.length-dn.length,l:'Instrumentação',cor:'az'}]},
+      {tipo:'p',html:txt},
+      {tipo:'tabela',legenda:'Danos ativos · '+p.nome,compacta:true,larg:['9%','22%','14%','6%','11%','7%','17%','14%'],
+        cab:['WTG','Caso','Componente','Prio.','Identificado','Idade','Prazo','SS / WO'],vazio:'Nenhum dano ativo neste parque.',
+        linhas:dn.map(function(x){return [{t:x.wtg+(x.mv&&x.mv.tipo==='novos'?' ●':''),cls:'b'},x.titulo||'—',LOCAL[x.local]||x.local||'—',pill(x.p),{t:fBR(x.data),cls:'n'},{t:x.idade==null?'—':x.idade+' d',cls:'n'+(x.idade>=365?' vm':x.idade>=180?' am':'')},{t:prazoTxt(x),cls:x.pz==='ven'?'vm':x.pz==='pro'?'am':x.pz==='ok'?'vd':'mu',st:'white-space:nowrap'},x.wo||'—'];})}
+    ]});
+  });
+  S.push({num:String(num),titulo:'Casos por parque',quebra:true,blocos:[{tipo:'p',html:'Danos ativos de cada parque, ordenados por prioridade e, dentro da mesma prioridade, pela idade. O símbolo ● indica caso novo desde a base anterior.'}],sub:sub});
+  num++;
+
+  /* Instrumentação */
+  if($('r-ins').checked){
+    var ii=ins.slice().sort(function(a,z){return (z.idade||0)-(a.idade||0);});
+    var iv=ii.filter(function(x){return x.pz==='ven';}).length;
+    S.push({num:String(num++),titulo:'Instrumentação',blocos:[
+      {tipo:'p',html:ii.length?b(ii.length)+' '+U.plural(ii.length,'sensor ou monitor está','sensores ou monitores estão')+' sem leitura confiável, o que deixa sem cobertura de monitoramento os componentes correspondentes. '+(iv?b(iv)+' '+U.plural(iv,'caso está','casos estão')+' com a tratativa de campo além do prazo.':'Todos estão dentro do prazo de tratativa.'):'Não há falhas de instrumentação ativas no escopo.'},
+      {tipo:'tabela',legenda:'Falhas de instrumentação ativas',compacta:true,larg:['9%','14%','27%','16%','10%','8%','16%'],
+        cab:['WTG','Parque','Caso','Componente','Identificado','Idade','SS / WO'],vazio:'Sem registros.',
+        linhas:ii.map(function(x){return [{t:x.wtg,cls:'b'},PQ[x.parque].nome,x.titulo||'—',LOCAL[x.local]||x.local||'—',{t:fBR(x.data),cls:'n'},{t:x.idade==null?'—':x.idade+' d',cls:'n'},x.wo||'—'];})}
+    ]});
+  }
+
+  /* Qualidade */
+  if($('r-qual').checked){
+    var AQ=ALERTAS.filter(function(a){return ids[a.c.parque];});
+    if(AQ.length){
+      var nomes={data:'sem data do evento',txt:'com data digitada como texto',old:'com data suspeita (mais de 5 anos)',pri:'danos sem prioridade',ev:'sem tipo de evento',dup:'possíveis duplicidades'};
+      var g={};AQ.forEach(function(a){(g[a.k]=g[a.k]||[]).push(a);});
+      S.push({num:String(num++),titulo:'Qualidade da base',blocos:[
+        {tipo:'p',html:'Foram identificados '+b(AQ.length)+' apontamentos na base que afetam o cálculo de idade ou de prazo: '+U.juntar(Object.keys(g).map(function(k){return g[k].length+' '+nomes[k];}))+'. Os casos abaixo devem ser corrigidos na planilha de origem.'},
+        {tipo:'tabela',legenda:'Apontamentos de qualidade',compacta:true,larg:['10%','16%','34%','30%','10%'],cab:['WTG','Parque','Caso','Apontamento','Linha'],
+          linhas:AQ.map(function(a){return [{t:a.c.wtg,cls:'b'},PQ[a.c.parque].nome,a.c.titulo||a.c.local||'—',a.m,{t:String(a.c.linha),cls:'n'}];})}
+      ]});
+    }
+  }
+
+  /* Destaques e considerações */
+  var dest=$('r-dest').value.split(/\r?\n/).map(function(s){return s.trim();}).filter(Boolean);
+  S.push({num:String(num++),titulo:'Destaques do período',blocos:[dest.length?{tipo:'lista',itens:dest.map(esc)}:{tipo:'p',html:'<span style="color:#8a948f">Sem destaques registrados para o período.</span>'}]});
+  var cons=$('r-cons').value.trim();
+  S.push({num:String(num++),titulo:'Considerações finais',blocos:[cons?{tipo:'p',html:esc(cons).replace(/\n/g,'<br>')}:{tipo:'p',html:'<span style="color:#8a948f">Sem considerações registradas.</span>'}]});
+
+  /* Anexo */
+  if($('r-anx').checked){
+    S.push({num:'Anexo A',titulo:' Premissas e critérios',quebra:true,blocos:[
+      {tipo:'p',html:'O prazo de cada caso é contado a partir da data do evento registrada na aba Events. A idade não reinicia quando a prioridade é alterada, para preservar o tempo real de exposição ao dano.'},
+      {tipo:'tabela',legenda:'Janela de ação por prioridade',compacta:true,larg:['8%','34%','18%','40%'],cab:['Prio.','Descrição','Janela','Observação'],
+        linhas:[1,2,3,4,5,6].map(function(p){return [pill(p),PRIO[p].n,{t:PRAZO[p]==null?'Sem prazo':PRAZO[p]+' dias',cls:'n'},p===5?'Referência: ciclo anual de preventiva':p===6?'Acompanha somente a idade':(p<=2?'Premissa da engenharia':'Tabela oficial de prioridade dos CMS Alerts')];})},
+      {tipo:'tabela',legenda:'Categorias de dano da watchlist',compacta:true,larg:['12%','18%','70%'],cab:['Categoria','Status','Descrição'],
+        linhas:[['CAT01','OK','Sem defeito ou desgaste normal esperado. Sem ação.'],['CAT02','Monitor','Defeito anormal que não exige reparo; reinspeção recomendada em 6 a 12 meses.'],['CAT03','Repair / Exchange','Defeito que exigirá reparo em breve, sem impedir a operação até lá, inclusive com limitação de potência.'],['CAT04','Shutdown','Defeito que exige parada imediata da turbina até o reparo.']].map(function(r){return [{t:r[0],cls:'b'},r[1],r[2]];})},
+      {tipo:'p',html:'<b>Referências normativas:</b> ISO 17359 (programa de monitoramento de condição) · ISO 16079-2 (monitoramento do trem de força de aerogeradores) · ISO 20816-21 (avaliação de vibração em turbinas com gearbox) · VDI 3834-1 · ISO 13381-1 (prognóstico) · DNV-SE-0439 (certificação de CMS).'}
+    ]});
+  }
+
+  var sufixo=esc_==='todos'?'Todos':esc_;
+  var doc={
+    titulo:'Relatório de Monitoramento CMS',
+    subtitulo:nomesPq,
+    modulo:'Estado da Frota · CMS',
+    cliente:cli, clientes:cli?null:['Essentia','Auren'],
+    cabecalhoInfo:(cli||'Todos os parques')+' · '+compTxt+' · v'+versao,
+    arquivo:'Relatorio_CMS_'+sufixo+'_'+comp+'_v'+versao,
+    meta:[['Competência',compTxt],['Base de dados','CMS Tracking · Events · '+fBR(D.gerado)],['Escopo',cli?cli+' · '+pqs.length+' parques':'Todos os parques (interno)']],
+    versao:versao, dataEmissao:hoje, responsavel:resp||'—',
+    revisoes:revisoes, secoes:S,
+    rodape:'Invenergy Services Brasil · Relatório de Monitoramento CMS · '+(cli||'Interno')+' · '+compTxt
+  };
+  if(!emitir){doc.titulo+=' (pré-visualização)';doc.versao=versao+' · rascunho';}
+  var w=Relatorio.abrir(doc);
+  if(w&&emitir){
+    Relatorio.registrar(chave,{versao:versao,data:hoje,responsavel:resp,descricao:$('r-desc').value||'Emissão',competencia:comp,escopo:esc_,base:D.gerado});
+    relCarregarTextos();
+  }
+}
+
+tudo();
+</script>
+</body>
+</html>

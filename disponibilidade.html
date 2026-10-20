@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Disponibilidade Energética (PBA) | Plataforma de Engenharia</title><style>:root{--navy:#1a3c5e;--navy-d:#0d1f30;--green:#78BE20;--green-t:#4d7a15;--orange:#F07E1A;--orange-t:#ad570b;--red:#b42318;--amber:#8a5a00;--blue:#1a5490;
+--border:#d8e3ee;--bg:#eef2f7;--card:#fff;--text:#1a2b3c;--muted:#56707d;--muted2:#606f79;--ess:#1a778f}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--bg);color:var(--text);font-size:13px}
+button,input,select,textarea{font-family:inherit;font-size:inherit}
+.topbar{background:var(--navy);height:58px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+.tl{display:flex;align-items:center;gap:14px}.tl img{height:27px}.tdiv{width:1px;height:22px;background:rgba(255,255,255,.25)}
+.tt{color:#fff;font-weight:600}.tt b{color:var(--green)}
+.tr{display:flex;gap:8px;align-items:center}
+.tb{color:#fff;background:transparent;border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:7px 12px;cursor:pointer;text-decoration:none;font-weight:600;font-size:12.5px}
+.tb:hover{background:rgba(255,255,255,.12)}.tb.u{border-color:var(--green)}
+.hero{background:linear-gradient(135deg,var(--navy-d),var(--navy) 62%,#24557f);padding:20px 24px 0;position:relative}
+.hero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--green) 55%,var(--orange) 55%)}
+.hin{max-width:1360px;margin:0 auto}
+.bc{font-size:11px;color:rgba(255,255,255,.55);margin-bottom:8px}.bc a{color:rgba(255,255,255,.75);text-decoration:none}
+.hero h1{color:#fff;font-size:23px;font-weight:800}.hero h1 em{font-style:normal;color:var(--green)}
+.hsub{color:rgba(255,255,255,.7);font-size:12.5px;margin-top:5px}
+.nav{display:flex;gap:4px;margin-top:16px}
+.nav button{background:transparent;border:none;color:rgba(255,255,255,.72);padding:10px 16px;font-weight:600;cursor:pointer;border-radius:8px 8px 0 0}
+.nav button.on{background:var(--bg);color:var(--navy)}
+.main{max-width:1360px;margin:0 auto;padding:22px 24px 60px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:16px}
+.card h3{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card h3::before{content:'';width:4px;height:14px;border-radius:2px;background:linear-gradient(180deg,var(--green) 55%,var(--orange) 55%)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.sp{flex:1}
+.btn{border:1px solid var(--border);background:#fff;color:var(--navy);padding:8px 14px;border-radius:7px;cursor:pointer;font-weight:600}
+.btn:hover{background:#f3f7fb}.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.g{background:var(--green);border-color:var(--green);color:var(--navy-d)}.btn.g:hover{background:#6aab1b}
+.btn.n{background:var(--navy);border-color:var(--navy);color:#fff}.btn.n:hover{background:#12293f}
+.btn.r{color:var(--red);border-color:#f0c4c0}.btn.s{padding:5px 10px;font-size:12px}
+input[type=text],input[type=month],input[type=number],select,textarea{border:1px solid var(--border);border-radius:7px;padding:7px 10px;background:#fff;color:var(--text)}
+textarea{width:100%;min-height:60px}
+.muted{color:var(--muted)}.small{font-size:11.5px}
+table.t{width:100%;border-collapse:collapse}
+.t th{background:#f4f7fb;text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--border);position:sticky;top:0;white-space:nowrap}
+.t td{padding:7px 10px;border-bottom:1px solid #eef2f6;vertical-align:top}
+.t tr:hover td{background:#f9fbfd}
+.tw{overflow:auto;max-height:620px;border:1px solid var(--border);border-radius:8px}
+.t th.num{text-align:right}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:12px;white-space:nowrap}
+.c-ok{background:#e6f4d7;color:#3a6410}.c-warn{background:#fff2d4;color:var(--amber)}.c-bad{background:#fde3e1;color:var(--red)}.c-info{background:#e3eef9;color:var(--blue)}.c-gray{background:#eef1f4;color:var(--muted2)}.c-navy{background:var(--navy);color:#fff}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px}
+.kpi{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 14px;border-top:3px solid var(--navy)}
+.kpi .l{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:700}
+.kpi .v{font-size:22px;font-weight:800;color:var(--navy);margin-top:5px}.kpi .s{font-size:11px;color:var(--muted);margin-top:3px}
+.cxtabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.cxt{background:#fff;border:1px solid var(--border);border-radius:9px;padding:10px 14px;cursor:pointer;min-width:190px;text-align:left}
+.cxt.on{border-color:var(--navy);box-shadow:0 0 0 2px var(--navy) inset}
+.cxt b{display:block;color:var(--navy);font-size:14px}
+.sub{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:14px}
+.sub button{border:none;background:transparent;padding:9px 14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent}
+.sub button.on{color:var(--navy);border-bottom-color:var(--green)}
+.al{border:1px solid var(--border);border-left:4px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px;background:#fff}
+.al.bloqueia{border-left-color:var(--red)}.al.alerta{border-left-color:#e0a100}.al.info{border-left-color:#7fa6cc}.al.ok{border-left-color:var(--green)}
+.al .h{display:flex;gap:8px;align-items:flex-start}.al .h .tx{flex:1;font-weight:600}
+.al .d{color:var(--muted);margin-top:4px;line-height:1.5}
+.al details{margin-top:6px}.al summary{cursor:pointer;color:var(--blue);font-size:12px}
+.al .oc{max-height:180px;overflow:auto;font-family:Consolas,monospace;font-size:11.5px;background:#f7f9fb;border-radius:6px;padding:6px 8px;margin-top:6px}
+.dec{margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.gate{position:sticky;bottom:0;background:#fff;border:2px solid var(--navy);border-radius:10px;padding:12px 16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+.dz{border:2px dashed var(--border);border-radius:9px;padding:16px;text-align:center;cursor:pointer;background:#f8fafc;flex:1;min-width:230px}
+.dz:hover,.dz.over{border-color:var(--green);background:#f3f9ec}
+.dz b{color:var(--navy);display:block}
+.bd{position:fixed;inset:0;background:rgba(13,31,48,.6);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.bd.on{display:flex}
+.md{background:#fff;border-radius:12px;max-width:820px;width:100%;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
+.md .mh{background:var(--navy);color:#fff;padding:16px 20px;font-weight:700;font-size:15px}
+.md .mb{padding:18px 20px;overflow:auto}.md .mf{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;background:#f7f9fb}
+.banner{border-radius:9px;padding:10px 14px;margin-bottom:14px;font-weight:600}
+.b-warn{background:#fff6e0;border:1px solid #f0d58f;color:var(--amber)}.b-ok{background:#eef8e3;border:1px solid #cfe7a8;color:#3a6410}.b-bad{background:#fde8e6;border:1px solid #f3b9b3;color:var(--red)}.b-info{background:#e8f1fb;border:1px solid #bcd3ec;color:var(--blue)}
+.mono{font-family:Consolas,monospace;font-size:11.5px}
+.bar{display:flex;align-items:flex-end;gap:2px;height:140px;padding:6px 0;border-bottom:1px solid var(--border)}
+.bar div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:1px}
+.bar i{display:block;border-radius:2px 2px 0 0}
+.hidden{display:none!important}
+.pg{display:flex;gap:6px;align-items:center;margin-top:8px}
+</style></head>
+<body>
+<div class="topbar"><div class="tl"><img src="data:image/png;base64,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" alt="Invenergy Services"><div class="tdiv"></div><div class="tt">Plataforma de <b>Engenharia</b></div></div><div class="tr"><button class="tb u" id="usr" data-act="usuario">👤</button><a class="tb" href="index.html">← Plataforma</a></div></div>
+<div class="hero"><div class="hin"><div class="bc"><a href="index.html">Plataforma</a> › Estado da Frota › <b style="color:#78BE20">Disponibilidade (PBA)</b></div>
+<div class="row"><div><h1>Disponibilidade <em>energética</em> · PBA</h1><div class="hsub">Essentia · Asa Branca, Chapada I, Chapada II e Chapada III · saída no próprio PBA Calculator</div></div><span class="sp"></span><label style="color:#fff;font-weight:600">Mês da apuração <input type="month" id="mes" style="margin-left:6px"></label></div>
+<div class="nav"><button data-aba="painel">Painel anual</button><button data-aba="apur">Apuração do mês</button><button data-aba="cad">Cadastro</button><button data-aba="log">Log e backup</button><button data-aba="metodo">Método</button></div></div></div>
+<div class="main"><div id="aviso"></div><div id="conteudo"></div></div>
+<div class="bd" id="bd"><div class="md"><div class="mh" id="md-t"></div><div class="mb" id="md-b"></div><div class="mf" id="md-f"></div></div></div>
+<script>/* ===== XLSX-LITE (leitura local, sem CDN) + ZIP bruto para preservar o modelo ===== */
+var XLSXLite=(function(){'use strict';
+function Bits(b,p){this.b=b;this.p=p;this.bit=0;this.cur=0;}
+Bits.prototype.get=function(n){var v=0,i=0;while(i<n){if(this.bit===0){this.cur=this.b[this.p++];this.bit=8;}var t=Math.min(n-i,this.bit);v|=((this.cur&((1<<t)-1))<<i);this.cur>>=t;this.bit-=t;i+=t;}return v>>>0;};
+Bits.prototype.align=function(){this.bit=0;};
+function tree(l){var i,c=new Int32Array(16);for(i=0;i<l.length;i++)c[l[i]]++;c[0]=0;var o=new Int32Array(17);for(i=1;i<=15;i++)o[i+1]=o[i]+c[i];var s=new Int32Array(l.length);for(i=0;i<l.length;i++)if(l[i])s[o[l[i]]++]=i;return{count:c,symbol:s};}
+function dec(br,t){var code=0,first=0,index=0,len,count;for(len=1;len<=15;len++){code|=br.get(1);count=t.count[len];if(code-first<count)return t.symbol[index+(code-first)];index+=count;first+=count;first<<=1;code<<=1;}throw new Error('Fluxo comprimido corrompido');}
+var LB=[3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258],LE=[0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,0],DB=[1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577],DE=[0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13],OR=[16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15];
+function inflate(buf,start,exp){var br=new Bits(buf,start),out=new Uint8Array(exp>0?exp:65536),o=0;function push(b){if(o>=out.length){var t=new Uint8Array(out.length*2);t.set(out);out=t;}out[o++]=b;}var fL=null,fD=null;
+for(;;){var last=br.get(1),type=br.get(2);if(type===0){br.align();var len=buf[br.p]|(buf[br.p+1]<<8);br.p+=4;for(var i=0;i<len;i++)push(buf[br.p++]);}else{var lt,dt;
+if(type===1){if(!fL){var l=new Uint8Array(288),k;for(k=0;k<144;k++)l[k]=8;for(;k<256;k++)l[k]=9;for(;k<280;k++)l[k]=7;for(;k<288;k++)l[k]=8;fL=tree(l);var d=new Uint8Array(30);for(k=0;k<30;k++)d[k]=5;fD=tree(d);}lt=fL;dt=fD;}
+else if(type===2){var nl=br.get(5)+257,nd=br.get(5)+1,nc=br.get(4)+4,cl=new Uint8Array(19),j;for(j=0;j<nc;j++)cl[OR[j]]=br.get(3);var ct=tree(cl),ls=new Uint8Array(nl+nd),n=0;while(n<nl+nd){var s=dec(br,ct),rep,val;if(s<16)ls[n++]=s;else if(s===16){val=ls[n-1];rep=3+br.get(2);while(rep--)ls[n++]=val;}else if(s===17){rep=3+br.get(3);while(rep--)ls[n++]=0;}else{rep=11+br.get(7);while(rep--)ls[n++]=0;}}lt=tree(ls.subarray(0,nl));dt=tree(ls.subarray(nl));}
+else throw new Error('Bloco deflate inválido');
+for(;;){var sym=dec(br,lt);if(sym===256)break;if(sym<256)push(sym);else{sym-=257;var length=LB[sym]+br.get(LE[sym]),ds=dec(br,dt),dist=DB[ds]+br.get(DE[ds]);for(var c=0;c<length;c++)push(out[o-dist]);}}}if(last)break;}return out.subarray(0,o);}
+function zipBruto(ab){var b=new Uint8Array(ab),dv=new DataView(ab),i,e=-1;for(i=b.length-22;i>=0&&i>b.length-66000;i--){if(dv.getUint32(i,true)===0x06054b50){e=i;break;}}if(e<0)throw new Error('Arquivo não é um .xlsx/.xlsm válido.');
+var n=dv.getUint16(e+10,true),p=dv.getUint32(e+16,true),L=[];for(i=0;i<n;i++){if(dv.getUint32(p,true)!==0x02014b50)break;var nl=dv.getUint16(p+28,true),el=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true),nm='';for(var k=0;k<nl;k++)nm+=String.fromCharCode(b[p+46+k]);
+var off=dv.getUint32(p+42,true),comp=dv.getUint32(p+20,true),ini=off+30+dv.getUint16(off+26,true)+dv.getUint16(off+28,true);
+L.push({nome:nm,metodo:dv.getUint16(p+10,true),crc:dv.getUint32(p+16,true),comp:comp,orig:dv.getUint32(p+24,true),flags:dv.getUint16(p+8,true),bytes:b.subarray(ini,ini+comp)});p+=46+nl+el+cl;}
+return L;}
+function bytesDe(en){return en.metodo===0?en.bytes:inflate(en.bytes,0,en.orig);}
+function zip(ab){var L=zipBruto(ab),a={};L.forEach(function(x){a[x.nome]=x;});
+return{tem:function(x){return!!a[x];},texto:function(x){var q=a[x];if(!q)return null;return new TextDecoder('utf-8').decode(bytesDe(q));}};}
+function un(s){return s.replace(/&#(\d+);/g,function(_,d){return String.fromCharCode(+d);}).replace(/&#x([0-9a-f]+);/gi,function(_,h){return String.fromCharCode(parseInt(h,16));}).replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;/g,'&');}
+function col(r){var m=/^([A-Z]+)/.exec(r);if(!m)return 0;var n=0,s=m[1];for(var i=0;i<s.length;i++)n=n*26+(s.charCodeAt(i)-64);return n-1;}
+function attr(s,n){var m=new RegExp('\\b'+n+'="([^"]*)"').exec(s);return m?m[1]:null;}
+function read(ab){var z=zip(ab),sst=[];if(z.tem('xl/sharedStrings.xml')){var xs=z.texto('xl/sharedStrings.xml'),re=/<si\b[^>]*>([\s\S]*?)<\/si>/g,m;while((m=re.exec(xs))){var t='',rt=/<t\b[^>]*>([\s\S]*?)<\/t>/g,q;while((q=rt.exec(m[1])))t+=q[1];sst.push(un(t));}}
+var ehD={};if(z.tem('xl/styles.xml')){var st=z.texto('xl/styles.xml'),fm={},rf=/<numFmt\b([^>]*)\/?>/g,f;while((f=rf.exec(st)))fm[attr(f[1],'numFmtId')]=un(attr(f[1],'formatCode')||'');var mc=/<cellXfs[^>]*>([\s\S]*?)<\/cellXfs>/.exec(st);if(mc){var rx=/<xf\b([^>]*)>/g,x,i2=0;while((x=rx.exec(mc[1]))){var id=+attr(x[1],'numFmtId'),cd=(fm[id]||'').replace(/\[[^\]]*\]/g,'').replace(/"[^"]*"/g,'');ehD[i2++]=(id>=14&&id<=22)||(id>=45&&id<=47)||(/[dy]/i.test(cd)&&/[dmyh]/i.test(cd));}}}
+var rels={};if(z.tem('xl/_rels/workbook.xml.rels')){var xr=z.texto('xl/_rels/workbook.xml.rels'),rr=/<Relationship\b([^>]*)\/?>/g,r;while((r=rr.exec(xr))){var a1=attr(r[1],'Id'),tg=attr(r[1],'Target');if(a1&&tg)rels[a1]=tg.replace(/^\/?xl\//,'').replace(/^\//,'');}}
+var abas=[],nomes=[],wb=z.texto('xl/workbook.xml')||'',rs=/<sheet\b([^>]*)\/?>/g,s2;while((s2=rs.exec(wb))){var nm=attr(s2[1],'name'),rid=attr(s2[1],'r:id');if(!nm||!rid||!rels[rid])continue;nomes.push(un(nm));abas.push({nome:un(nm),alvo:rels[rid],oculta:/state="(hidden|veryHidden)"/.test(s2[1])});}
+function aba(na){var alvo=null;for(var i=0;i<abas.length;i++)if(abas[i].nome===na)alvo=abas[i].alvo;if(!alvo)return null;var c='xl/'+alvo;if(!z.tem(c))return null;var xml=z.texto(c),L=[],r2=/<row\b([^>]*)>([\s\S]*?)<\/row>/g,rw;
+while((rw=r2.exec(xml))){var ri=attr(rw[1],'r'),ix=ri?(+ri-1):L.length,cs=[],rc=/<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g,cc;while((cc=rc.exec(rw[2]))){var at=cc[1],cp=cc[2]||'',ref=attr(at,'r'),ci=ref?col(ref):cs.length,tp=attr(at,'t')||'n',si=attr(at,'s'),v=null;
+if(tp==='inlineStr'){var it='',r3=/<t\b[^>]*>([\s\S]*?)<\/t>/g,tt;while((tt=r3.exec(cp)))it+=tt[1];v=un(it);}else{var mv=/<v\b[^>]*>([\s\S]*?)<\/v>/.exec(cp);if(mv){var raw=mv[1];if(tp==='s')v=sst[+raw]!=null?sst[+raw]:'';else if(tp==='str'||tp==='e')v=un(raw);else if(tp==='b')v=raw==='1';else{var num=parseFloat(raw);v=(si!=null&&ehD[+si]&&num>20000&&num<80000)?{serial:num}:num;}}}cs[ci]=v;}
+for(var q2=0;q2<cs.length;q2++)if(cs[q2]===undefined)cs[q2]=null;L[ix]=cs;}for(var w=0;w<L.length;w++)if(!L[w])L[w]=[];return L;}
+return{nomes:nomes,abas:abas,aba:aba,sst:sst,rels:rels,abaAlvo:function(na){for(var i=0;i<abas.length;i++)if(abas[i].nome===na)return'xl/'+abas[i].alvo;return null;}};}
+return{read:read,zipBruto:zipBruto,bytesDe:bytesDe,un:un,col:col,attr:attr};})();
+var XLSXWriter=(function(){'use strict';
+var CRC=(function(){var t=new Uint32Array(256);for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+function crc32(u){var c=0xFFFFFFFF;for(var i=0;i<u.length;i++)c=CRC[(c^u[i])&0xFF]^(c>>>8);return(c^0xFFFFFFFF)>>>0;}
+async function deflate(u){if(typeof CompressionStream==='undefined')return null;try{var cs=new CompressionStream('deflate-raw');var s=new Blob([u]).stream().pipeThrough(cs);return new Uint8Array(await new Response(s).arrayBuffer());}catch(e){return null;}}
+async function zipar(files,tipo){var enc=new TextEncoder(),parts=[],cd=[],off=0;
+for(var i=0;i<files.length;i++){var f=files[i],nm=enc.encode(f.nome),met,cr,body,orig;
+ if(f.bruto){met=f.bruto.metodo;cr=f.bruto.crc;body=f.bruto.bytes;orig=f.bruto.orig;}
+ else{var raw=typeof f.dados==='string'?enc.encode(f.dados):f.dados,cmp=await deflate(raw);cr=crc32(raw);met=cmp?8:0;body=cmp||raw;orig=raw.length;}
+ var h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(8,met,true);h.setUint32(14,cr,true);h.setUint32(18,body.length,true);h.setUint32(22,orig,true);h.setUint16(26,nm.length,true);
+ parts.push(new Uint8Array(h.buffer),nm,body);
+ var c=new DataView(new ArrayBuffer(46));c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(10,met,true);c.setUint32(16,cr,true);c.setUint32(20,body.length,true);c.setUint32(24,orig,true);c.setUint16(28,nm.length,true);c.setUint32(42,off,true);
+ cd.push(new Uint8Array(c.buffer),nm);off+=30+nm.length+body.length;}
+var cdl=cd.reduce(function(a,x){return a+x.length;},0),e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cdl,true);e.setUint32(16,off,true);
+return new Blob(parts.concat(cd,[new Uint8Array(e.buffer)]),{type:tipo||'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});}
+function x(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'');}
+function cn(i){var s='';i++;while(i>0){var m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26);}return s;}
+var STYLES='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="3"><numFmt numFmtId="164" formatCode="dd/mm/yyyy hh:mm:ss"/><numFmt numFmtId="165" formatCode="0.0000%"/><numFmt numFmtId="166" formatCode="0.000"/></numFmts><fonts count="3"><font><sz val="10"/><name val="Arial"/></font><font><b/><sz val="10"/><name val="Arial"/></font><font><b/><sz val="10"/><color rgb="FFC0392B"/><name val="Arial"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFDCE6F0"/></patternFill></fill></fills><borders count="1"><border/></borders><cellStyleXfs count="1"><xf/></cellStyleXfs><cellXfs count="7"><xf/><xf fontId="1" applyFont="1"/><xf numFmtId="164" applyNumberFormat="1"/><xf numFmtId="165" applyNumberFormat="1"/><xf numFmtId="166" applyNumberFormat="1"/><xf fontId="1" fillId="2" applyFont="1" applyFill="1"/><xf fontId="2" applyFont="1"/></cellXfs></styleSheet>';
+function serial(d){return(d.getTime()-d.getTimezoneOffset()*60000)/86400000+25569;}
+function sheetXml(sh){var o=['<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'];
+if(sh.congelar)o.push('<sheetViews><sheetView workbookViewId="0"><pane ySplit="'+sh.congelar+'" topLeftCell="A'+(sh.congelar+1)+'" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>');
+if(sh.larg)o.push('<cols>'+sh.larg.map(function(w,i){return'<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+w+'" customWidth="1"/>';}).join('')+'</cols>');
+o.push('<sheetData>');Object.keys(sh.linhas).map(Number).sort(function(a,b){return a-b;}).forEach(function(r){var cs=sh.linhas[r],p=['<row r="'+r+'">'];for(var c=0;c<cs.length;c++){var k=cs[c];if(k==null)continue;if(typeof k!=='object'||k instanceof Date)k={v:k};var ref=cn(c)+r,st=k.s!=null?' s="'+k.s+'"':'',v=k.v;
+if(v instanceof Date){v=serial(v);if(k.s==null)st=' s="2"';}
+if(typeof v==='number'&&isFinite(v))p.push('<c r="'+ref+'"'+st+'><v>'+(+v.toPrecision(15))+'</v></c>');
+else if(v!=null&&v!=='')p.push('<c r="'+ref+'"'+st+' t="inlineStr"><is><t xml:space="preserve">'+x(v)+'</t></is></c>');}
+p.push('</row>');o.push(p.join(''));});
+o.push('</sheetData></worksheet>');return o.join('');}
+async function gerar(sheets){var n=sheets.length,f=[];
+f.push({nome:'[Content_Types].xml',dados:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'+sheets.map(function(s,i){return'<Override PartName="/xl/worksheets/sheet'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>';}).join('')+'</Types>'});
+f.push({nome:'_rels/.rels',dados:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'});
+f.push({nome:'xl/workbook.xml',dados:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>'+sheets.map(function(s,i){return'<sheet name="'+x(s.nome)+'" sheetId="'+(i+1)+'" r:id="rId'+(i+1)+'"/>';}).join('')+'</sheets></workbook>'});
+f.push({nome:'xl/_rels/workbook.xml.rels',dados:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+sheets.map(function(s,i){return'<Relationship Id="rId'+(i+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>';}).join('')+'<Relationship Id="rId'+(n+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'});
+f.push({nome:'xl/styles.xml',dados:STYLES});
+sheets.forEach(function(s,i){f.push({nome:'xl/worksheets/sheet'+(i+1)+'.xml',dados:sheetXml(s)});});
+return zipar(f);}
+return{gerar:gerar,zipar:zipar,crc32:crc32,col:cn,serial:serial,esc:x};})();
+if(false)module.exports={XLSXLite:XLSXLite,XLSXWriter:XLSXWriter};
+
+var Motor=(function(){'use strict';
+var VERSAO_METODO='PBA-ESS 1.2 · réplica das fórmulas do PBA Calculator (ago/2026) · período 1º dia 00:00 a último dia 23:50';
+var CATEGORIAS=['Rede/BOP - Intervenção Necessária','Rede/BOP - Peça Necessária','Reparo ou Serviço Excluído','Atraso do Proprietário na Decisão para MCE','Peças ou Guindaste Solicitado Não Disponível ','Atraso Excessivo de Grandes Componentes ou Guindaste','Força Maior','Parada Solicitada pelo Proprietário','Teste ou Inspeção Solicitado pelo Proprietário','Carência de Turbina Parada','Carência de Grande Componente Programado','Carência de Grande Componente Não Programado','Manutenção dos Parafusos da Fundação','Manutenção de Equipamentos de Segurança','Acesso Não Seguro'];
+var CAT_SEM_COLUNA={'Carência de Turbina Limitada':'Item 12 do contrato (Derated Turbine Grace Period): indisponibilidade parcial, proporcional à limitação de potência. Não existe coluna para ela no PBA Calculator e a fórmula conta a turbina inteira (peso 1).'};
+function S(scada,cod,wfms,n,cap,com){return{scada:scada,cod:cod,wfms:wfms,n:n,cap:cap,comercial:com};}
+var CAD_PADRAO={versao:1,
+ complexos:[
+  {id:'ASB',nome:'Asa Branca',cliente:'Essentia',tag:'Asa_Branca.WFMS.',spes:[S('WCS-004','ASB04','WFMS 4',20,32.4,'Asa Branca IV'),S('WCS-005','ASB05','WFMS 5',20,32.4,'Asa Branca V'),S('WCS-006','ASB06','WFMS 6',20,32.4,'Asa Branca VI'),S('WCS-007','ASB07','WFMS 7',20,32.4,'Asa Branca VII'),S('WCS-008','ASB08','WFMS 8',20,32.4,'Asa Branca VIII')]},
+  {id:'CH1',nome:'Chapada I',cliente:'Essentia',tag:'Chapada.WFMS.',spes:[S('WCS-009','JOA09','WFMS 9',16,29.6,'Ventos de Santa Joana IX'),S('WCS-010','JOA10','WFMS 10',16,29.6,'Ventos de Santa Joana X'),S('WCS-011','JOA11','WFMS 11',16,29.6,'Ventos de Santa Joana XI'),S('WCS-012','JOA12','WFMS 12',17,30.25,'Ventos de Santa Joana XII'),S('WCS-013','JOA13','WFMS 13',16,29.6,'Ventos de Santa Joana XIII'),S('WCS-015','JOA15','WFMS 15',17,29.71,'Ventos de Santa Joana XV'),S('WCS-016','JOA16','WFMS 16',17,30.34,'Ventos de Santa Joana XVI')]},
+  {id:'CH2',nome:'Chapada II',cliente:'Essentia',tag:'Chapada-Exp.WFMS.',spes:[S('WCJ-001','JOA01','WFMS J1',17,30.43,'Ventos de Santa Joana I'),S('WCJ-003','JOA03','WFMS J3',16,29.6,'Ventos de Santa Joana III'),S('WCJ-004','JOA04','WFMS J4',16,28.64,'Ventos de Santa Joana IV'),S('WCJ-005','JOA05','WFMS J5',17,30.43,'Ventos de Santa Joana V'),S('WCJ-007','JOA07','WFMS J7',17,30.43,'Ventos de Santa Joana VII'),S('WCA-004','AUG04','WFMS A4',17,30.43,'Ventos de Santo Augusto IV')]},
+  {id:'CH3',nome:'Chapada III',cliente:'Essentia',tag:'Chapada-Exp.WFMS.',spes:[S('WCA-003','AUG03','WFMS A3',16,29.6,'Ventos de Santo Augusto III'),S('WCA-005','AUG05','WFMS A5',16,29.6,'Ventos de Santo Augusto V')]}
+ ],
+ foraContrato:['JOA02','JOA06','JOA08','JOA14','AUG01','AUG02'],
+ categorias:CATEGORIAS.slice(),aliases:{},demandaTag:'Input SetPoint to the SRL (padrão) · Active power demand setpoint quando o arquivo não tem a primeira',
+ premissas:[
+  'Correspondência SCADA ↔ código confirmada pelo usuário (WCS-009 ↔ JOA09, WCJ-001 ↔ JOA01, WCA-004 ↔ AUG04…).',
+  'AUG04 pertence à Chapada II; AUG03 e AUG05 à Chapada III.',
+  'Turbinas por SPE conforme INV_PPT Capacidade instalada (JOA03 = 16, JOA05 = 17) — pendente de confirmação com a distribuição oficial de máquinas.',
+  'Capacidade por SPE = "Active power demand setpoint" do SCADA; a soma por complexo bate com o "Max Output" das calculadoras (162 / 208,7 / 179,96 / 59,2 MW).',
+  'Nomes comerciais das SPEs registrados como premissa (Asa Branca IV–VIII; Ventos de Santa Joana N; Ventos de Santo Augusto N) — pendente de confirmação.',
+  'Demanda do cálculo (P_DMD_MW) = "Input SetPoint to the SRL". Em exportações antigas, sem essa coluna, usa-se "Active power demand setpoint" (critério anterior), com registro da fonte em cada arquivo.',
+  'Planilha de carveouts: uma aba por complexo, identificada pelo nome da aba. Abas sem tabela de carveouts são ignoradas.',
+  'Colunas "Only Blade" / "Split unavailability" do tracker são lidas e exibidas, mas não alteram o cálculo: a calculadora conta 1 turbina por linha.',
+  'Arquivo de saída = o próprio PBA Calculator do complexo (modelo cadastrado), com os dados do mês colados nos mesmos lugares; abas, gráficos, macros e formatação preservados.'
+ ]};
+function clone(o){return JSON.parse(JSON.stringify(o));}
+function cxDe(cad,id){for(var i=0;i<cad.complexos.length;i++)if(cad.complexos[i].id===id)return cad.complexos[i];return null;}
+function totalWTG(cx){return cx.spes.reduce(function(a,s){return a+s.n;},0);}
+function mapaSPE(cad){var m={};cad.complexos.forEach(function(c){c.spes.forEach(function(s){m[s.cod]={cx:c.id,n:s.n,s:s};});});return m;}
+function mapaScada(cad){var m={};cad.complexos.forEach(function(c){c.spes.forEach(function(s){m[s.scada.toUpperCase()]={cx:c.id,s:s};});});return m;}
+function cxPorNome(s){var t=String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[_\-.]+/g,' ').replace(/\s+/g,' ').trim();
+  if(!t)return null;
+  if(/\basa\s*branca\b|^asb\b|^ab$/.test(t))return'ASB';
+  if(/\bchapada\s*(iii|3)\b|\bch\s*0?3\b|\bchp\s*3\b/.test(t))return'CH3';
+  if(/\bchapada\s*(ii|2)\b|\bch\s*0?2\b|\bchp\s*2\b/.test(t))return'CH2';
+  if(/\bchapada\s*(i|1)\b|\bch\s*0?1\b|\bchp\s*1\b/.test(t))return'CH1';
+  return null;}
+var ROM={I:1,II:2,III:3,IV:4,V:5,VI:6,VII:7,VIII:8,IX:9,X:10,XI:11,XII:12,XIII:13,XIV:14,XV:15,XVI:16};
+var FAM=[['ASB',['ASABRANCA','ASA','ASB','AB']],['JOA',['VENTOSDESANTAJOANA','VENTOSSANTAJOANA','SANTAJOANA','JOANA','VSJ','JOA','WCJ','J']],['AUG',['VENTOSDESANTOAUGUSTO','VENTOSSANTOAUGUSTO','SANTOAUGUSTO','AUGUSTO','VSA','AUG','WCA','A']],['WCS',['WCS']]];
+function normNome(t){var s=String(t==null?'':t).toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  s=s.replace(/[\s\-_.\/\\:#]+/g,' ').trim();s=s.replace(/^(WTG|AEROGERADOR|TURBINA|MAQUINA|UG|AG)\s+/,'');s=s.replace(/(^|\s)(WTG|AG|UG|T)(?=\s*\d)/g,'$1');
+  s=s.replace(/\s+/g,' ').trim();s=s.replace(/([A-Z]) (?=[A-Z])/g,'$1');return s;}
+function chaveAlias(t,cx){return normNome(t).replace(/\s/g,'')+'|'+(cx||'*');}
+function cand(fam,resto){var out=[];resto=resto.trim();
+  function add(f,p,t,pres){if(f==='WCS'){if(p>=4&&p<=8)f='ASB';else if(p>=9&&p<=16)f='JOA';else return;}var pq=f+(p<10?'0':'')+p;out.push({parque:pq,turb:t,id:pq+'-'+(t<10?'0':'')+t,presumido:!!pres});}
+  var m=/^([IVX]+)\s*(\d{1,3})$/.exec(resto);if(m&&ROM[m[1]]){add(fam,ROM[m[1]],+m[2]);return out;}
+  m=/^(\d{1,3})\s+(\d{1,3})$/.exec(resto);if(m){add(fam,+m[1],+m[2]);return out;}
+  m=/^(\d{3,5})$/.exec(resto);if(m){var d=m[1];for(var i=1;i<d.length;i++){var p=+d.slice(0,i),t=+d.slice(i);if(p>=1&&p<=16&&t>=1&&t<=20&&d.slice(i).length<=3)add(fam,p,t,true);}}
+  return out;}
+function interpretar(txt,cxId,cad){var raw=String(txt==null?'':txt).trim();
+  if(!raw)return{status:'vazio',msg:'Nome da turbina vazio'};
+  if(/^full\s*site$/i.test(raw))return{status:'full',id:'Full Site',msg:'Complexo inteiro'};
+  var al=cad.aliases[chaveAlias(raw,cxId)]||cad.aliases[chaveAlias(raw,'*')],SP=mapaSPE(cad);
+  if(al)return{status:'ok',id:al,parque:al.split('-')[0],turb:+al.split('-')[1],viaAlias:true,msg:'Reconhecido pela tabela de apelidos'};
+  var s=normNome(raw),all=[],soSPE=false;
+  FAM.forEach(function(f){f[1].forEach(function(p){if(s.indexOf(p)===0){var resto=s.slice(p.length).trim();var c=cand(f[0],resto);all=all.concat(c);if(!c.length&&(/^([IVX]+|\d{1,2})$/.test(resto))&&(ROM[resto]||/^\d{1,2}$/.test(resto)))soSPE=true;}});});
+  if(!all.length&&/^\d{1,3}\s+\d{1,3}$|^\d{3,5}$/.test(s)){['ASB','JOA','AUG'].forEach(function(f){all=all.concat(cand(f,s));});all.forEach(function(c){c.semPrefixo=true;});}
+  var seen={};all.forEach(function(c){if(!seen[c.id]||!c.presumido)seen[c.id]=c;});var L=Object.keys(seen).map(function(k){return seen[k];});
+  var ok=L.filter(function(c){return SP[c.parque]&&c.turb>=1&&c.turb<=SP[c.parque].n;}),okc=cxId?ok.filter(function(c){return SP[c.parque].cx===cxId;}):ok;
+  if(okc.length===1){var c=okc[0];if(c.presumido||c.semPrefixo)return{status:'presumido',id:c.id,parque:c.parque,turb:c.turb,candidatos:[c.id],msg:c.semPrefixo?'Sem prefixo do parque: leitura presumida':'Números colados: leitura presumida'};return{status:'ok',id:c.id,parque:c.parque,turb:c.turb,msg:''};}
+  if(okc.length>1)return{status:'ambiguo',candidatos:okc.map(function(c){return c.id;}),msg:'Mais de uma leitura possível'};
+  var fora=L.filter(function(c){return cad.foraContrato.indexOf(c.parque)>=0;});
+  if(fora.length)return{status:'fora',candidatos:fora.map(function(c){return c.id;}),msg:'Parque fora do contrato'};
+  if(ok.length)return{status:'outro_complexo',candidatos:ok.map(function(c){return c.id;}),complexoCorreto:SP[ok[0].parque].cx,msg:'Turbina de outro complexo ('+SP[ok[0].parque].cx+')'};
+  if(L.length)return{status:'inexistente',candidatos:L.map(function(c){return c.id;}),msg:'Parque ou nº de turbina inexistente no cadastro'};
+  if(soSPE)return{status:'spe_inteira',msg:'Parece uma SPE inteira, sem a turbina. Lance uma linha por turbina no arquivo de carveouts.'};
+  return{status:'nao_reconhecido',msg:'Formato não reconhecido'};}
+function listaTurbinas(cx){var o=[];cx.spes.forEach(function(s){for(var t=1;t<=s.n;t++)o.push(s.cod+'-'+(t<10?'0':'')+t);});return o;}
+function serialParaData(n){var ms=Math.round((n-25569)*86400000/1000)*1000;var d=new Date(ms);return new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate(),d.getUTCHours(),d.getUTCMinutes(),d.getUTCSeconds());}
+function lerDataValor(v,ordem){if(v==null||v==='')return null;if(v instanceof Date)return isNaN(v)?null:v;
+  if(typeof v==='object'&&v.serial!=null)return serialParaData(v.serial);if(typeof v==='number')return(v>20000&&v<80000)?serialParaData(v):null;
+  var s=String(v).trim(),m=/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:[ T]+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?)?$/i.exec(s);
+  if(m){var a=+m[1],b=+m[2],dd,mm;if(ordem==='DMY'){dd=a;mm=b;}else if(ordem==='MDY'){mm=a;dd=b;}else if(a>12){dd=a;mm=b;}else{dd=b;mm=a;}
+    var h=+(m[4]||0);if(m[7]){var pm=m[7].toUpperCase()==='PM';if(h===12)h=pm?12:0;else if(pm)h+=12;}
+    var d=new Date(+m[3],mm-1,dd,h,+(m[5]||0),+(m[6]||0));return d.getDate()===dd?d:null;}
+  m=/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2})(?::(\d{2}))?)?/.exec(s);if(m)return new Date(+m[1],+m[2]-1,+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0));return null;}
+function tipoData(v){if(v==null||v==='')return'vazio';if(v instanceof Date||(typeof v==='object'&&v.serial!=null))return'data';if(typeof v==='number')return'numero';return'texto';}
+function ordemDatas(valores){var a=0,b=0;valores.forEach(function(v){if(typeof v!=='string')return;var m=/^(\d{1,2})\/(\d{1,2})\//.exec(v.trim());if(m){a=Math.max(a,+m[1]);b=Math.max(b,+m[2]);}});if(a>12)return'DMY';if(b>12)return'MDY';return'?';}
+function num(v){if(v==null||v==='')return NaN;if(typeof v==='number')return v;if(typeof v==='object'&&v.serial!=null)return v.serial;var s=String(v).trim();if(!s)return NaN;if(/^-?\d{1,3}(\.\d{3})*,\d+$/.test(s)||/^-?\d+,\d+$/.test(s))s=s.replace(/\./g,'').replace(',','.');var n=Number(s);return isNaN(n)?NaN:n;}
+function mesInfo(ym){var p=ym.split('-'),ini=new Date(+p[0],+p[1]-1,1),fim=new Date(+p[0],+p[1],1);var dias=Math.round((fim-ini)/86400000);return{ini:ini,fim:fim,n:dias*144,dias:dias};}
+function fmtDH(d){if(!d)return'—';d=d instanceof Date?d:new Date(d);function p(x){return(x<10?'0':'')+x;}return p(d.getDate())+'/'+p(d.getMonth()+1)+'/'+d.getFullYear()+' '+p(d.getHours())+':'+p(d.getMinutes());}
+function lerCSV(txt){txt=txt.replace(/^\uFEFF/,'');var l1=txt.split(/\r?\n/)[0]||'';var dl=[',',';','\t'].sort(function(a,b){return l1.split(b).length-l1.split(a).length;})[0];
+  var L=[],row=[],f='',q=false;for(var i=0;i<txt.length;i++){var ch=txt[i];if(q){if(ch==='"'){if(txt[i+1]==='"'){f+='"';i++;}else q=false;}else f+=ch;}else if(ch==='"')q=true;else if(ch===dl){row.push(f);f='';}else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&txt[i+1]==='\n')i++;row.push(f);L.push(row);row=[];f='';}else f+=ch;}
+  if(f!==''||row.length){row.push(f);L.push(row);}return L;}
+function lerTabelaScada(L){var h=-1,ix={};
+  for(var r=0;r<Math.min(L.length,40);r++){var row=L[r]||[],t={};
+    row.forEach(function(c,j){var s=String(c==null?'':c).toLowerCase().replace(/\s+/g,' ');
+      if(/^\s*system/.test(s))t.sys=j;else if(/time\s*stamp|timestamp/.test(s))t.ts=j;else if(/actual active power/.test(s))t.p=j;
+      else if(/setpoint to the srl|input set ?point/.test(s))t.srl=j;else if(/active power demand set ?point/.test(s))t.dset=j;else if(/available turbines/.test(s))t.av=j;});
+    if(t.sys!=null&&t.ts!=null&&t.p!=null&&t.av!=null){h=r;ix=t;break;}}
+  if(h<0)return null;
+  var tsv=[];for(var r2=h+1;r2<L.length;r2++){var v=(L[r2]||[])[ix.ts];if(typeof v==='string')tsv.push(v);if(tsv.length>3000)break;}
+  var ordem=ordemDatas(tsv),regs=[],sys=null,invalidas=0,cntSrl={},cntTot={};
+  for(var i=h+1;i<L.length;i++){var R=L[i]||[];if(!R.length)continue;var s=R[ix.sys];if(s!=null&&String(s).trim()!=='')sys=String(s).trim().toUpperCase();
+    var tv=R[ix.ts];if(tv==null||tv==='')continue;var d=lerDataValor(tv,ordem==='?'?'MDY':ordem);if(!d){invalidas++;continue;}
+    var srl=ix.srl!=null?num(R[ix.srl]):NaN,ds=ix.dset!=null?num(R[ix.dset]):NaN;cntTot[sys]=(cntTot[sys]||0)+1;if(!isNaN(srl))cntSrl[sys]=(cntSrl[sys]||0)+1;
+    regs.push({sys:sys,t:d.getTime(),p:num(R[ix.p]),srl:srl,ds:ds,a:num(R[ix.av])});}
+  var fonte={},faltando=[];
+  Object.keys(cntTot).forEach(function(sy){fonte[sy]=(ix.srl!=null&&cntSrl[sy])?'SRL':(ix.dset!=null?'ADS':'NENHUMA');});
+  regs.forEach(function(r){var f=fonte[r.sys];r.dm=f==='SRL'?r.srl:(f==='ADS'?r.ds:NaN);r.df=f;delete r.srl;});
+  if(ix.srl==null&&ix.dset==null)faltando.push('demanda (nem Input SetPoint to the SRL nem Active power demand setpoint)');
+  return{regs:regs,colunas:ix,ordem:ordem,faltando:faltando,invalidas:invalidas,linhaCab:h+1,fonteDemanda:fonte,temSRL:ix.srl!=null,temADS:ix.dset!=null};}
+function semAc(s){return String(s==null?'':s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();}
+function lerTabelaCarveouts(L,ym){var h=-1,ix={};
+  for(var r=0;r<Math.min(L.length,60);r++){var row=L[r]||[],t={};
+    row.forEach(function(c,j){var s=semAc(c);if(!s)return;
+      if(t.tur==null&&/^(turbine|turbina|wtg|aerogerador|maquina|ug)\b/.test(s))t.tur=j;else if(t.ini==null&&/^(start|inicio|data inicial|data de inicio|start time|hora inicio)/.test(s))t.ini=j;
+      else if(t.fim==null&&/^(stop|end|fim|termino|data final|data de fim|stop time|end time)/.test(s))t.fim=j;else if(t.desc==null&&/^(description|descricao|observacao|comentario)/.test(s))t.desc=j;
+      else if(t.cat==null&&/^(reason code|categoria|classificacao|motivo|reason)/.test(s))t.cat=j;else if(t.split==null&&/^(split|only blade|somente pa|indisponibilidade parcial)/.test(s))t.split=j;
+      else if(t.site==null&&/^(site|complexo)$/.test(s))t.site=j;});
+    if(t.tur!=null&&t.ini!=null&&t.fim!=null){h=r;ix=t;break;}}
+  if(h<0)return null;
+  var tsv=[];for(var r2=h+1;r2<L.length;r2++){[ix.ini,ix.fim].forEach(function(j){var v=(L[r2]||[])[j];if(typeof v==='string'&&v.trim())tsv.push(v);});}
+  var ordem=ordemDatas(tsv),ordemOrigem=tsv.length?'conteúdo':'células em formato de data';
+  if(ordem==='?'&&tsv.length){if(ym){var M=mesInfo(ym),c1=0,c2=0;tsv.forEach(function(v){var a=lerDataValor(v,'DMY'),b=lerDataValor(v,'MDY');if(a&&a>=M.ini&&a<M.fim)c1++;if(b&&b>=M.ini&&b<M.fim)c2++;});ordem=c2>c1?'MDY':'DMY';ordemOrigem=c1===c2?'ambígua (assumido DD/MM)':'mês da apuração';}else{ordem='DMY';ordemOrigem='ambígua (assumido DD/MM)';}}
+  if(ordem==='?')ordem='DMY';
+  var site=null,titulo=null;for(var r3=0;r3<h;r3++){var rw=L[r3]||[];for(var j=0;j<rw.length;j++){var sv=String(rw[j]==null?'':rw[j]).trim();if(!sv)continue;if(/^site$/i.test(sv)&&rw[j+1])site=String(rw[j+1]).trim();else if(!titulo&&cxPorNome(sv))titulo=sv;}}
+  var out=[];
+  for(var i=h+1;i<L.length;i++){var R=L[i]||[];var tur=R[ix.tur];if(tur==null||String(tur).trim()==='')continue;
+    var vi=R[ix.ini],vf=R[ix.fim],di=lerDataValor(vi,ordem),df=lerDataValor(vf,ordem),sp=ix.split!=null?R[ix.split]:null;
+    out.push({linhaOrig:i+1,nome:String(tur).trim(),ini:di?di.getTime():null,fim:df?df.getTime():null,iniBruto:vi==null?'':String(typeof vi==='object'&&vi.serial!=null?vi.serial:vi),fimBruto:vf==null?'':String(typeof vf==='object'&&vf.serial!=null?vf.serial:vf),
+      iniTipo:tipoData(vi),fimTipo:tipoData(vf),desc:ix.desc!=null&&R[ix.desc]!=null?String(R[ix.desc]):'',cat:ix.cat!=null&&R[ix.cat]!=null?String(R[ix.cat]):'',
+      split:sp==null||String(sp).trim()===''?'':String(sp).trim(),site:ix.site!=null&&R[ix.site]?String(R[ix.site]).trim():null});}
+  return{linhas:out,site:site,titulo:titulo,ordem:ordem,ordemOrigem:ordemOrigem,linhaCab:h+1,colSplit:ix.split!=null?String((L[h]||[])[ix.split]):null};}
+function lerCalculadora(wb,cad){var calc=wb.aba('Data Pull & Calculation'),dp=wb.aba('Data Pulls');if(!calc||!dp)return null;
+  var nome=String((calc[1]||[])[1]||'').trim(),cx=null;cad.complexos.forEach(function(c){if(c.nome.toLowerCase()===nome.toLowerCase())cx=c;});
+  if(!cx)throw new Error('Calculadora de complexo não reconhecido: "'+nome+'"');
+  var h5=dp[4]||[],grupos=[],g=-1;
+  h5.forEach(function(v,j){var s=String(v==null?'':v).trim();if(/^power$/i.test(s))g=0;else if(/^demand power$/i.test(s))g=1;else if(/^unavail/i.test(s))g=2;else if(g>=0&&/^WC[SJA]-\d{3}$/i.test(s))grupos.push({g:g,col:j,scada:s.toUpperCase()});});
+  var regs=[];for(var r=5;r<dp.length;r++){var R=dp[r]||[],d=lerDataValor(R[1]);if(!d)continue;var by={};
+    grupos.forEach(function(k){var o=by[k.scada]||(by[k.scada]={sys:k.scada,t:d.getTime(),p:NaN,dm:NaN,ds:NaN,a:NaN,df:'CALC'});var v=R[k.col];var n=(v==null||v==='')?NaN:num(v);if(k.g===0)o.p=n;else if(k.g===1)o.dm=n;else o.a=n;});
+    Object.keys(by).forEach(function(k){regs.push(by[k]);});}
+  var cv=wb.aba('Carveout data - 3rd Party')||[],co=lerTabelaCarveouts(cv);
+  var sm=wb.aba('Summary')||[];var pre=(sm[10]||[])[3],pos=(sm[10]||[])[5],tba=(calc[9]||[])[2];
+  return{cx:cx.id,regs:regs,colunas:grupos,carveouts:co?co.linhas:[],resumo:{pre:typeof pre==='number'?pre:null,pos:typeof pos==='number'?pos:null,tba:typeof tba==='number'?tba:null}};}
+function montarSerie(cx,ym,fontes){var M=mesInfo(ym),n=M.n,t0=M.ini.getTime(),sp=cx.spes,idx={};sp.forEach(function(s,i){idx[s.scada.toUpperCase()]=i;});
+  function arr(){var a=new Float64Array(n);a.fill(NaN);return a;}
+  var P=sp.map(arr),Dm=sp.map(arr),Ds=sp.map(arr),A=sp.map(arr),src=sp.map(function(){return new Int16Array(n);});
+  var diag={foraMes:{},desalinhados:[],ajustados:[],conflitos:[],duplicados:0,porSPE:sp.map(function(){return{registros:0,arquivos:{},demanda:{}};})};
+  fontes.forEach(function(f,fi){f.regs.forEach(function(r){var j=idx[r.sys];if(j==null)return;
+    var off=r.t-t0;if(r.t<t0||r.t>=M.fim.getTime()){var k=fmtDH(new Date(r.t));diag.foraMes[k]=(diag.foraMes[k]||0)+1;return;}
+    var i=Math.round(off/600000),dlt=off-i*600000;
+    if(dlt!==0){if(Math.abs(dlt)<=120000&&i>=0&&i<n){diag.ajustados.push({spe:sp[j].cod,t:r.t,i:i,s:Math.round(dlt/1000),arquivo:f.arquivo.nome});}else{diag.desalinhados.push({spe:sp[j].cod,t:r.t,arquivo:f.arquivo.nome});return;}}
+    var ps=diag.porSPE[j];ps.registros++;ps.arquivos[f.arquivo.nome]=1;var dfk=r.df||'SRL';ps.demanda[dfk]=(ps.demanda[dfk]||0)+1;
+    if(src[j][i]){var ig=(P[j][i]===r.p||(isNaN(P[j][i])&&isNaN(r.p)))&&(Dm[j][i]===r.dm||(isNaN(Dm[j][i])&&isNaN(r.dm)))&&(A[j][i]===r.a||(isNaN(A[j][i])&&isNaN(r.a)));
+      if(ig){diag.duplicados++;return;}
+      diag.conflitos.push({spe:sp[j].cod,j:j,i:i,t:r.t,a:{p:P[j][i],dm:Dm[j][i],av:A[j][i],arq:fontes[src[j][i]-1].arquivo.nome},b:{p:r.p,dm:r.dm,av:r.a,arq:f.arquivo.nome}});return;}
+    src[j][i]=fi+1;P[j][i]=r.p;Dm[j][i]=r.dm;Ds[j][i]=r.ds;A[j][i]=r.a;});});
+  return{ym:ym,n:n,t0:t0,spes:sp.map(function(s){return s.cod;}),P:P,Dm:Dm,Ds:Ds,A:A,src:src,diag:diag};}
+function aplicarConflitos(serie,escolhas){(serie.diag.conflitos||[]).forEach(function(c,k){var e=escolhas&&escolhas[k];if(e==='b'){serie.P[c.j][c.i]=c.b.p;serie.Dm[c.j][c.i]=c.b.dm;serie.A[c.j][c.i]=c.b.av;}});}
+function somaComplexo(serie,N){var n=serie.n,ns=serie.spes.length,B=new Float64Array(n),C=new Float64Array(n),D=new Float64Array(n);
+  for(var i=0;i<n;i++){var b=0,c=0,a=0;for(var j=0;j<ns;j++){var p=serie.P[j][i],d=serie.Dm[j][i],v=serie.A[j][i];if(!isNaN(p))b+=p;if(!isNaN(d))c+=d;if(!isNaN(v))a+=v;}B[i]=b;C[i]=c;D[i]=N-a;}
+  return{B:B,C:C,D:D};}
+function faixa(l,t0,n){var a=Math.ceil((l.ini-t0-300000)/600000),b=Math.floor((l.fim-t0-300000)/600000);return[Math.max(a,0),Math.min(b,n-1)];}
+function calcular(serie,linhas,N,cats,detalhe){var n=serie.n,t0=serie.t0,s=somaComplexo(serie,N),B=s.B,C=s.C,D=s.D;
+  var R=new Float64Array(n),act=new Array(n);
+  linhas.forEach(function(l,k){if(l.ini==null||l.fim==null)return;var f=faixa(l,t0,n);l._f=f;for(var i=f[0];i<=f[1];i++){R[i]+=l.peso;(act[i]||(act[i]=[])).push(k);}});
+  var M=new Float64Array(n),O=new Float64Array(n),V=new Float64Array(n);var AP=0,LP=0,LPp=0,sD=0;
+  var porLinha=linhas.map(function(){return{mwh:0,int:0};}),porCat={},catIx={};(cats||[]).forEach(function(c,i){catIx[c]=i;});
+  var catInt=detalhe?(cats||[]).map(function(){return new Float64Array(n);}):null,foraLista=0,dias={};
+  for(var i=0;i<n;i++){var K=D[i]/6,L=N/6-K,m=B[i]<0?0:B[i]*1000/6,Nn=L!==0?m/L:0,cap=(C[i]-B[i])*1000/6;
+    var o=Math.max(Math.min(Nn*K,cap),0),Sx=(D[i]-R[i])<0?0:(D[i]-R[i])/6,T=N/6-Sx,U=T!==0?m/T:0,v=Math.max(Math.min(U*Sx,cap),0);
+    M[i]=m;O[i]=o;V[i]=v;AP+=m;LP+=o;LPp+=v;sD+=D[i];
+    var dk=Math.floor(i/144);var dd=dias[dk]||(dias[dk]={ap:0,lp:0,lpp:0});dd.ap+=m;dd.lp+=o;dd.lpp+=v;
+    if(R[i]!==0&&act[i]){var rem=(o-v)/R[i];act[i].forEach(function(k){var l=linhas[k],val=l.peso*rem;porLinha[k].mwh+=val;porLinha[k].int++;
+      if(catIx[l.cat]!=null){porCat[l.cat]=(porCat[l.cat]||0)+val;if(catInt)catInt[catIx[l.cat]][i]+=val;}else foraLista+=val;});}}
+  AP/=1000;LP/=1000;LPp/=1000;
+  var res={n:n,N:N,AP:AP,LP:LP,LPp:LPp,pre:AP+LP>0?1-LP/(AP+LP):null,pos:AP+LPp>0?1-LPp/(AP+LPp):null,tba:1-sD/(n*N),porCat:{},foraLista:foraLista/1000,removida:LP-LPp,
+    porLinha:porLinha.map(function(x){return{mwh:x.mwh/1000,int:x.int};}),porDia:Object.keys(dias).map(function(k){return{d:+k+1,ap:dias[k].ap/1000,lp:dias[k].lp/1000,lpp:dias[k].lpp/1000};})};
+  Object.keys(porCat).forEach(function(c){res.porCat[c]=porCat[c]/1000;});res.somaCats=Object.keys(res.porCat).reduce(function(a,c){return a+res.porCat[c];},0);
+  res.isolado=linhas.map(function(l){if(!l._f)return 0;var d=0;for(var i=l._f[0];i<=l._f[1];i++){var cap=(C[i]-B[i])*1000/6,r2=R[i]-l.peso,Sx=(D[i]-r2)<0?0:(D[i]-r2)/6,T=N/6-Sx,U=T!==0?M[i]/T:0,v2=Math.max(Math.min(U*Sx,cap),0);d+=v2-V[i];}
+    var lpp2=LPp+d/1000;return(res.pos-(AP+lpp2>0?1-lpp2/(AP+lpp2):0));});
+  if(detalhe)res.det={B:B,C:C,D:D,R:R,M:M,O:O,V:V,catInt:catInt};return res;}
+function resolverCarveouts(cx,cad,brutos,decisoes){var N=totalWTG(cx);
+  return brutos.map(function(b){var r=interpretar(b.nome,cx.id,cad),d=(decisoes||{})['CO|'+b.uid]||null,id=r.id,status=r.status,incl=true,cat=b.cat,motivo='';
+    if(d){if(d.acao==='excluir'){incl=false;motivo='Excluída por decisão';}else if(d.acao==='id'){id=d.id;status='ok';}}
+    var dc=(decisoes||{})['CAT|'+b.uid];if(dc&&dc.acao==='mapear')cat=dc.cat;
+    var spe=null,peso=1;if(status==='full'){peso=N;}else if(id){spe=id.split('-')[0];}
+    var resolvido=(status==='ok'||status==='full');
+    return{uid:b.uid,orig:b,interp:r,id:id,spe:spe,peso:peso,cat:cat,incluida:incl&&resolvido&&b.ini!=null&&b.fim!=null&&b.fim>b.ini,pendente:incl&&!resolvido,excluida:!incl,ini:b.ini,fim:b.fim,desc:b.desc,motivo:motivo};});}
+var NOME_DEM={SRL:'Input SetPoint to the SRL',ADS:'Active power demand setpoint (critério antigo)',CALC:'colunas da calculadora',NENHUMA:'nenhuma coluna de demanda'};
+function validar(cx,cad,ym,serie,cos,decisoes,ctx){ctx=ctx||{};var al=[],N=totalWTG(cx),sp=cx.spes,n=serie?serie.n:0;
+  function add(o){o.key=o.key||o.cod+'|'+(o.ref||'');al.push(o);}
+  if(!serie){add({cod:'S0',nivel:'bloqueia',grupo:'SCADA',titulo:'Nenhum dado do SCADA carregado para este complexo',det:'Carregue o(s) arquivo(s) exportado(s) do SCADA.',ref:'x'});}
+  else{var t0=serie.t0,dg=serie.diag;
+    var fontes={};dg.porSPE.forEach(function(p,j){Object.keys(p.demanda||{}).forEach(function(k){(fontes[k]=fontes[k]||[]).push(sp[j].cod);});});
+    var fk=Object.keys(fontes);
+    if(fk.indexOf('NENHUMA')>=0)add({cod:'S17',nivel:'bloqueia',grupo:'SCADA',ref:'dem0',titulo:'Arquivo do SCADA sem coluna de demanda para '+fontes.NENHUMA.join(', '),det:'Nem "Input SetPoint to the SRL" nem "Active power demand setpoint" foram encontradas. Pela opção 1, a demanda conta como zero e a perda é zerada.',decisao:'opcao1'});
+    if(fk.indexOf('ADS')>=0)add({cod:'S17',nivel:fk.length>1?'alerta':'info',grupo:'SCADA',ref:'demADS',titulo:'Demanda calculada com "Active power demand setpoint" em '+fontes.ADS.join(', '),det:'O arquivo não tem "Input SetPoint to the SRL" para essas SPEs (exportação antiga). Foi usado o critério anterior, conforme a regra definida.'+(fk.length>1?' Atenção: o complexo mistura fontes de demanda ('+fk.map(function(k){return NOME_DEM[k]+': '+fontes[k].join(', ');}).join(' · ')+').':'')});
+    else if(fk.length===1&&fk[0]==='SRL')add({cod:'S17',nivel:'info',grupo:'SCADA',ref:'demSRL',titulo:'Demanda calculada com "Input SetPoint to the SRL" em todas as SPEs'});
+    sp.forEach(function(s,j){var reg=dg.porSPE[j].registros;
+      if(reg===0){add({cod:'S12',nivel:'bloqueia',grupo:'SCADA',ref:s.cod,titulo:'SPE '+s.cod+' ('+s.scada+') sem nenhum dado no mês',det:'Pela regra da planilha (opção 1), todas as '+s.n+' turbinas da SPE contam como indisponíveis em todo o mês.',decisao:'opcao1'});return;}
+      var miss=[],spk=[],acima=[],cap=[],zero=[],dem0=[],trava=[];
+      for(var i=0;i<n;i++){var p=serie.P[j][i],d=serie.Dm[j][i],a=serie.A[j][i],t=t0+i*600000,f=[];if(isNaN(p))f.push('geração');if(isNaN(d))f.push('demanda');if(isNaN(a))f.push('disponíveis');
+        if(f.length){miss.push({t:t,f:f});continue;}
+        if(a>s.n+1e-9||a<-1e-9)acima.push({t:t,v:a});if(p>s.cap*1.05)cap.push({t:t,v:p});if(a<0.05&&p>0.5)zero.push({t:t,v:p});if(d<=0.01&&p>0.5)dem0.push({t:t,v:p});
+        if(i>0&&i<n-1){var a0=serie.A[j][i-1],a2=serie.A[j][i+1],lim=Math.max(4,0.25*s.n);if(!isNaN(a0)&&!isNaN(a2)&&a0-a>=lim&&a2-a>=lim)spk.push({t:t,v:a0+' → '+a+' → '+a2});}}
+      var run=1;for(var i2=1;i2<=n;i2++){var p1=i2<n?serie.P[j][i2]:NaN,p0=serie.P[j][i2-1],dd=i2<n?serie.Dm[j][i2]:NaN;
+        if(i2<n&&!isNaN(p1)&&p1===p0&&Math.abs(p1)>0.2&&!isNaN(dd)&&Math.abs(p1-dd)>0.05)run++;else{if(run>=6)trava.push({t:t0+(i2-run)*600000,v:p0+' MW por '+run+' intervalos ('+(run/6).toFixed(1)+' h)'});run=1;}}
+      if(miss.length){var tres=miss.filter(function(m){return m.f.length===3;}).length,alt=impactoFalta(serie,j,N);
+        add({cod:tres===miss.length?'S2':'S1',nivel:'bloqueia',grupo:'SCADA',ref:s.cod,titulo:s.cod+' ('+s.scada+'): '+miss.length+' intervalo(s) sem dado'+(tres?' — '+tres+' com as três tags vazias':''),
+          det:'Pela opção 1 (igual à planilha), o vazio conta como zero. Diagnóstico: se o intervalo usasse o valor anterior, o TBA mudaria '+fmtPP(alt.dtba)+' e o PBA pré '+fmtPP(alt.dpre)+'.',ocorr:miss.map(function(m){return fmtDH(new Date(m.t))+' · sem '+m.f.join(', ');}),decisao:'opcao1'});}
+      if(acima.length)add({cod:'S4',nivel:'bloqueia',grupo:'SCADA',ref:s.cod,titulo:s.cod+': turbinas disponíveis acima do total da SPE ('+s.n+') em '+acima.length+' intervalo(s)',det:'Valor máximo lido: '+Math.max.apply(null,acima.map(function(x){return x.v;}))+'. Pode indicar SPE trocada no arquivo ou cadastro de turbinas incorreto. O cálculo mantém o valor do SCADA.',ocorr:acima.map(function(x){return fmtDH(new Date(x.t))+' · '+x.v;}),decisao:'manter'});
+      if(spk.length)add({cod:'S3',nivel:'alerta',grupo:'SCADA',ref:s.cod,titulo:s.cod+': salto isolado de disponibilidade em '+spk.length+' intervalo(s)',det:'A disponibilidade cai e volta em um único intervalo de 10 min — típico de falha de leitura.',ocorr:spk.map(function(x){return fmtDH(new Date(x.t))+' · '+x.v;})});
+      if(cap.length)add({cod:'S5',nivel:'alerta',grupo:'SCADA',ref:s.cod,titulo:s.cod+': geração acima da capacidade ('+s.cap+' MW) em '+cap.length+' intervalo(s)',ocorr:cap.map(function(x){return fmtDH(new Date(x.t))+' · '+x.v+' MW';})});
+      if(zero.length)add({cod:'S6',nivel:'alerta',grupo:'SCADA',ref:s.cod,titulo:s.cod+': geração com 0 turbinas disponíveis em '+zero.length+' intervalo(s)',ocorr:zero.map(function(x){return fmtDH(new Date(x.t))+' · '+x.v+' MW';})});
+      if(dem0.length)add({cod:'S11',nivel:'alerta',grupo:'SCADA',ref:s.cod,titulo:s.cod+': geração com demanda zero em '+dem0.length+' intervalo(s)',ocorr:dem0.map(function(x){return fmtDH(new Date(x.t))+' · '+x.v+' MW';})});
+      if(trava.length)add({cod:'S9',nivel:'alerta',grupo:'SCADA',ref:s.cod,titulo:s.cod+': geração travada (mesmo valor, diferente da demanda) em '+trava.length+' trecho(s)',det:'Possível tag congelada no SCADA.',ocorr:trava.map(function(x){return fmtDH(new Date(x.t))+' · '+x.v;})});
+      var dsv=[];for(var i3=0;i3<n;i3++){var v3=serie.Ds[j][i3];if(!isNaN(v3))dsv.push(v3);}
+      if(dsv.length>50){dsv.sort(function(a,b){return a-b;});var med=dsv[dsv.length>>1];if(Math.abs(med-s.cap)>0.05)add({cod:'S13',nivel:'alerta',grupo:'SCADA',ref:s.cod,titulo:s.cod+': setpoint de potência ('+med+' MW) diferente da capacidade cadastrada ('+s.cap+' MW)',det:'Pode indicar sistema trocado no arquivo ou cadastro desatualizado.'});}});
+    var fm=Object.keys(dg.foraMes);if(fm.length)add({cod:'S10',nivel:'info',grupo:'SCADA',ref:'fora',titulo:fm.reduce(function(a,k){return a+dg.foraMes[k];},0)+' registro(s) fora do mês ignorados',det:'Regra: o período vai de 01 00:00 até o último dia 23:50. Exemplos: '+fm.slice(0,3).join(', ')+'.'});
+    if(dg.desalinhados.length)add({cod:'S10b',nivel:'alerta',grupo:'SCADA',ref:'desal',titulo:dg.desalinhados.length+' registro(s) com horário fora da grade de 10 min ignorados',ocorr:dg.desalinhados.map(function(d){return d.spe+' · '+fmtDH(new Date(d.t))+' · '+d.arquivo;})});
+    if(dg.ajustados.length)add({cod:'S16',nivel:'alerta',grupo:'SCADA',ref:'ajuste',titulo:dg.ajustados.length+' registro(s) com horário fora da grade ajustados ao intervalo de 10 min mais próximo',det:'Diferença de até ±2 min. Na colagem manual, esses registros também ocupam a linha do intervalo.',ocorr:dg.ajustados.map(function(d){return d.spe+' · lido '+fmtDH(new Date(d.t))+':'+('0'+new Date(d.t).getSeconds()).slice(-2)+' → '+fmtDH(new Date(d.t-d.s*1000))+' · '+d.arquivo;})});
+    if(dg.duplicados)add({cod:'S14',nivel:'info',grupo:'SCADA',ref:'dup',titulo:dg.duplicados+' registro(s) duplicado(s) com valores idênticos (desconsiderados)'});
+    dg.conflitos.forEach(function(c,k){add({cod:'S15',nivel:'bloqueia',grupo:'SCADA',ref:'conf'+k,titulo:c.spe+' '+fmtDH(new Date(c.t))+': valores diferentes para o mesmo intervalo',det:'A: '+c.a.arq+' (ger '+c.a.p+', dem '+c.a.dm+', disp '+c.a.av+') · B: '+c.b.arq+' (ger '+c.b.p+', dem '+c.b.dm+', disp '+c.b.av+')',escolha:['a','b'],idx:k});});
+    var s7=0,e7=0,s8=0,e8=0;for(var i4=0;i4<n;i4++){var b=0,c=0,ng=0;for(var j2=0;j2<sp.length;j2++){var p2=serie.P[j2][i4],d2=serie.Dm[j2][i4];if(!isNaN(p2)){b+=p2;if(p2<0)ng+=p2;}if(!isNaN(d2))c+=d2;}if(b>c+1e-9){s7++;e7+=(b-c)/6;}if(ng<0&&b>0){s8++;e8+=ng/6;}}
+    if(s7)add({cod:'S7',nivel:'info',grupo:'SCADA',ref:'cx',titulo:'Geração acima da demanda em '+s7+' intervalo(s)',det:'Nesses intervalos a perda é zerada pela fórmula (limite pela demanda). Excedente: '+e7.toFixed(1)+' MWh.'});
+    if(s8)add({cod:'S8',nivel:'info',grupo:'SCADA',ref:'cx',titulo:'Geração negativa de SPE compensada pelas demais em '+s8+' intervalo(s) ('+e8.toFixed(2)+' MWh)',det:'Comportamento idêntico à planilha: só se zera quando a soma do complexo é negativa.'});}
+  var cob=ctx.cobertura||[];
+  if(!cob.length)add({cod:'C0',nivel:'alerta',grupo:'Carveouts',ref:'cob',titulo:'Nenhuma planilha de carveouts carregada para '+cx.nome,det:'Sem carveouts, o PBA pós-carveout fica igual ao pré. Se o mês realmente não teve carveouts, siga com a ciência deste alerta.'});
+  else{cob.forEach(function(c){add({cod:'C0',nivel:'info',grupo:'Carveouts',ref:'cob'+c.arquivo+c.aba,titulo:'Carveouts de '+cx.nome+': aba "'+c.aba+'" de '+c.arquivo+' — '+c.linhas+' linha(s)',det:c.linhas?'Ordem das datas em texto: '+c.ordem+' ('+c.ordemOrigem+').':'A aba está no arquivo e não tem lançamentos no mês.'});});
+    if(cob.length>1)add({cod:'C0b',nivel:'alerta',grupo:'Carveouts',ref:'cobmulti',titulo:cob.length+' abas/arquivos de carveouts somados para '+cx.nome,det:cob.map(function(c){return c.arquivo+' › '+c.aba;}).join(' · ')+'. Confira se não é a mesma informação carregada duas vezes.'});}
+  var SPm={};sp.forEach(function(s,j){SPm[s.cod]={j:j,n:s.n};});var M2=mesInfo(ym),numDatas=[],splits=[];
+  cos.forEach(function(c){var b=c.orig,r=c.interp,lin='Linha '+b.linhaOrig+' de '+b.arquivo+' — "'+b.nome+'"';if(c.excluida)return;
+    if(r.status!=='ok'&&r.status!=='full'){var dd=(decisoes||{})['CO|'+c.uid];add({cod:'C1',nivel:'bloqueia',grupo:'Carveouts',ref:c.uid,uid:c.uid,titulo:lin+': '+r.msg,det:dd&&dd.acao==='id'?'Resolvido como '+c.id:(r.candidatos?'Leituras possíveis: '+r.candidatos.join(', '):''),interp:r});}
+    if(b.ini==null||b.fim==null)add({cod:'C4',nivel:'bloqueia',grupo:'Carveouts',ref:c.uid,uid:c.uid,titulo:lin+': data de início ou fim inválida',det:'Lido: início "'+b.iniBruto+'", fim "'+b.fimBruto+'". Corrija no arquivo ou exclua a linha.'});
+    else if(b.fim<=b.ini)add({cod:'C4',nivel:'bloqueia',grupo:'Carveouts',ref:c.uid,uid:c.uid,titulo:lin+': fim antes ou igual ao início',det:fmtDH(new Date(b.ini))+' → '+fmtDH(new Date(b.fim))});
+    else if(b.fim<M2.ini.getTime()||b.ini>=M2.fim.getTime())add({cod:'C4b',nivel:'alerta',grupo:'Carveouts',ref:c.uid,uid:c.uid,titulo:lin+': período fora do mês',det:fmtDH(new Date(b.ini))+' → '+fmtDH(new Date(b.fim))+'. Sem efeito no cálculo.'});
+    if(b.iniTipo==='numero'||b.fimTipo==='numero')numDatas.push(lin);if(b.split)splits.push(lin+' · '+b.split);
+    if(cad.categorias.indexOf(c.orig.cat)<0){var sem=CAT_SEM_COLUNA[String(b.cat).trim()];add({cod:'C5',nivel:'bloqueia',grupo:'Carveouts',ref:c.uid,uid:c.uid,titulo:lin+': '+(sem?'categoria sem coluna na calculadora':'categoria fora da lista oficial'),det:'Lido: "'+b.cat+'". '+(sem||'Na planilha, a perda seria removida mas sumiria do detalhamento por categoria.')});}
+    var dsc=(b.desc||'').toLowerCase(),ct=(c.cat||'').toLowerCase();
+    if(((/grid|rede/.test(dsc))&&ct.indexOf('rede')<0)||((/corrective|corretiv/.test(dsc))&&ct.indexOf('rede')>=0))add({cod:'C9',nivel:'alerta',grupo:'Carveouts',ref:c.uid,uid:c.uid,titulo:lin+': descrição incoerente com a categoria',det:'Descrição "'+b.desc+'" · categoria "'+String(c.cat).trim()+'"'});});
+  if(numDatas.length)add({cod:'C12',nivel:'alerta',grupo:'Carveouts',ref:'numdata',titulo:numDatas.length+' data(s) de carveout gravada(s) como número, sem formato de data',det:'Convertidas como data serial do Excel. Confira e formate a célula como data no arquivo.',ocorr:numDatas});
+  if(splits.length)add({cod:'C13',nivel:'alerta',grupo:'Carveouts',ref:'split',titulo:splits.length+' linha(s) com a coluna "Split unavailability / Only Blade" preenchida',det:'O cálculo segue a calculadora e conta 1 turbina inteira por linha.',ocorr:splits});
+  var inc=cos.filter(function(c){return c.incluida;});
+  for(var a=0;a<inc.length;a++)for(var bb=a+1;bb<inc.length;bb++){var x=inc[a],y=inc[bb];if(x.id&&x.id===y.id&&x.id!=='Full Site'&&x.ini<y.fim&&y.ini<x.fim)
+    add({cod:'C3',nivel:'bloqueia',grupo:'Carveouts',ref:x.uid+'~'+y.uid,titulo:x.id+' com períodos sobrepostos (linhas '+x.orig.linhaOrig+' e '+y.orig.linhaOrig+')',det:fmtDH(new Date(x.ini))+'–'+fmtDH(new Date(x.fim))+' × '+fmtDH(new Date(y.ini))+'–'+fmtDH(new Date(y.fim))+'. Na planilha, a turbina conta duas vezes no período comum.',par:[x.uid,y.uid]});}
+  var G={};inc.forEach(function(c){if(!c.spe)return;var k=c.spe+'|'+Math.floor(c.ini/60000)+'|'+String(c.cat).trim();(G[k]=G[k]||[]).push(c);});
+  Object.keys(G).forEach(function(k){var L=G[k],sp0=SPm[L[0].spe];if(!sp0)return;if(L.length>=Math.max(5,0.5*sp0.n)&&L.length<sp0.n){var tem={};L.forEach(function(c){tem[+c.id.split('-')[1]]=1;});
+    var falt=[],cob2=[];for(var t=1;t<=sp0.n;t++){if(tem[t])continue;var id=L[0].spe+'-'+(t<10?'0':'')+t;var outro=inc.some(function(c){return c.id===id&&c.ini<=L[0].ini&&c.fim>=L[0].ini;});(outro?cob2:falt).push(id);}
+    if(falt.length)add({cod:'C8',nivel:'alerta',grupo:'Carveouts',ref:k,titulo:'Evento de grupo em '+L[0].spe+' às '+fmtDH(new Date(L[0].ini))+': '+L.length+' de '+sp0.n+' turbinas lançadas',det:'Faltam: '+falt.join(', ')+(cob2.length?' · Já cobertas por outro carveout: '+cob2.join(', '):'')+'. Verifique se alguma turbina foi esquecida no arquivo.'});}});
+  if(serie&&inc.length){var nn=serie.n,t0b=serie.t0,s=somaComplexo(serie,N),R=new Float64Array(nn);inc.forEach(function(c){var f=faixa(c,t0b,nn);c._f=f;for(var i=f[0];i<=f[1];i++)R[i]+=c.peso;});
+    var exc=0;for(var i5=0;i5<nn;i5++)if(R[i5]>s.D[i5]+1e-9)exc++;
+    if(exc)add({cod:'C7',nivel:'alerta',grupo:'Carveouts',ref:'cx',titulo:'Mais turbinas com carveout do que indisponíveis no complexo em '+exc+' intervalo(s)',det:'Nesses intervalos toda a perda pré-carveout é removida (mesma marcação da coluna W da planilha).'});
+    inc.forEach(function(c){if(!c.spe||!SPm[c.spe])return;var j=SPm[c.spe].j,nt=SPm[c.spe].n,tot=0,ok=0;for(var i=c._f[0];i<=c._f[1];i++){var a=serie.A[j][i];if(isNaN(a))continue;tot++;if(nt-a<0.05)ok++;}c._spe100=ok;c._speTot=tot;
+      var lin='Linha '+c.orig.linhaOrig+' ('+c.orig.arquivo+') — '+c.id;
+      if(tot&&ok===tot)add({cod:'C6',nivel:'alerta',grupo:'Carveouts',ref:c.uid,uid:c.uid,forte:true,titulo:lin+': a SPE '+c.spe+' estava 100% disponível no SCADA durante todo o carveout',det:tot+' intervalo(s), '+fmtDH(new Date(c.ini))+' → '+fmtDH(new Date(c.fim))+'. Provável erro de data ou de turbina.'});
+      else if(tot&&ok>0&&ok/tot>=0.1)add({cod:'C10',nivel:'alerta',grupo:'Carveouts',ref:c.uid,uid:c.uid,titulo:lin+': SPE '+c.spe+' 100% disponível em '+ok+' de '+tot+' intervalos ('+Math.round(ok/tot*100)+'%)',det:'Parte do carveout não tem turbina parada na própria SPE.'});
+      if(tot===0&&c._f[1]<c._f[0])add({cod:'C4c',nivel:'alerta',grupo:'Carveouts',ref:c.uid,uid:c.uid,titulo:lin+': não cobre nenhum meio de intervalo de 10 min',det:'Sem efeito no cálculo.'});});}
+  if(ctx.res){var r=ctx.res,dif=Math.abs(r.removida-(r.somaCats+r.foraLista));
+    add({cod:'K1',nivel:dif<1e-6?'info':'bloqueia',grupo:'Cálculo',ref:'fech',titulo:'Fechamento: perda removida '+r.removida.toFixed(3)+' MWh = soma por linha/categoria '+(r.somaCats+r.foraLista).toFixed(3)+' MWh',det:dif<1e-6?'Conferência da planilha (Summary F15 = G15) atendida.':'Diferença de '+dif.toFixed(6)+' MWh.'});
+    inc.forEach(function(c,k){var pl=r.porLinha[k];if(pl&&pl.int&&Math.abs(pl.mwh)<1e-9)add({cod:'C11',nivel:'info',grupo:'Carveouts',ref:c.uid,uid:c.uid,titulo:'Linha '+c.orig.linhaOrig+' — '+c.id+': carveout sem efeito no PBA',det:'Turbina já disponível no complexo ou perda limitada pela demanda.'});});
+    if(ctx.anterior&&ctx.anterior.pos!=null&&r.pos!=null&&Math.abs(r.pos-ctx.anterior.pos)>0.015)add({cod:'K2',nivel:'alerta',grupo:'Cálculo',ref:'var',titulo:'Variação de '+fmtPP(r.pos-ctx.anterior.pos)+' no PBA pós em relação ao mês anterior emitido',det:'Mês anterior: '+(ctx.anterior.pos*100).toFixed(3)+'%.'});}
+  if(ctx.modelo===null)add({cod:'K3',nivel:'alerta',grupo:'Cálculo',ref:'modelo',titulo:'Modelo do PBA Calculator de '+cx.nome+' não cadastrado',det:'O cálculo funciona, mas a calculadora preenchida (arquivo de saída) só é gerada com o modelo cadastrado na aba Cadastro.'});
+  return al;}
+function fmtPP(x){return(x>=0?'+':'')+(x*100).toFixed(4)+' pp';}
+function impactoFalta(serie,j,N){var c=serie,a1=calcular(c,[],N,[]),P=c.P.slice(),Dm=c.Dm.slice(),A=c.A.slice();P[j]=Float64Array.from(c.P[j]);Dm[j]=Float64Array.from(c.Dm[j]);A[j]=Float64Array.from(c.A[j]);
+  for(var i=1;i<c.n;i++){if(isNaN(P[j][i]))P[j][i]=P[j][i-1];if(isNaN(Dm[j][i]))Dm[j][i]=Dm[j][i-1];if(isNaN(A[j][i]))A[j][i]=A[j][i-1];}
+  var a2=calcular({n:c.n,t0:c.t0,spes:c.spes,P:P,Dm:Dm,A:A},[],N,[]);return{dtba:a2.tba-a1.tba,dpre:(a2.pre||0)-(a1.pre||0)};}
+function sha256(bytes){var K=[1116352408,1899447441,3049323471,3921009573,961987163,1508970993,2453635748,2870763221,3624381080,310598401,607225278,1426881987,1925078388,2162078206,2614888103,3248222580,3835390401,4022224774,264347078,604807628,770255983,1249150122,1555081692,1996064986,2554220882,2821834349,2952996808,3210313671,3336571891,3584528711,113926993,338241895,666307205,773529912,1294757372,1396182291,1695183700,1986661051,2177026350,2456956037,2730485921,2820302411,3259730800,3345764771,3516065817,3600352804,4094571909,275423344,430227734,506948616,659060556,883997877,958139571,1322822218,1537002063,1747873779,1955562222,2024104815,2227730452,2361852424,2428436474,2756734187,3204031479,3329325298];
+  var H=[1779033703,3144134277,1013904242,2773480762,1359893119,2600822924,528734635,1541459225],l=bytes.length,nb=((l+9+63)>>6)<<6,m=new Uint8Array(nb);m.set(bytes);m[l]=0x80;var bl=l*8;for(var i=0;i<8;i++)m[nb-1-i]=(i<4)?(bl>>>(8*i))&255:Math.floor(bl/Math.pow(2,8*i))&255;
+  var w=new Uint32Array(64);for(var o=0;o<nb;o+=64){for(var t=0;t<16;t++)w[t]=(m[o+4*t]<<24)|(m[o+4*t+1]<<16)|(m[o+4*t+2]<<8)|m[o+4*t+3];
+    for(t=16;t<64;t++){var x=w[t-15],y=w[t-2];var s0=((x>>>7)|(x<<25))^((x>>>18)|(x<<14))^(x>>>3),s1=((y>>>17)|(y<<15))^((y>>>19)|(y<<13))^(y>>>10);w[t]=(w[t-16]+s0+w[t-7]+s1)|0;}
+    var a=H[0],b=H[1],c=H[2],d=H[3],e=H[4],f=H[5],g=H[6],h=H[7];
+    for(t=0;t<64;t++){var S1=((e>>>6)|(e<<26))^((e>>>11)|(e<<21))^((e>>>25)|(e<<7)),ch=(e&f)^(~e&g),t1=(h+S1+ch+K[t]+w[t])|0,S0=((a>>>2)|(a<<30))^((a>>>13)|(a<<19))^((a>>>22)|(a<<10)),mj=(a&b)^(a&c)^(b&c),t2=(S0+mj)|0;h=g;g=f;f=e;e=(d+t1)|0;d=c;c=b;b=a;a=(t1+t2)|0;}
+    H[0]=(H[0]+a)|0;H[1]=(H[1]+b)|0;H[2]=(H[2]+c)|0;H[3]=(H[3]+d)|0;H[4]=(H[4]+e)|0;H[5]=(H[5]+f)|0;H[6]=(H[6]+g)|0;H[7]=(H[7]+h)|0;}
+  return H.map(function(v){return('00000000'+(v>>>0).toString(16)).slice(-8);}).join('');}
+return{VERSAO_METODO:VERSAO_METODO,CATEGORIAS:CATEGORIAS,CAT_SEM_COLUNA:CAT_SEM_COLUNA,CAD_PADRAO:CAD_PADRAO,NOME_DEM:NOME_DEM,clone:clone,cxDe:cxDe,cxPorNome:cxPorNome,totalWTG:totalWTG,mapaSPE:mapaSPE,mapaScada:mapaScada,
+  normNome:normNome,chaveAlias:chaveAlias,interpretar:interpretar,listaTurbinas:listaTurbinas,lerCSV:lerCSV,lerTabelaScada:lerTabelaScada,lerTabelaCarveouts:lerTabelaCarveouts,lerCalculadora:lerCalculadora,
+  montarSerie:montarSerie,aplicarConflitos:aplicarConflitos,somaComplexo:somaComplexo,calcular:calcular,resolverCarveouts:resolverCarveouts,validar:validar,mesInfo:mesInfo,fmtDH:fmtDH,lerDataValor:lerDataValor,sha256:sha256,num:num,fmtPP:fmtPP};})();
+if(false)module.exports=Motor;
+
+var Modelo=(function(){'use strict';
+var L=XLSXLite,cn=XLSXWriter.col,xe=XLSXWriter.esc;
+var ABAS={dp:'Data Pulls',ca:'Data Pull & Calculation',co:'Carveout data - 3rd Party',sm:'Summary'};
+var MESES_EN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+var ESPERADO={
+ K:'IFERROR((D{r}),0)/6', L:'($B$7)/6-K{r}', M:'IFERROR(IF(B{r}<0,0,IF($B$16="MW",B{r}*1000/6,B{r}/6)),0)', N:'IFERROR(M{r}/L{r},0)',
+ O:'MAX(MIN((N{r}*K{r}),((C{r}-B{r})*1000)/6),0)',
+ R:'SUMIFS(\'Carveout data - 3rd Party\'!F:F,\'Carveout data - 3rd Party\'!B:B,"<="&(A{r}+5/60/24),\'Carveout data - 3rd Party\'!C:C,">="&(A{r}+5/60/24))',
+ S:'IFERROR(IF(((D{r}+E{r}+F{r}+H{r})-R{r})<0,0,((D{r}+E{r}+F{r}+H{r})-R{r})/6),0)', T:'($B$7)/6-S{r}', U:'IFERROR(M{r}/T{r},0)',
+ V:'MAX(MIN((U{r}*S{r}),((C{r}-B{r})*1000)/6),0)', W:'IF(R{r}>SUM(D{r}:F{r}),1,"")'};
+var CAT_F='IF($R{r}=0,0,SUMIFS(\'Carveout data - 3rd Party\'!$F:$F,\'Carveout data - 3rd Party\'!$B:$B,"<="&\'Data Pull & Calculation\'!$A{r}+5/60/24,\'Carveout data - 3rd Party\'!$C:$C,">="&\'Data Pull & Calculation\'!$A{r}+5/60/24,\'Carveout data - 3rd Party\'!$E:$E,{c}$14)*($O{r}-$V{r})/$R{r})';
+var CO_F='IF(A{r}="Full Site",$B$5,IF(COUNT(FIND({0,1,2,3,4,5,6,7,8,9},A{r}))>0,1,0))',CO_G='(C{r}-B{r})*24';
+function parseRows(xml){var a=xml.indexOf('<sheetData'),b=xml.indexOf('</sheetData>');if(a<0)throw new Error('Aba sem sheetData');var a2=xml.indexOf('>',a)+1;
+  if(xml.charAt(a2-2)==='/')return{pre:xml.slice(0,a2-2)+'>',rows:[],pos:'</sheetData>'+xml.slice(a2)};
+  var body=xml.slice(a2,b),rows=[],re=/<row\b([^>]*?)(?:\/>|>([\s\S]*?)<\/row>)/g,m;
+  while((m=re.exec(body)))rows.push({r:+L.attr(m[1],'r'),attrs:m[1],xml:m[0],inner:m[2]||''});
+  return{pre:xml.slice(0,a2),rows:rows,pos:xml.slice(b)};}
+function parseCells(inner){var out=[],re=/<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g,m;while((m=re.exec(inner))){var at=m[1],body=m[2]||'',ref=L.attr(at,'r'),fm=/<f\b([^>]*?)(?:\/>|>([\s\S]*?)<\/f>)/.exec(body),vm=/<v\b[^>]*?(?:\/>|>([\s\S]*?)<\/v>)/.exec(body);
+  out.push({ref:ref,col:ref.replace(/\d+/g,''),row:+ref.replace(/[A-Z]+/g,''),s:L.attr(at,'s'),t:L.attr(at,'t'),fAttrs:fm?fm[1]:null,fTxt:fm?(fm[2]||''):null,fShared:fm?/t="shared"/.test(fm[1]):false,v:vm?(vm[1]==null?'':vm[1]):null,raw:m[0]});}return out;}
+function shift(txt,delta){return txt.replace(/(^|[^A-Za-z0-9_$.])(\$?)([A-Z]{1,3})(\$?)(\d+)(?![\dA-Za-z_(])/g,function(all,pre,d1,c,d2,r){return pre+d1+c+d2+(d2?r:(+r+delta));});}
+function normF(txt,row){return L.un(txt).replace(new RegExp('(?<![\\d$])'+row+'(?!\\d)','g'),'{r}');}
+function cel(ref,s,t,f,v){var h='<c r="'+ref+'"'+(s!=null?' s="'+s+'"':'')+(t?' t="'+t+'"':'');if(f==null&&v==null)return h+'/>';return h+'>'+(f||'')+(v==null?'':'<v>'+v+'</v>')+'</c>';}
+function nv(x){return(typeof x==='number'&&isFinite(x))?String(x):null;}
+function serial(ms){var d=new Date(ms);return(ms-d.getTimezoneOffset()*60000)/86400000+25569;}
+function blocosHeader(vals){var g=null,out={P:{label:null,cod:{},sum:null},D:{label:null,cod:{},sum:null},A:{label:null,cod:{},sum:null}};
+  (vals||[]).forEach(function(v,j){var s=String(v==null?'':v).trim();if(/^power$/i.test(s)){g='P';out.P.label=j;}else if(/^demand power$/i.test(s)){g='D';out.D.label=j;}else if(/^unavail/i.test(s)){g='A';out.A.label=j;}
+    else if(g&&/^WC[SJA]-\d{3}$/i.test(s))out[g].cod[s.toUpperCase()]=j;else if(g&&/^sum$/i.test(s)){out[g].sum=j;g=null;}});return out;}
+function analisar(ab,cad){var erros=[],avisos=[],wb=L.read(ab),info={};
+  Object.keys(ABAS).forEach(function(k){if(wb.nomes.indexOf(ABAS[k])<0)erros.push('Aba "'+ABAS[k]+'" não encontrada.');});
+  if(erros.length)return{ok:false,erros:erros,avisos:avisos};
+  var ca=wb.aba(ABAS.ca),dp=wb.aba(ABAS.dp),co=wb.aba(ABAS.co);
+  var nome=String((ca[1]||[])[1]||'').trim(),cx=null;cad.complexos.forEach(function(c){if(c.nome.toLowerCase()===nome.toLowerCase())cx=c;});
+  if(!cx)return{ok:false,erros:['Complexo não reconhecido na célula B2 de "Data Pull & Calculation": "'+nome+'"'],avisos:avisos};
+  var N=Motor.totalWTG(cx);info.cx=cx.id;
+  if(+((ca[6]||[])[1])!==N)erros.push('B7 (# WTGs) = '+(ca[6]||[])[1]+' no modelo, mas o cadastro tem '+N+' turbinas em '+cx.nome+'.');
+  if(String((ca[15]||[])[1]).trim()!=='MW')erros.push('B16 (unidade da potência) deve ser "MW".');
+  if(+((co[4]||[])[1])!==N)erros.push('B5 (# WTGs) da aba de carveouts = '+(co[4]||[])[1]+', cadastro = '+N+'.');
+  var hb=blocosHeader(dp[4]),cods=cx.spes.map(function(s){return s.scada;});
+  ['P','D','A'].forEach(function(g){var nm={P:'Power',D:'Demand Power',A:'Unavail'}[g],k=Object.keys(hb[g].cod);
+    if(hb[g].label==null||hb[g].sum==null)erros.push('Data Pulls: grupo "'+nm+'" sem rótulo ou coluna "Sum" na linha 5.');
+    var falta=cods.filter(function(c){return k.indexOf(c)<0;}),sobra=k.filter(function(c){return cods.indexOf(c)<0;});
+    if(falta.length||sobra.length)erros.push('Data Pulls, grupo "'+nm+'": SPEs do modelo diferem do cadastro'+(falta.length?' · faltam '+falta.join(', '):'')+(sobra.length?' · sobram '+sobra.join(', '):''));});
+  info.hb=hb;
+  var ents=L.zipBruto(ab),byN={};ents.forEach(function(e){byN[e.nome]=e;});
+  function xml(nome){var p=wb.abaAlvo(nome);return new TextDecoder().decode(L.bytesDe(byN[p]));}
+  var xca=xml(ABAS.ca),r19=null,re=/<row r="19"[^>]*>([\s\S]*?)<\/row>/.exec(xca);if(!re)erros.push('Data Pull & Calculation: linha 19 não encontrada.');else r19=parseCells(re[1]);
+  var catCols={};
+  if(r19){var h14=ca[13]||[];
+    r19.forEach(function(c){if(c.fTxt==null&&c.fShared)return;if(c.fTxt==null)return;var f=normF(c.fTxt,19),exp=ESPERADO[c.col];
+      var ci=L.col(c.col),hdr=h14[ci];
+      if(exp){if(f!==exp)erros.push('Fórmula de '+c.col+'19 diferente do método replicado: '+L.un(c.fTxt));}
+      else if(ci>=23){if(f!==CAT_F.replace('{c}',c.col))erros.push('Fórmula de '+c.col+'19 diferente do método replicado.');else{if(cad.categorias.indexOf(hdr)<0)erros.push('Categoria "'+hdr+'" (coluna '+c.col+') não existe no cadastro.');else catCols[c.col]=cad.categorias.indexOf(hdr);}}
+      else erros.push('Fórmula não prevista em '+c.col+'19: '+L.un(c.fTxt));});
+    Object.keys(ESPERADO).forEach(function(k){if(!r19.some(function(c){return c.col===k&&c.fTxt!=null;}))erros.push('Coluna '+k+' sem fórmula na linha 19.');});
+    var faltCat=cad.categorias.filter(function(_,i){return!Object.keys(catCols).some(function(k){return catCols[k]===i;});});if(faltCat.length)erros.push('Categorias sem coluna no modelo: '+faltCat.join(' | '));}
+  info.catCols=catCols;
+  var xdp=xml(ABAS.dp),r6=/<row r="6"[^>]*>([\s\S]*?)<\/row>/.exec(xdp);
+  if(!r6)erros.push('Data Pulls: linha 6 não encontrada.');else{parseCells(r6[1]).forEach(function(c){if(c.fTxt==null)return;var f=L.un(c.fTxt),ci=L.col(c.col),ok=false;
+    ['P','D'].forEach(function(g){if(ci===hb[g].sum){var cs=Object.keys(hb[g].cod).map(function(k){return hb[g].cod[k];});ok=f==='SUM('+cn(Math.min.apply(null,cs))+'6:'+cn(Math.max.apply(null,cs))+'6)';}});
+    if(ci===hb.A.sum){var cs2=Object.keys(hb.A.cod).map(function(k){return hb.A.cod[k];});ok=f===N+'-SUM('+cn(Math.min.apply(null,cs2))+'6:'+cn(Math.max.apply(null,cs2))+'6)';}
+    if(!ok)erros.push('Data Pulls '+c.ref+': fórmula diferente do esperado: '+f);});}
+  var xco=xml(ABAS.co),r11=/<row r="11"[^>]*>([\s\S]*?)<\/row>/.exec(xco);
+  if(!r11)erros.push('Carveout data: linha 11 não encontrada (modelo sem nenhum carveout lançado).');else{var c11=parseCells(r11[1]);
+    ['F','G'].forEach(function(k){var c=c11.filter(function(x){return x.col===k;})[0];if(!c||c.fTxt==null)erros.push('Carveout data: '+k+'11 sem fórmula.');else if(normF(c.fTxt,11)!==(k==='F'?CO_F:CO_G))erros.push('Carveout data: fórmula de '+k+'11 diferente do esperado.');});}
+  var wbx=new TextDecoder().decode(L.bytesDe(byN['xl/workbook.xml'])),cm=/calcMode="(\w+)"/.exec(wbx);info.calcMode=cm?cm[1]:'auto';
+  if(info.calcMode==='manual')avisos.push('O modelo está em cálculo manual: os valores das fórmulas são gravados já calculados pela plataforma.');
+  info.vba=!!byN['xl/vbaProject.bin'];info.graficos=ents.filter(function(e){return/^xl\/charts\/chart\d+\.xml$/.test(e.nome);}).length;
+  return{ok:!erros.length,erros:erros,avisos:avisos,info:info};}
+function avaliar(f,ctx,celMap){var m;
+  if((m=/^'Data Pulls'!A([12])$/.exec(f)))return ctx.datas[+m[1]-1];
+  if((m=/^SUM\(([A-Z]+)19:\1\d+\)\/1000$/.exec(f)))return ctx.soma(m[1])/1000;
+  if((m=/^1-\(F(\d+)\/\(F(\d+)\+F(\d+)\)\)$/.exec(f))&&m[1]===m[3]){var a=celMap['F'+m[1]],b=celMap['F'+m[2]];return 1-a/(b+a);}
+  if((m=/^1-\(SUM\(D19:D(\d+)\)\/\(COUNT\(D19:D\1\)\*B7\)\)$/.exec(f)))return 1-ctx.soma('D')/(ctx.n*ctx.N);
+  if(f==="'Data Pull & Calculation'!B2")return{manter:true};
+  if(f==='TEXT(\'Data Pull & Calculation\'!B3,"mmmm") & " " & YEAR(\'Data Pull & Calculation\'!B3)')return{str:ctx.mesEN};
+  if((m=/^SUM\('Data Pull & Calculation'!([A-Z]+):\1\)(\/1000)?$/.exec(f)))return ctx.soma(m[1])/(m[2]?1000:1);
+  if((m=/^([A-Z]+\d+)\/\(\1\+([A-Z]+\d+)\)$/.exec(f)))return celMap[m[1]]/(celMap[m[1]]+celMap[m[2]]);
+  if((m=/^([A-Z]+\d+)-([A-Z]+\d+)$/.exec(f)))return celMap[m[1]]-celMap[m[2]];
+  if((m=/^SUM\(([A-Z]+)(\d+):([A-Z]+)\2\)\/1000$/.exec(f))){var s=0;for(var c=L.col(m[1]);c<=L.col(m[3]);c++)s+=celMap[cn(c)+m[2]]||0;return s/1000;}
+  return undefined;}
+function reavaliarCabecalho(rows,ctx,limite,nomeAba,erros){var celMap={};
+  return rows.map(function(row){if(limite&&row.r>=limite)return row;var mudou=false;
+    var inner=row.inner.replace(/<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g,function(all,at,body){body=body||'';var fm=/<f\b[^>]*?(?:\/>|>([\s\S]*?)<\/f>)/.exec(body),ref=L.attr(at,'r'),vm=/<v>([\s\S]*?)<\/v>/.exec(body);
+      if(!fm){if(vm&&!/t="/.test(at))celMap[ref]=+vm[1];return all;}
+      var f=L.un(fm[1]||''),r=avaliar(f,ctx,celMap);
+      if(r===undefined){erros.push(nomeAba+' '+ref+': fórmula não reconhecida pelo preenchimento automático: '+f);return all;}
+      if(r&&r.manter){return all;}
+      mudou=true;
+      if(r&&r.str!=null){return'<c'+at.replace(/\s*t="[^"]*"/,'')+' t="str">'+fm[0]+'<v>'+xe(r.str)+'</v></c>';}
+      celMap[ref]=r;return'<c'+at.replace(/\s*t="[^"]*"/,'')+'>'+fm[0]+(nv(r)!=null?'<v>'+nv(r)+'</v>':'')+'</c>';});
+    if(!mudou)return row;return{r:row.r,attrs:row.attrs,xml:'<row'+row.attrs+'>'+inner+'</row>'};});}
+function montar(p,rowsXml){return p.pre+rowsXml.join('')+p.pos;}
+async function preencher(ab,c){
+  var an=analisar(ab,c.cad);if(!an.ok)throw new Error('Modelo inválido: '+an.erros.join(' · '));if(an.info.cx!==c.cx.id)throw new Error('O modelo é de '+an.info.cx+', não de '+c.cx.id+'.');
+  var wb=L.read(ab),ents=L.zipBruto(ab),byN={};ents.forEach(function(e){byN[e.nome]=e;});
+  function xml(nome){return new TextDecoder().decode(L.bytesDe(byN[wb.abaAlvo(nome)]));}
+  var cx=c.cx,N=Motor.totalWTG(cx),n=c.serie.n,t0=c.serie.t0,DT=c.res.det,M=Motor.mesInfo(c.ym),hb=an.info.hb,erros=[];
+  var sIni=serial(M.ini.getTime()),sFim=serial(M.fim.getTime());
+  var spIdx={};cx.spes.forEach(function(s,j){spIdx[s.scada.toUpperCase()]=j;});
+  var colSums={};function acum(col,v){if(typeof v==='number'&&isFinite(v))colSums[col]=(colSums[col]||0)+v;}
+  var pDP=parseRows(xml(ABAS.dp)),proto6=pDP.rows.filter(function(r){return r.r===6;})[0],c6=parseCells(proto6.inner),out=[],si=0,shMap={};
+  pDP.rows.forEach(function(r){if(r.r<6){if(r.r===1||r.r===2){var v=r.r===1?sIni:sFim;out.push('<row'+r.attrs+'>'+r.inner.replace(/(<c r="A\d+"[^>]*>)<v>[^<]*<\/v>/,'$1<v>'+v+'</v>')+'</row>');}else out.push(r.xml);}});
+  var tsCols={};tsCols[1]=1;['P','D','A'].forEach(function(g){tsCols[hb[g].label]=1;});
+  var grupoDe={};['P','D','A'].forEach(function(g){Object.keys(hb[g].cod).forEach(function(k){grupoDe[hb[g].cod[k]]={g:g,j:spIdx[k]};});if(hb[g].sum!=null)grupoDe[hb[g].sum]={g:g,sum:true};});
+  function c_serie(k,j,i){return j==null?NaN:c.serie[k][j][i];}
+  for(var i=0;i<n;i++){var r=6+i,cs=[],ts=serial(t0+i*600000);
+    c6.forEach(function(cc){var ci=L.col(cc.col),ref=cc.col+r,gd=grupoDe[ci];
+      if(tsCols[ci])cs.push(cel(ref,cc.s,null,null,String(ts)));
+      else if(gd&&!gd.sum){var v=gd.g==='P'?c_serie('P',gd.j,i):gd.g==='D'?c_serie('Dm',gd.j,i):c_serie('A',gd.j,i);cs.push(cel(ref,cc.s,null,null,isNaN(v)?null:String(v)));}
+      else if(gd&&gd.sum){var val=gd.g==='P'?DT.B[i]:gd.g==='D'?DT.C[i]:DT.D[i],f;
+        if(cc.fShared){var k=shMap[cc.col];if(k==null){k=shMap[cc.col]=si++;f='<f t="shared" ref="'+cc.col+'6:'+cc.col+(5+n)+'" si="'+k+'">'+cc.fTxt+'</f>';}else f='<f t="shared" si="'+k+'"/>';}
+        else f='<f>'+shift(cc.fTxt,i)+'</f>';cs.push(cel(ref,cc.s,null,f,nv(val)));}
+      else if(cc.fTxt!=null||cc.fShared)erros.push('Data Pulls '+cc.ref+': célula com fórmula não prevista.');
+      else cs.push(cel(ref,cc.s,null,null,null));});
+    out.push('<row r="'+r+'"'+proto6.attrs.replace(/\s*r="\d+"/,'')+'>'+cs.join('')+'</row>');}
+  var xmlDP=montar(pDP,out).replace(/<dimension ref="([A-Z]+\d+):([A-Z]+)\d+"/,'<dimension ref="$1:$2'+(5+n)+'"');
+  var pCA=parseRows(xml(ABAS.ca)),p19=pCA.rows.filter(function(r){return r.r===19;})[0],c19=parseCells(p19.inner),catCols=an.info.catCols;si=0;shMap={};
+  var linhasCA=[];
+  for(var i2=0;i2<n;i2++){var rr=19+i2,cs2=[],Dv=DT.D[i2],Kv=Dv/6,Lv=N/6-Kv,Mv=DT.M[i2],Nn=Lv!==0?Mv/Lv:0,Rv=DT.R[i2],Sv=(Dv-Rv)<0?0:(Dv-Rv)/6,Tv=N/6-Sv,Uv=Tv!==0?Mv/Tv:0;
+    var vals={A:serial(t0+i2*600000),B:DT.B[i2],C:DT.C[i2],D:Dv,K:Kv,L:Lv,M:Mv,N:Nn,O:DT.O[i2],R:Rv,S:Sv,T:Tv,U:Uv,V:DT.V[i2]};
+    Object.keys(catCols).forEach(function(k){vals[k]=DT.catInt[catCols[k]][i2];});
+    Object.keys(vals).forEach(function(k){acum(k,vals[k]);});
+    c19.forEach(function(cc){var ref=cc.col+rr,v=vals[cc.col];
+      if(cc.fTxt==null&&!cc.fShared){cs2.push(cel(ref,cc.s,null,null,(cc.col==='A'||cc.col==='B'||cc.col==='C'||cc.col==='D')?nv(v):null));return;}
+      var f;if(cc.fShared){var k=shMap[cc.col];if(k==null){k=shMap[cc.col]=si++;f='<f t="shared" ref="'+cc.col+'19:'+cc.col+(18+n)+'" si="'+k+'">'+cc.fTxt+'</f>';}else f='<f t="shared" si="'+k+'"/>';}
+      else f='<f>'+shift(cc.fTxt,i2)+'</f>';
+      if(cc.col==='W'){var w=Rv>Dv;cs2.push(w?cel(ref,cc.s,null,f,'1'):'<c r="'+ref+'"'+(cc.s!=null?' s="'+cc.s+'"':'')+' t="str">'+f+'<v></v></c>');return;}
+      cs2.push(cel(ref,cc.s,null,f,nv(v)));});
+    linhasCA.push('<row r="'+rr+'"'+p19.attrs.replace(/\s*r="\d+"/,'')+'>'+cs2.join('')+'</row>');}
+  var ctxEval={datas:[sIni,sFim],n:n,N:N,mesEN:MESES_EN[M.ini.getMonth()]+' '+M.ini.getFullYear(),soma:function(col){return colSums[col]||0;}};
+  var cab=reavaliarCabecalho(pCA.rows.filter(function(r){return r.r<19;}),ctxEval,19,ABAS.ca,erros);
+  var xmlCA=montar(pCA,cab.map(function(r){return r.xml;}).concat(linhasCA)).replace(/<dimension ref="([A-Z]+\d+):([A-Z]+)\d+"/,'<dimension ref="$1:$2'+(18+n)+'"');
+  var pCO=parseRows(xml(ABAS.co)),p11=pCO.rows.filter(function(r){return r.r===11;})[0],c11=parseCells(p11.inner),outCO=[];
+  var ultDado=0;pCO.rows.forEach(function(r){if(r.r>=11&&/<v>|<f/.test(r.inner))ultDado=Math.max(ultDado,r.r);});
+  var filler=pCO.rows.filter(function(r){return r.r>ultDado&&!/<v>|<f/.test(r.inner);})[0];
+  pCO.rows.forEach(function(r){if(r.r<11)outCO.push(r.xml);});
+  var inc=c.cos.filter(function(x){return x.incluida;});
+  inc.forEach(function(x,k){var rr=11+k,cs3=[],nome=x.interp.status==='full'?'Full Site':((x.interp.status==='ok'&&/\d/.test(x.orig.nome))?x.orig.nome:x.id),sb=serial(x.ini),sc=serial(x.fim);
+    c11.forEach(function(cc){var ref=cc.col+rr;
+      if(cc.col==='A')cs3.push('<c r="'+ref+'"'+(cc.s!=null?' s="'+cc.s+'"':'')+' t="inlineStr"><is><t xml:space="preserve">'+xe(nome)+'</t></is></c>');
+      else if(cc.col==='B')cs3.push(cel(ref,cc.s,null,null,String(sb)));else if(cc.col==='C')cs3.push(cel(ref,cc.s,null,null,String(sc)));
+      else if(cc.col==='D'||cc.col==='E'){var tx=cc.col==='D'?(x.desc||''):x.cat;cs3.push(tx?'<c r="'+ref+'"'+(cc.s!=null?' s="'+cc.s+'"':'')+' t="inlineStr"><is><t xml:space="preserve">'+xe(tx)+'</t></is></c>':cel(ref,cc.s,null,null,null));}
+      else if(cc.col==='F')cs3.push(cel(ref,cc.s,null,'<f>'+xe(CO_F.replace(/\{r\}/g,rr))+'</f>',String(x.peso)));
+      else if(cc.col==='G')cs3.push(cel(ref,cc.s,null,'<f>'+xe(CO_G.replace(/\{r\}/g,rr))+'</f>',String((sc-sb)*24)));
+      else cs3.push(cel(ref,cc.s,null,null,null));});
+    outCO.push('<row r="'+rr+'"'+p11.attrs.replace(/\s*r="\d+"/,'')+'>'+cs3.join('')+'</row>');});
+  var ultEscrita=10+inc.length;
+  for(var rf=ultEscrita+1;rf<=ultDado;rf++){if(filler){outCO.push('<row r="'+rf+'"'+filler.attrs.replace(/\s*r="\d+"/,'')+'>'+filler.inner.replace(/r="([A-Z]+)\d+"/g,'r="$1'+rf+'"')+'</row>');}}
+  pCO.rows.forEach(function(r){if(r.r>Math.max(ultDado,ultEscrita))outCO.push(r.xml);});
+  var dimCO=Math.max(ultEscrita,+((/<dimension ref="[A-Z]+\d+:[A-Z]+(\d+)"/.exec(pCO.pre)||[0,0])[1]));
+  var xmlCO=montar(pCO,outCO).replace(/<dimension ref="([A-Z]+\d+):([A-Z]+)\d+"/,'<dimension ref="$1:$2'+dimCO+'"');
+  var pSM=parseRows(xml(ABAS.sm)),sm=reavaliarCabecalho(pSM.rows,ctxEval,0,ABAS.sm,erros),xmlSM=montar(pSM,sm.map(function(r){return r.xml;}));
+  if(erros.length)throw new Error('Não foi possível preencher o modelo: '+erros.slice(0,5).join(' · '));
+  var wbx=new TextDecoder().decode(L.bytesDe(byN['xl/workbook.xml'])),ids={},rs=/<sheet\b([^>]*)\/?>/g,s2;while((s2=rs.exec(wbx)))ids[L.un(L.attr(s2[1],'name'))]=L.attr(s2[1],'sheetId');
+  var novos={};novos[wb.abaAlvo(ABAS.dp)]=xmlDP;novos[wb.abaAlvo(ABAS.ca)]=xmlCA;novos[wb.abaAlvo(ABAS.co)]=xmlCO;novos[wb.abaAlvo(ABAS.sm)]=xmlSM;
+  if(byN['xl/calcChain.xml']){var cc=['<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<calcChain xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'];
+    wb.abas.forEach(function(a){var p='xl/'+a.alvo,x=novos[p]||new TextDecoder().decode(L.bytesDe(byN[p])),id=ids[a.nome],first=true,re2=/<c r="([A-Z]+\d+)"[^>]*>(?:(?!<\/c>)[\s\S])*?<f\b/g,m2;
+      while((m2=re2.exec(x))){cc.push('<c r="'+m2[1]+'"'+(first?' i="'+id+'"':'')+'/>');first=false;}});
+    cc.push('</calcChain>');novos['xl/calcChain.xml']=cc.join('');}
+  var files=ents.map(function(e){return novos[e.nome]!=null?{nome:e.nome,dados:novos[e.nome]}:{nome:e.nome,bruto:e};});
+  var blob=await XLSXWriter.zipar(files,'application/vnd.ms-excel.sheet.macroEnabled.12');
+  return{blob:blob,alteradas:Object.keys(novos),preservadas:ents.length-Object.keys(novos).length,total:ents.length};}
+return{analisar:analisar,preencher:preencher};})();
+if(false)module.exports=Modelo;
+
+var Auditoria=(function(){'use strict';
+function d(ms){return new Date(ms);}
+async function gerar(c){var cx=c.cx,R=c.res,au={nome:'Auditoria',linhas:{},larg:[34,100]},A=au.linhas,r=1;
+  function kv(k,v,s){A[r++]=[{v:k,s:1},v==null?'—':(s?{v:v,s:s}:v)];}
+  A[r++]=[{v:'Apuração de disponibilidade energética (PBA) — relatório de auditoria',s:1}];r++;
+  kv('Complexo',cx.nome+' ('+cx.id+')');kv('Mês',c.ym);kv('Situação',c.status==='EMITIDA'?'EMITIDA — versão '+c.versao:'RASCUNHO (não emitido)');kv('Gerado em',Motor.fmtDH(Date.now()));kv('Gerado por',c.por);
+  kv('Método',Motor.VERSAO_METODO);kv('Demanda (P_DMD_MW)',c.demanda||'—');kv('Dado faltando no SCADA','Opção 1 — vazio conta como zero (igual à planilha)');
+  kv('Ciente dos alertas',c.ciente?c.ciente.por+' em '+Motor.fmtDH(c.ciente.em)+' ('+c.ciente.qtd+' alertas)':'—');
+  kv('PBA pré-carveout',R.pre,3);kv('PBA pós-carveout',R.pos,3);kv('TBA',R.tba,3);kv('Actual Prod (MWh)',R.AP,4);kv('Lost Prod pré (MWh)',R.LP,4);kv('Lost Prod pós (MWh)',R.LPp,4);
+  kv('Hash do resultado (SHA-256)',c.hashRes);kv('Calculadora preenchida',c.arqCalc||'—');kv('Modelo usado',c.modelo?c.modelo.nome+' · SHA-256 '+c.modelo.sha:'—');r++;
+  A[r++]=[{v:'Arquivos de entrada',s:5},{v:'Tipo · tamanho · SHA-256 · importado por/em',s:5}];
+  c.arquivos.forEach(function(f){A[r++]=[f.nome,f.tipo+' · '+(f.tam/1024).toFixed(1)+' KB · '+f.sha+' · '+f.por+' em '+Motor.fmtDH(f.em)+(f.resumo&&f.resumo.demanda?' · demanda: '+f.resumo.demanda:'')];});r++;
+  if(c.cobertura&&c.cobertura.length){A[r++]=[{v:'Abas de carveouts usadas',s:5},{v:'Arquivo › aba · linhas',s:5}];c.cobertura.forEach(function(x){A[r++]=[x.aba,x.arquivo+' · '+x.linhas+' linha(s)'];});r++;}
+  A[r++]=[{v:'Cadastro utilizado',s:5},{v:'SCADA · turbinas · capacidade (MW) · nome comercial',s:5}];cx.spes.forEach(function(s){A[r++]=[s.cod,s.scada+' · '+s.n+' WTG · '+s.cap+' MW · '+s.comercial];});r++;
+  A[r++]=[{v:'Premissas registradas',s:5},null];c.cad.premissas.forEach(function(p){A[r++]=['•',p];});
+  var co={nome:'Carveouts · impacto',linhas:{},larg:[16,14,10,18,18,10,40,14,14,14,14,16,30],congelar:1},C=co.linhas;
+  C[1]=['Nome no arquivo','Turbina','SPE','Início','Fim','Horas','Categoria','Intervalos','MWh recuperados','Impacto PBA (pp)','Isolado (pp)','% SPE 100% disp.','Arquivo › aba · linha'].map(function(x){return{v:x,s:5};});
+  var inc=c.cos.filter(function(x){return x.incluida;});inc.forEach(function(x,k){var pl=R.porLinha[k];C[2+k]=[x.orig.nome,x.id,x.spe||'Complexo',d(x.ini),d(x.fim),{v:(x.fim-x.ini)/3600000,s:4},String(x.cat).trim(),pl.int,{v:pl.mwh,s:4},{v:pl.mwh/(R.AP+R.LPp)*100,s:4},{v:(R.isolado[k]||0)*100,s:4},x._speTot?{v:x._spe100/x._speTot,s:3}:'—',x.orig.arquivo+' · '+x.orig.linhaOrig];});
+  var ni={nome:'Carveouts não incluídos',linhas:{},larg:[16,18,18,30,40,30,40,36]};ni.linhas[1]=['Nome original','Início','Fim','Descrição','Categoria','Situação','Decisão / justificativa','Arquivo › aba · linha'].map(function(x){return{v:x,s:5};});
+  c.cos.filter(function(x){return!x.incluida;}).forEach(function(x,k){var dc=c.decisoes['CO|'+x.uid]||{};ni.linhas[2+k]=[x.orig.nome,x.ini?d(x.ini):x.orig.iniBruto,x.fim?d(x.fim):x.orig.fimBruto,x.desc,x.orig.cat,x.excluida?'Excluída':(x.pendente?'Pendente: '+x.interp.msg:'Datas inválidas'),(dc.just||'')+(dc.por?' — '+dc.por+' em '+Motor.fmtDH(dc.em):''),x.orig.arquivo+' · '+x.orig.linhaOrig];});
+  var va={nome:'Validação',linhas:{},larg:[7,10,11,60,60,30,18,16,60]};va.linhas[1]=['Código','Nível','Grupo','Achado','Detalhe','Decisão','Por','Em','Ocorrências (até 30)'].map(function(x){return{v:x,s:5};});
+  c.alertas.forEach(function(a,k){var dc=a._dec||{};va.linhas[2+k]=[a.cod,a.nivel,a.grupo,a.titulo,a.det||'',dc.txt||'',dc.por||'',dc.em?Motor.fmtDH(dc.em):'',(a.ocorr||[]).slice(0,30).join(' | ')];});
+  var lg={nome:'Log',linhas:{},larg:[18,22,30,100]};lg.linhas[1]=['Quando','Quem','Ação','Detalhe'].map(function(x){return{v:x,s:5};});(c.log||[]).forEach(function(e,k){lg.linhas[2+k]=[Motor.fmtDH(e.em),e.por,e.acao,e.det||''];});
+  return XLSXWriter.gerar([au,va,co,ni,lg]);}
+return{gerar:gerar};})();
+if(false)module.exports=Auditoria;
+
+'use strict';
+var $=function(id){return document.getElementById(id);};
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function pct(x,c){return x==null||isNaN(x)?'—':(x*100).toFixed(c==null?3:c).replace('.',',')+'%';}
+function nf(x,c){return x==null||isNaN(x)?'—':Number(x).toLocaleString('pt-BR',{minimumFractionDigits:c==null?1:c,maximumFractionDigits:c==null?1:c});}
+function pp(x){return x==null||isNaN(x)?'—':((x>=0?'+':'')+(x*100).toFixed(4).replace('.',','))+' pp';}
+var MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],MES_EN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var NOME_ARQ={ASB:'AsaBranca',CH1:'Chapada1',CH2:'Chapada2',CH3:'Chapada3'};
+function ymTxt(ym){var p=ym.split('-');return MESES[+p[1]-1]+'/'+p[0];}
+function nomeCalc(cx,ym,suf){var p=ym.split('-');return'PBA Calculator - '+NOME_ARQ[cx]+'_'+MES_EN[+p[1]-1]+p[0]+(suf||'')+'.xlsm';}
+function agora(){return Date.now();}
+var DB={db:null,
+  open:function(){return new Promise(function(ok,ko){var r=indexedDB.open('plataformaEng_disponibilidade',1);r.onupgradeneeded=function(){r.result.createObjectStore('kv');};r.onsuccess=function(){DB.db=r.result;ok();};r.onerror=function(){ko(r.error);};});},
+  tx:function(m){return DB.db.transaction('kv',m).objectStore('kv');},
+  get:function(k){return new Promise(function(ok,ko){var q=DB.tx('readonly').get(k);q.onsuccess=function(){ok(q.result);};q.onerror=function(){ko(q.error);};});},
+  set:function(k,v){return new Promise(function(ok,ko){var q=DB.tx('readwrite').put(v,k);q.onsuccess=function(){ok();};q.onerror=function(){ko(q.error);};});},
+  range:function(p){return new Promise(function(ok,ko){var st=DB.tx('readonly'),kr=IDBKeyRange.bound(p,p+'\uffff'),out=[],c=st.openCursor(kr);c.onsuccess=function(){var x=c.result;if(x){out.push({k:x.key,v:x.value});x.continue();}else ok(out);};c.onerror=function(){ko(c.error);};});},
+  todas:function(){return DB.range('');}};
+var ST={cad:null,usuario:'',ym:null,apur:null,cx:'ASB',sub:'val',aba:'apur',cache:{},emisIdx:[],apurIdx:{},modIdx:{},pagina:0,filtro:'todos',mostraSPE:false,ano:null,ordCO:'arquivo',verSel:{},vistas:{}};
+var CXS=['ASB','CH1','CH2','CH3'];
+async function logar(acao,det,ym,cx){var e={em:agora(),por:ST.usuario||'(sem nome)',acao:acao,det:det||'',ym:ym||(ST.apur&&ST.apur.ym)||'',cx:cx||''};await DB.set('log:'+e.em+':'+Math.random().toString(36).slice(2,7),e);}
+async function sha256Buf(buf){try{if(window.crypto&&crypto.subtle){var h=await crypto.subtle.digest('SHA-256',buf);return Array.from(new Uint8Array(h)).map(function(b){return('0'+b.toString(16)).slice(-2);}).join('');}}catch(e){}return Motor.sha256(new Uint8Array(buf));}
+async function shaTxt(t){return sha256Buf(new TextEncoder().encode(t));}
+function novaApur(ym){var o={ym:ym,criado:agora(),arquivos:[],scada:{},carve:{},ref:{},cx:{}};CXS.forEach(function(c){o.cx[c]={decisoes:{},ciente:null,calc:null,status:'aberto',versao:0};});return o;}
+async function salvarApur(){ST.apur.atualizado=agora();await DB.set('apur:'+ST.apur.ym,ST.apur);
+  var idx=ST.apurIdx[ST.apur.ym]={};CXS.forEach(function(c){var x=ST.apur.cx[c];idx[c]={status:x.status,versao:x.versao,calc:x.calc?{pre:x.calc.res.pre,pos:x.calc.res.pos,tba:x.calc.res.tba,em:x.calc.em}:null};});await DB.set('apuridx',ST.apurIdx);}
+async function abrirMes(ym){ST.ym=ym;var a=await DB.get('apur:'+ym);ST.apur=a||novaApur(ym);ST.cache={};$('mes').value=ym;render();}
+function paraCols(regs){var sys=[],si={},n=regs.length,dfs=[],di={},o={sys:sys,dfs:dfs,s:new Uint8Array(n),f:new Uint8Array(n),t:new Float64Array(n),p:new Float64Array(n),dm:new Float64Array(n),ds:new Float64Array(n),a:new Float64Array(n)};
+  regs.forEach(function(r,i){if(si[r.sys]==null){si[r.sys]=sys.length;sys.push(r.sys);}var df=r.df||'SRL';if(di[df]==null){di[df]=dfs.length;dfs.push(df);}o.s[i]=si[r.sys];o.f[i]=di[df];o.t[i]=r.t;o.p[i]=r.p;o.dm[i]=r.dm;o.ds[i]=r.ds;o.a[i]=r.a;});return o;}
+function deCols(o){var r=new Array(o.t.length);for(var i=0;i<o.t.length;i++)r[i]={sys:o.sys[o.s[i]],df:o.dfs?o.dfs[o.f[i]]:'SRL',t:o.t[i],p:o.p[i],dm:o.dm[i],ds:o.ds[i],a:o.a[i]};return r;}
+function coberturaDe(ap,cxId){var o=[];ap.arquivos.forEach(function(f){((f.resumo||{}).abas||[]).forEach(function(a){if(a.cx===cxId)o.push({arquivo:f.nome,aba:a.aba,linhas:a.linhas,ordem:a.ordem||'—',ordemOrigem:a.ordemOrigem||'—',sha:f.sha});});});return o;}
+function decisaoDe(a,dec){if(['S1','S2','S12','S4','S17'].indexOf(a.cod)>=0)return dec['ACK|'+a.key];if(a.cod==='S15')return dec['CONF|'+a.idx];if(a.cod==='C1')return dec['CO|'+a.uid];if(a.cod==='C3')return dec['OV|'+a.key];if(a.cod==='C5')return dec['CAT|'+a.uid];return null;}
+function demandaTxt(serie){if(!serie)return'—';var f={};serie.diag.porSPE.forEach(function(p,j){Object.keys(p.demanda||{}).forEach(function(k){(f[k]=f[k]||[]).push(serie.spes[j]);});});return Object.keys(f).map(function(k){return Motor.NOME_DEM[k]+(Object.keys(f).length>1?' ('+f[k].join(', ')+')':'');}).join(' · ')||'—';}
+function computar(cxId,det){var c=ST.cache[cxId];if(c&&(!det||c.det))return c;
+  var cx=Motor.cxDe(ST.cad,cxId),ap=ST.apur,cs=ap.cx[cxId],fontes=[];
+  ap.arquivos.forEach(function(f){var s=ap.scada[f.id];if(s&&s[cxId])fontes.push({arquivo:{nome:f.nome,id:f.id},regs:deCols(s[cxId])});});
+  var serie=fontes.length?Motor.montarSerie(cx,ap.ym,fontes):null;
+  if(serie){var e2={};(serie.diag.conflitos||[]).forEach(function(x,k){var d=cs.decisoes['CONF|'+k];if(d)e2[k]=d.escolha;});Motor.aplicarConflitos(serie,e2);}
+  var brutos=[];ap.arquivos.forEach(function(f){(ap.carve[f.id]||[]).forEach(function(l){if(l.cx===cxId)brutos.push(l);});});
+  var cob=coberturaDe(ap,cxId),cos=Motor.resolverCarveouts(cx,ST.cad,brutos,cs.decisoes),inc=cos.filter(function(x){return x.incluida;}),N=Motor.totalWTG(cx);
+  var res=serie?Motor.calcular(serie,inc,N,ST.cad.categorias,!!det):null;
+  var ant=null,pv=mesAnterior(ap.ym);ST.emisIdx.forEach(function(e){if(e.ym===pv&&e.cx===cxId&&(!ant||e.versao>ant.versao))ant=e;});
+  var al=Motor.validar(cx,ST.cad,ap.ym,serie,cos,cs.decisoes,{res:res,anterior:ant,cobertura:cob,modelo:ST.modIdx[cxId]||null});
+  al.forEach(function(a){var d=decisaoDe(a,cs.decisoes);if(d)a._dec=d;});var ord={bloqueia:0,alerta:1,info:2};al.sort(function(a,b){return ord[a.nivel]-ord[b.nivel];});
+  var usados=ap.arquivos.filter(function(f){return(ap.scada[f.id]&&ap.scada[f.id][cxId])||(ap.carve[f.id]||[]).some(function(l){return l.cx===cxId;})||((f.resumo||{}).abas||[]).some(function(a){return a.cx===cxId;});});
+  var chave=JSON.stringify({m:Motor.VERSAO_METODO,a:usados.map(function(f){return f.sha;}).sort(),d:cs.decisoes,s:cx.spes,al:ST.cad.aliases,f:ST.cad.foraContrato,c:ST.cad.categorias,l:brutos.map(function(b){return b.uid;})});
+  c={cx:cx,serie:serie,cos:cos,inc:inc,res:res,alertas:al,cobertura:cob,demanda:demandaTxt(serie),chave:Motor.sha256(new TextEncoder().encode(chave)),det:!!det,arquivosCx:usados};ST.cache[cxId]=c;return c;}
+function mesAnterior(ym){var p=ym.split('-'),y=+p[0],m=+p[1]-1;if(m===0){y--;m=12;}return y+'-'+('0'+m).slice(-2);}
+function pendentes(c){return c.alertas.filter(function(a){return a.nivel==='bloqueia'&&!a._dec;});}
+function avisos(c){return c.alertas.filter(function(a){return a.nivel==='alerta';});}
+function hashAvisos(c){return Motor.sha256(new TextEncoder().encode(avisos(c).map(function(a){return a.key+'#'+a.titulo;}).join('\n')));}
+function cienteOK(c,cs){return!!(cs.ciente&&cs.ciente.hash===hashAvisos(c));}
+function calcValido(c,cs){return!!(cs.calc&&cs.calc.chave===c.chave);}
+function bloqueado(cxId){return ST.apur.cx[cxId].status==='emitido';}
+function invalidar(cxId){if(cxId)delete ST.cache[cxId];else ST.cache={};}
+
+/* ===== VERSÕES EMITIDAS: leitura a partir do registro imutável ===== */
+function versoesDe(ym,cx){return ST.emisIdx.filter(function(e){return e.ym===ym&&e.cx===cx;}).sort(function(a,b){return b.versao-a.versao;});}
+function ultimaEmitida(ym,cx){return versoesDe(ym,cx)[0]||null;}
+/* versão a exibir: emitido → selecionada ou a vigente; aberto → só se o usuário escolher ver uma versão */
+function versaoEmVista(){if(!ST.apur)return null;var cs=ST.apur.cx[ST.cx],k=ST.apur.ym+'|'+ST.cx,sel=ST.verSel[k];
+  if(cs.status==='emitido')return sel||cs.versao;return sel||null;}
+function chaveVista(ym,cx,v){return ym+'|'+cx+'|'+v;}
+async function carregarVista(ym,cxId,v){var key=chaveVista(ym,cxId,v);if(ST.vistas[key]&&ST.vistas[key]!=='carregando')return ST.vistas[key];ST.vistas[key]='carregando';
+  try{var s=await DB.get('emis:'+ym+':'+cxId+':'+('00'+v).slice(-3));if(!s)throw new Error('Registro da versão v'+v+' não encontrado neste navegador. Restaure o backup.');
+    var cx=Motor.cxDe(s.cad,cxId),cos=Motor.resolverCarveouts(cx,s.cad,s.brutos,s.decisoes),inc=cos.filter(function(x){return x.incluida;});
+    var res=Motor.calcular(s.serie,inc,Motor.totalWTG(cx),s.cad.categorias,true);
+    Motor.validar(cx,s.cad,ym,s.serie,cos,s.decisoes,{res:res,cobertura:s.cobertura||[]});
+    var hr=await shaTxt(JSON.stringify({ym:ym,cx:cxId,pre:res.pre,pos:res.pos,tba:res.tba,AP:res.AP,LP:res.LP,LPp:res.LPp,chave:s.chave}));
+    var dif=['pre','pos','tba','AP','LP','LPp'].filter(function(k){return Math.abs((res[k]||0)-(s.res[k]||0))>1e-9;});
+    var vista={emitida:true,versao:v,snap:s,cx:cx,cad:s.cad,serie:s.serie,cos:cos,inc:inc,res:res,alertas:(s.alertas||[]).map(function(a){return Object.assign({},a);}),cobertura:s.cobertura||[],demanda:s.demanda||'—',integro:hr===s.hashRes&&!dif.length,hr:hr,difCampos:dif,arquivosCx:s.arquivos||[]};
+    ST.vistas[key]=vista;await logar('Consultou versão emitida',cxId+' · '+ymTxt(ym)+' · v'+v+' · integridade '+(vista.integro?'verificada':'DIVERGENTE'),ym,cxId);return vista;}
+  catch(e){ST.vistas[key]={erro:e.message};return ST.vistas[key];}}
+
+var LIMITE_MB=25;
+function lerArquivo(f,lim){return new Promise(function(ok,ko){var L=lim||LIMITE_MB;if(f.size>L*1048576){ko(new Error('"'+f.name+'" tem '+(f.size/1048576).toFixed(1)+' MB; o limite é '+L+' MB.'));return;}var r=new FileReader();r.onload=function(){ok(r.result);};r.onerror=function(){ko(r.error);};r.readAsArrayBuffer(f);});}
+function tabelasDe(nome,buf){if(/\.csv$|\.txt$/i.test(nome)){var t=new TextDecoder('utf-8').decode(buf);if(t.indexOf('\uFFFD')>=0)t=new TextDecoder('windows-1252').decode(buf);return[{aba:'(csv)',L:Motor.lerCSV(t),oculta:false}];}
+  var wb=XLSXLite.read(buf);return wb.abas.map(function(x){return{aba:x.nome,oculta:x.oculta,get L(){return wb.aba(x.nome);}};});}
+async function registrarArquivo(f,buf,tipo){var sha=await sha256Buf(buf);if(ST.apur.arquivos.some(function(a){return a.sha===sha;}))throw new Error('O arquivo "'+f.name+'" já foi carregado nesta apuração (mesmo SHA-256).');
+  return{id:sha.slice(0,12),nome:f.name,tam:f.size,sha:sha,tipo:tipo,por:ST.usuario,em:agora(),resumo:{}};}
+async function importarScada(files){var msgs=[];
+  for(var k=0;k<files.length;k++){var f=files[k];try{var buf=await lerArquivo(f);var meta=await registrarArquivo(f,buf,'SCADA');
+    var tab=null,aba=null;tabelasDe(f.name,buf).some(function(x){var r=Motor.lerTabelaScada(x.L);if(r){tab=r;aba=x.aba;return true;}return false;});
+    if(!tab)throw new Error('"'+f.name+'": cabeçalho do SCADA não reconhecido (esperado System, Timestamp, Actual active power, Number of available turbines e a demanda).');
+    var mp=Motor.mapaScada(ST.cad),porCx={},desc={},meses={};
+    tab.regs.forEach(function(r){var m=mp[r.sys];var d=new Date(r.t),ym=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2);meses[ym]=(meses[ym]||0)+1;if(!m){desc[r.sys]=(desc[r.sys]||0)+1;return;}(porCx[m.cx]=porCx[m.cx]||[]).push(r);});
+    var ymDom=Object.keys(meses).sort(function(a,b){return meses[b]-meses[a];})[0];
+    if(ymDom&&ymDom!==ST.apur.ym){if(!ST.apur.arquivos.length){if(confirm('"'+f.name+'" contém dados de '+ymTxt(ymDom)+'. Abrir a apuração de '+ymTxt(ymDom)+'?'))await abrirMes(ymDom);}else msgs.push('⚠ "'+f.name+'" tem a maior parte dos dados em '+ymTxt(ymDom)+', diferente do mês da apuração.');}
+    var ignor=[];Object.keys(porCx).forEach(function(c){if(bloqueado(c)){ignor.push(c);delete porCx[c];}});
+    var fts={};Object.keys(tab.fonteDemanda).forEach(function(s){fts[tab.fonteDemanda[s]]=1;});var dem=Object.keys(fts).map(function(k){return Motor.NOME_DEM[k];}).join(' + ');
+    meta.resumo={aba:aba,ordemDatas:tab.ordem,registros:tab.regs.length,invalidas:tab.invalidas,colunas:tab.colunas,faltando:tab.faltando,complexos:{},desconhecidos:desc,demanda:dem,fonteDemanda:tab.fonteDemanda};
+    Object.keys(porCx).forEach(function(c){meta.resumo.complexos[c]=porCx[c].length;});
+    ST.apur.scada[meta.id]={};Object.keys(porCx).forEach(function(c){ST.apur.scada[meta.id][c]=paraCols(porCx[c]);});ST.apur.arquivos.push(meta);
+    await logar('Importou SCADA',f.name+' · SHA-256 '+meta.sha+' · '+tab.regs.length+' registros · demanda: '+dem+' · '+Object.keys(meta.resumo.complexos).map(function(c){return c+': '+meta.resumo.complexos[c];}).join(', ')+(Object.keys(desc).length?' · sistemas desconhecidos: '+Object.keys(desc).join(', '):''));
+    msgs.push('✔ '+f.name+': '+tab.regs.length+' registros ('+Object.keys(meta.resumo.complexos).join(', ')+') · demanda: <b>'+esc(dem)+'</b>'+(tab.faltando.length?' · ✖ coluna ausente: '+tab.faltando.join(', '):'')+(Object.keys(desc).length?' · sistemas fora do cadastro ignorados: '+Object.keys(desc).join(', '):'')+(ignor.length?' · complexos emitidos não alterados: '+ignor.join(', '):''));
+  }catch(e){msgs.push('✖ '+e.message);}}
+  invalidar();await salvarApur();render();aviso(msgs.join('<br>'));}
+function cxDasTurbinas(linhas){var cnt={},mp=Motor.mapaSPE(ST.cad);linhas.forEach(function(l){var r=Motor.interpretar(l.nome,null,ST.cad),id=r.id||(r.candidatos&&r.candidatos.length===1?r.candidatos[0]:null);if(id&&mp[id.split('-')[0]]){var c=mp[id.split('-')[0]].cx;cnt[c]=(cnt[c]||0)+1;}});
+  var k=Object.keys(cnt).sort(function(a,b){return cnt[b]-cnt[a];});return k.length?{cx:k[0],cnt:cnt}:null;}
+async function importarCarve(files,cxSel){var msgs=[];
+  for(var k=0;k<files.length;k++){var f=files[k];try{var buf=await lerArquivo(f);var meta=await registrarArquivo(f,buf,'Carveouts');
+    var tabs=tabelasDe(f.name,buf),blocos=[],semTabela=[];
+    tabs.forEach(function(x){var r=Motor.lerTabelaCarveouts(x.L,ST.apur.ym);if(!r){semTabela.push(x.aba);return;}blocos.push({aba:x.aba,oculta:x.oculta,r:r});});
+    if(!blocos.length)throw new Error('"'+f.name+'": nenhuma aba com tabela de carveouts (esperado colunas Turbine/Turbina, Start/Início e Stop/Fim). Abas lidas: '+tabs.map(function(t){return t.aba;}).join(', '));
+    var multi=blocos.length>1,obs=[];if(multi&&cxSel!=='auto')obs.push('arquivo com '+blocos.length+' abas: o complexo selecionado foi ignorado e cada aba usou o seu');
+    blocos.forEach(function(b){var cx=null,orig='';if(!multi&&cxSel!=='auto'){cx=cxSel;orig='selecionado na importação';}else if((cx=Motor.cxPorNome(b.aba)))orig='nome da aba';else if((cx=Motor.cxPorNome(b.r.site)))orig='célula Site';else if((cx=Motor.cxPorNome(b.r.titulo)))orig='título da aba';else{var d=cxDasTurbinas(b.r.linhas);if(d){cx=d.cx;orig='presumido pelas turbinas';}}b.cx=cx;b.origemCx=orig;});
+    var semCx=blocos.filter(function(b){return!b.cx&&b.r.linhas.length;});if(semCx.length)throw new Error('"'+f.name+'": não foi possível identificar o complexo da(s) aba(s) '+semCx.map(function(b){return'"'+b.aba+'"';}).join(', ')+'. Renomeie a aba com o nome do complexo ou importe essa aba separada escolhendo o complexo.');
+    blocos=blocos.filter(function(b){return b.cx;});var porCx={};blocos.forEach(function(b){(porCx[b.cx]=porCx[b.cx]||[]).push(b);});
+    Object.keys(porCx).forEach(function(c){if(porCx[c].length>1)obs.push('⚠ '+porCx[c].length+' abas apontam para '+c+'; as linhas foram somadas');});
+    var emi=blocos.filter(function(b){return bloqueado(b.cx);});if(emi.length){obs.push('abas de complexos já emitidos não importadas: '+emi.map(function(b){return b.aba+' ('+b.cx+')';}).join(', '));blocos=blocos.filter(function(b){return!bloqueado(b.cx);});}
+    if(!blocos.length)throw new Error('"'+f.name+'": todas as abas pertencem a complexos já emitidos. Reabra a versão para revisão antes de importar.');
+    var cxsNovos=Array.from(new Set(blocos.map(function(b){return b.cx;}))),antigos=ST.apur.arquivos.filter(function(a){return((a.resumo||{}).abas||[]).some(function(x){return cxsNovos.indexOf(x.cx)>=0;});});
+    if(antigos.length){if(confirm('Já existem carveouts carregados para '+cxsNovos.join(', ')+':\n'+antigos.map(function(a){return'• '+a.nome;}).join('\n')+'\n\nOK = substituir pelos do novo arquivo (com registro no log)\nCancelar = manter os dois (as linhas serão somadas)')){
+        for(var q=0;q<antigos.length;q++){var a=antigos[q];ST.apur.carve[a.id]=(ST.apur.carve[a.id]||[]).filter(function(l){return cxsNovos.indexOf(l.cx)<0;});a.resumo.abas=a.resumo.abas.filter(function(x){return cxsNovos.indexOf(x.cx)<0;});cxsNovos.forEach(function(c){ST.apur.cx[c].calc=null;});
+          await logar('Substituiu carveouts',a.nome+' (SHA-256 '+a.sha+') → '+f.name+' · complexos: '+cxsNovos.join(', '));if(!a.resumo.abas.length&&!(ST.apur.carve[a.id]||[]).length&&!ST.apur.scada[a.id]){ST.apur.arquivos=ST.apur.arquivos.filter(function(z){return z.id!==a.id;});delete ST.apur.carve[a.id];}}
+        obs.push('carveouts anteriores de '+cxsNovos.join(', ')+' substituídos');}else obs.push('⚠ carveouts anteriores mantidos e somados');}
+    var linhas=[],abas=[];blocos.forEach(function(b,bi){b.r.linhas.forEach(function(l){var o=Object.assign({},l);o.uid=meta.id+':'+bi+':'+l.linhaOrig;o.arquivo=f.name+' › '+b.aba;o.aba=b.aba;o.cx=b.cx;linhas.push(o);});abas.push({aba:b.aba,cx:b.cx,linhas:b.r.linhas.length,origemCx:b.origemCx,ordem:b.r.ordem,ordemOrigem:b.r.ordemOrigem,colSplit:b.r.colSplit,oculta:b.oculta});});
+    meta.resumo={abas:abas,abasIgnoradas:semTabela,linhas:linhas.length,complexos:{}};abas.forEach(function(a){meta.resumo.complexos[a.cx]=(meta.resumo.complexos[a.cx]||0)+a.linhas;});
+    ST.apur.carve[meta.id]=linhas;ST.apur.arquivos.push(meta);
+    await logar('Importou carveouts',f.name+' · SHA-256 '+meta.sha+' · '+abas.map(function(a){return'"'+a.aba+'" → '+a.cx+' ('+a.linhas+' linhas, '+a.origemCx+')';}).join(' · ')+(semTabela.length?' · abas ignoradas: '+semTabela.join(', '):''));
+    msgs.push('✔ '+f.name+'<br>'+abas.map(function(a){return'&nbsp;&nbsp;• aba "'+esc(a.aba)+'" → <b>'+Motor.cxDe(ST.cad,a.cx).nome+'</b>: '+a.linhas+' linha(s)'+(a.linhas?'':' (sem lançamentos no mês)')+' <span class="small">['+a.origemCx+']</span>';}).join('<br>')+(semTabela.length?'<br>&nbsp;&nbsp;• ignoradas (sem tabela de carveouts): '+esc(semTabela.join(', ')):'')+(obs.length?'<br>&nbsp;&nbsp;• '+obs.map(esc).join('<br>&nbsp;&nbsp;• '):''));
+  }catch(e){msgs.push('✖ '+e.message);}}
+  invalidar();await salvarApur();render();aviso(msgs.join('<br>'));}
+async function registrarModelo(file){try{aviso('Analisando o modelo…','info');var buf=await lerArquivo(file,40),an=Modelo.analisar(buf,ST.cad),sha=await sha256Buf(buf);
+  if(!an.ok){modal('Modelo recusado — '+esc(file.name),'<div class="banner b-bad">O arquivo não pode ser usado como modelo de saída:</div><ul style="margin-left:18px;line-height:1.7">'+an.erros.map(function(e){return'<li>'+esc(e)+'</li>';}).join('')+'</ul>',[['Fechar',null]]);await logar('Modelo recusado',file.name+' · SHA-256 '+sha+' · '+an.erros.join(' | '));$('aviso').innerHTML='';return;}
+  var cx=an.info.cx,ant=ST.modIdx[cx];
+  if(ant&&ant.sha===sha){aviso('Este modelo já é o cadastrado para '+cx+'.','info');return;}
+  if(ant&&!confirm('Substituir o modelo de '+Motor.cxDe(ST.cad,cx).nome+'?\nAtual: '+ant.nome+' ('+Motor.fmtDH(ant.em)+')\nNovo: '+file.name+'\n\nVersões já emitidas continuam usando o modelo da época.'))return;
+  await DB.set('modbin:'+sha,buf);ST.modIdx[cx]={nome:file.name,sha:sha,tam:file.size,em:agora(),por:ST.usuario,calcMode:an.info.calcMode,vba:an.info.vba,graficos:an.info.graficos,avisos:an.avisos};await DB.set('modidx',ST.modIdx);
+  await logar('Cadastrou modelo de saída',cx+' · '+file.name+' · SHA-256 '+sha+(ant?' · substituiu '+ant.nome+' ('+ant.sha.slice(0,12)+')':''));invalidar();render();
+  aviso('✔ Modelo de '+Motor.cxDe(ST.cad,cx).nome+' cadastrado: '+esc(file.name)+'. Estrutura, fórmulas, SPEs e categorias conferem com o método.'+(an.avisos.length?'<br>'+an.avisos.map(esc).join('<br>'):''));
+}catch(e){aviso('✖ '+esc(e.message),'bad');}}
+async function modeloBytes(sha){var b=await DB.get('modbin:'+sha);if(!b)throw new Error('Arquivo do modelo (SHA-256 '+sha.slice(0,12)+'…) não encontrado neste navegador. Restaure o backup ou cadastre o modelo novamente.');return b;}
+async function importarCalculadora(file,modo){if(modo==='modelo')return registrarModelo(file);
+  try{var buf=await lerArquivo(file,40);var wb=XLSXLite.read(buf);var c=Motor.lerCalculadora(wb,ST.cad);if(!c)throw new Error('Arquivo não é um PBA Calculator (abas "Data Pulls" e "Data Pull & Calculation" não encontradas).');
+    var sha=await sha256Buf(buf);
+    if(modo==='conferir'){var rel=conferir(c,file.name,sha);await logar('Conferiu com calculadora',file.name+' · SHA-256 '+sha+' · '+c.cx+' · '+rel.resumo,ST.apur.ym,c.cx);modal('Conferência com a calculadora — '+esc(file.name),rel.html,[['Fechar',null]]);return;}
+    if(bloqueado(c.cx))throw new Error('Complexo '+c.cx+' já emitido. Reabra para revisão antes de importar.');
+    var meta=await registrarArquivo(file,buf,'Calculadora (histórico)');ST.apur.scada[meta.id]={};ST.apur.scada[meta.id][c.cx]=paraCols(c.regs);
+    ST.apur.carve[meta.id]=c.carveouts.map(function(l){var o=Object.assign({},l);o.uid=meta.id+':c:'+l.linhaOrig;o.arquivo=file.name+' › Carveout data - 3rd Party';o.aba='Carveout data - 3rd Party';o.cx=c.cx;return o;});
+    ST.apur.ref[c.cx]={arquivo:file.name,sha:sha,resumo:c.resumo};meta.resumo={complexos:{},calculadora:c.resumo,demanda:'colunas da calculadora',abas:[{aba:'Carveout data - 3rd Party',cx:c.cx,linhas:c.carveouts.length,origemCx:'calculadora'}]};meta.resumo.complexos[c.cx]=c.regs.length;
+    ST.apur.arquivos.push(meta);await logar('Importou calculadora como fonte',file.name+' · SHA-256 '+sha+' · '+c.cx,ST.apur.ym,c.cx);invalidar();await salvarApur();ST.cx=c.cx;render();aviso('✔ Calculadora de '+c.cx+' importada como fonte.');
+  }catch(e){aviso('✖ '+e.message,'bad');}}
+function conferir(c,nome,sha){var cx=Motor.cxDe(ST.cad,c.cx),cur=computar(c.cx),h='',res=[],sc=Motor.montarSerie(cx,ST.apur.ym,[{arquivo:{nome:nome},regs:c.regs}]);
+  h+='<div class="banner b-info">Complexo '+esc(cx.nome)+' · mês '+ymTxt(ST.apur.ym)+' · SHA-256 '+sha.slice(0,16)+'…</div>';
+  if(!cur.serie)h+='<p>Não há dados do SCADA carregados para este complexo nesta apuração.</p>';
+  else{var tags=[['P','Geração'],['Dm','Demanda'],['A','Disponíveis']],rows='',trocas=[];
+    cx.spes.forEach(function(s,j){tags.forEach(function(t){var a=sc[t[0]][j],b=cur.serie[t[0]][j],dif=0,tot=0;for(var i=0;i<sc.n;i++){if(isNaN(a[i])&&isNaN(b[i]))continue;tot++;if(isNaN(a[i])||isNaN(b[i])||Math.abs(a[i]-b[i])>1e-6)dif++;}
+      var best=null;if(dif>tot*0.05){cx.spes.forEach(function(s2,k){var bb=cur.serie[t[0]][k],eq=0;for(var i=0;i<sc.n;i++){if(!isNaN(a[i])&&!isNaN(bb[i])&&Math.abs(a[i]-bb[i])<=1e-6)eq++;}if(!best||eq>best.eq)best={k:k,eq:eq};});if(best&&best.k!==j&&best.eq>tot*0.9)trocas.push('Coluna <b>'+s.scada+'</b> ('+t[1]+') da calculadora contém os dados de <b>'+cx.spes[best.k].scada+'</b>');}
+      rows+='<tr><td>'+s.cod+' ('+s.scada+')</td><td>'+t[1]+'</td><td class="num">'+tot+'</td><td class="num">'+(dif?'<span class="chip c-bad">'+dif+'</span>':'<span class="chip c-ok">0</span>')+'</td></tr>';});});
+    if(trocas.length)h+='<div class="banner b-bad">Colunas trocadas na colagem manual:<br>'+trocas.join('<br>')+'</div>';
+    h+='<div class="tw" style="max-height:260px"><table class="t"><tr><th>SPE</th><th>Tag</th><th class="num">Intervalos</th><th class="num">Divergentes</th></tr>'+rows+'</table></div>';res.push(trocas.length?trocas.length+' coluna(s) trocada(s)':'colunas conferem');}
+  if(cur.res&&c.resumo.pre!=null){h+='<table class="t" style="margin-top:12px"><tr><th></th><th class="num">Calculadora</th><th class="num">Plataforma</th><th class="num">Diferença</th></tr>'+[['PBA pré',c.resumo.pre,cur.res.pre],['PBA pós',c.resumo.pos,cur.res.pos],['TBA',c.resumo.tba,cur.res.tba]].map(function(x){return'<tr><td>'+x[0]+'</td><td class="num">'+pct(x[1],4)+'</td><td class="num">'+pct(x[2],4)+'</td><td class="num">'+pp(x[2]-x[1])+'</td></tr>';}).join('')+'</table>';res.push('pós '+pp(cur.res.pos-c.resumo.pos));}
+  return{html:h,resumo:res.join(' · ')};}
+async function removerArquivo(id){var f=ST.apur.arquivos.filter(function(a){return a.id===id;})[0];if(!f)return;
+  var afet=[];if(ST.apur.scada[id])afet=afet.concat(Object.keys(ST.apur.scada[id]));(ST.apur.carve[id]||[]).forEach(function(l){afet.push(l.cx);});((f.resumo||{}).abas||[]).forEach(function(a){afet.push(a.cx);});afet=Array.from(new Set(afet));
+  var emi=afet.filter(bloqueado);if(emi.length){aviso('O arquivo afeta complexo(s) emitido(s): '+emi.join(', ')+'. Reabra para revisão antes de removê-lo. A versão emitida continua disponível porque fica guardada em registro próprio.','bad');return;}
+  var j=prompt('Remover "'+f.nome+'" da apuração? Informe a justificativa:');if(!j)return;
+  ST.apur.arquivos=ST.apur.arquivos.filter(function(a){return a.id!==id;});delete ST.apur.scada[id];delete ST.apur.carve[id];afet.forEach(function(c){ST.apur.cx[c].calc=null;});
+  await logar('Removeu arquivo',f.nome+' · SHA-256 '+f.sha+' · justificativa: '+j);invalidar();await salvarApur();render();}
+async function decidir(chave,obj,descr){var cs=ST.apur.cx[ST.cx];if(bloqueado(ST.cx))return;obj.por=ST.usuario;obj.em=agora();cs.decisoes[chave]=obj;cs.calc=null;await logar('Decisão',descr+' · '+chave+(obj.just?' · justificativa: '+obj.just:''),null,ST.cx);invalidar(ST.cx);await salvarApur();render();}
+async function desfazer(chave){var cs=ST.apur.cx[ST.cx];if(bloqueado(ST.cx))return;var d=cs.decisoes[chave];delete cs.decisoes[chave];cs.calc=null;await logar('Desfez decisão',chave+(d&&d.txt?' · era: '+d.txt:''),null,ST.cx);invalidar(ST.cx);await salvarApur();render();}
+async function moverLinha(uid,cx){var l=null;Object.keys(ST.apur.carve).forEach(function(k){ST.apur.carve[k].forEach(function(x){if(x.uid===uid)l=x;});});if(!l||bloqueado(cx))return;var de=l.cx;l.cx=cx;ST.apur.cx[de].calc=null;ST.apur.cx[cx].calc=null;await logar('Moveu linha de carveout',l.arquivo+' linha '+l.linhaOrig+' de '+de+' para '+cx,null,cx);invalidar();await salvarApur();render();}
+async function marcarCiente(){var c=computar(ST.cx),cs=ST.apur.cx[ST.cx];cs.ciente={por:ST.usuario,em:agora(),hash:hashAvisos(c),qtd:avisos(c).length};await logar('Ciente dos alertas',avisos(c).length+' alerta(s): '+avisos(c).map(function(a){return a.cod;}).join(', '),null,ST.cx);await salvarApur();render();}
+async function calcularCx(){var c=computar(ST.cx),cs=ST.apur.cx[ST.cx];if(pendentes(c).length||!cienteOK(c,cs)||!c.res)return;
+  var r=c.res,hr=await shaTxt(JSON.stringify({ym:ST.apur.ym,cx:ST.cx,pre:r.pre,pos:r.pos,tba:r.tba,AP:r.AP,LP:r.LP,LPp:r.LPp,chave:c.chave}));
+  cs.calc={em:agora(),por:ST.usuario,chave:c.chave,hashRes:hr,res:{pre:r.pre,pos:r.pos,tba:r.tba,AP:r.AP,LP:r.LP,LPp:r.LPp,porCat:r.porCat,foraLista:r.foraLista,nInc:c.inc.length}};
+  delete ST.verSel[ST.apur.ym+'|'+ST.cx];
+  await logar('Calculou',ST.cx+' · pré '+pct(r.pre,4)+' · pós '+pct(r.pos,4)+' · TBA '+pct(r.tba,4)+' · demanda: '+c.demanda+' · hash '+hr.slice(0,16),null,ST.cx);await salvarApur();ST.sub='res';render();}
+
+function baixarBlob(blob,nome){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=nome;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href);},4000);}
+async function logsDe(ym,cx){var L=await DB.range('log:');return L.map(function(x){return x.v;}).filter(function(e){return e.ym===ym&&(!e.cx||e.cx===cx);});}
+async function gerarSaidas(o){var out={};
+  if(o.modelo){var buf=await modeloBytes(o.modelo.sha),p=await Modelo.preencher(buf,{cad:o.cad,cx:o.cx,ym:o.ym,serie:o.serie,res:o.res,cos:o.cos});out.calc={blob:p.blob,nome:nomeCalc(o.cx.id,o.ym,o.suf),info:p};}
+  o.arqCalc=out.calc?out.calc.nome:null;o.log=await logsDe(o.ym,o.cx.id);
+  out.aud={blob:await Auditoria.gerar(o),nome:'PBA_'+o.cx.id+'_'+o.ym+(o.suf||'')+'_Auditoria.xlsx'};return out;}
+async function exportarRascunho(){var cxId=ST.cx;aviso('Gerando arquivos…','info');
+  var c=computar(cxId,true),cs=ST.apur.cx[cxId];if(!c.res){aviso('Sem dados para gerar.','bad');return;}
+  try{var s=await gerarSaidas({ym:ST.apur.ym,cx:c.cx,cad:ST.cad,serie:c.serie,cos:c.cos,res:c.res,alertas:c.alertas,decisoes:cs.decisoes,ciente:cs.ciente,arquivos:c.arquivosCx,cobertura:c.cobertura,versao:cs.versao,status:'RASCUNHO',por:ST.usuario,hashRes:calcValido(c,cs)?cs.calc.hashRes:'(não calculado)',modelo:ST.modIdx[cxId]||null,demanda:c.demanda,suf:'_RASCUNHO'});
+    if(s.calc)baixarBlob(s.calc.blob,s.calc.nome);setTimeout(function(){baixarBlob(s.aud.blob,s.aud.nome);},600);
+    await logar('Exportou rascunho',(s.calc?s.calc.nome+' · ':'')+s.aud.nome,null,cxId);aviso('✔ '+(s.calc?esc(s.calc.nome)+' e ':'')+esc(s.aud.nome)+' gerados.'+(s.calc?'':' A calculadora preenchida não foi gerada: cadastre o modelo do PBA Calculator deste complexo na aba Cadastro.'));
+  }catch(e){console.error(e);aviso('✖ '+esc(e.message),'bad');}}
+async function emitir(){var cxId=ST.cx,c=computar(cxId,true),cs=ST.apur.cx[cxId];if(!calcValido(c,cs)){aviso('Calcule antes de emitir.','bad');return;}
+  var mod=ST.modIdx[cxId];if(!mod){aviso('✖ A emissão exige o modelo do PBA Calculator de '+esc(c.cx.nome)+' (arquivo de saída obrigatório). Cadastre na aba Cadastro → Modelos de saída.','bad');return;}
+  var obs=prompt('Emitir a versão '+(cs.versao+1)+' de '+c.cx.nome+' · '+ymTxt(ST.apur.ym)+'?\nApós a emissão a apuração fica bloqueada para alteração.\n\nObservação da emissão (opcional):','');if(obs===null)return;
+  var v=cs.versao+1,ser=c.serie;
+  var snap={ym:ST.apur.ym,cx:cxId,versao:v,em:agora(),por:ST.usuario,obs:obs,metodo:Motor.VERSAO_METODO,hashRes:cs.calc.hashRes,chave:c.chave,res:cs.calc.res,modelo:mod,demanda:c.demanda,
+    cad:Motor.clone(ST.cad),arquivos:c.arquivosCx,cobertura:c.cobertura,decisoes:Motor.clone(cs.decisoes),ciente:cs.ciente,calcPor:cs.calc.por,calcEm:cs.calc.em,ref:ST.apur.ref[cxId]||null,
+    serie:{ym:ser.ym,n:ser.n,t0:ser.t0,spes:ser.spes,P:ser.P,Dm:ser.Dm,Ds:ser.Ds,A:ser.A,diag:{conflitos:[],foraMes:{},desalinhados:[],ajustados:[],duplicados:0,porSPE:ser.diag.porSPE}},
+    brutos:c.cos.map(function(x){return x.orig;}),alertas:c.alertas.map(function(a){return{cod:a.cod,nivel:a.nivel,grupo:a.grupo,titulo:a.titulo,det:a.det,ocorr:(a.ocorr||[]).slice(0,200),_dec:a._dec||null,key:a.key,uid:a.uid||null,par:a.par||null,forte:a.forte||false};})};
+  await DB.set('emis:'+ST.apur.ym+':'+cxId+':'+('00'+v).slice(-3),snap);
+  ST.emisIdx.push({ym:ST.apur.ym,cx:cxId,versao:v,em:snap.em,por:snap.por,pre:snap.res.pre,pos:snap.res.pos,tba:snap.res.tba,hashRes:snap.hashRes,obs:obs});await DB.set('emisidx',ST.emisIdx);
+  cs.status='emitido';cs.versao=v;delete ST.verSel[ST.apur.ym+'|'+cxId];ST.sub='res';
+  await logar('Emitiu versão',c.cx.nome+' · '+ymTxt(ST.apur.ym)+' · v'+v+' · pós '+pct(snap.res.pos,4)+' · modelo '+mod.nome+' ('+mod.sha.slice(0,12)+') · hash '+snap.hashRes+(obs?' · obs: '+obs:''),null,cxId);await salvarApur();
+  await baixarEmissao(ST.apur.ym,cxId,v);render();}
+async function baixarEmissao(ym,cxId,v){aviso('Gerando arquivos da versão v'+v+'…','info');
+  try{var w=await carregarVista(ym,cxId,v);if(w.erro)throw new Error(w.erro);var s=w.snap;
+    var o=await gerarSaidas({ym:ym,cx:w.cx,cad:s.cad,serie:s.serie,cos:w.cos,res:w.res,alertas:s.alertas,decisoes:s.decisoes,ciente:s.ciente,arquivos:s.arquivos,cobertura:s.cobertura||[],versao:v,status:'EMITIDA',por:s.por+' (emissão '+Motor.fmtDH(s.em)+')',hashRes:s.hashRes+(w.integro?'':' — ATENÇÃO: recálculo divergente '+w.hr),modelo:s.modelo,demanda:s.demanda,suf:'_v'+v});
+    if(o.calc)baixarBlob(o.calc.blob,o.calc.nome);setTimeout(function(){baixarBlob(o.aud.blob,o.aud.nome);},600);
+    await logar('Baixou arquivos da versão',(o.calc?o.calc.nome+' · ':'')+o.aud.nome+' · integridade '+(w.integro?'verificada':'DIVERGENTE'),ym,cxId);
+    aviso(w.integro?'✔ '+(o.calc?esc(o.calc.nome)+' e ':'')+esc(o.aud.nome)+' · recálculo confere com o hash emitido.':'✖ O recálculo não confere com o hash emitido. Verifique o log.',w.integro?'ok':'bad');
+  }catch(e){console.error(e);aviso('✖ '+esc(e.message),'bad');}}
+async function reabrir(){var cs=ST.apur.cx[ST.cx];var j=prompt('Reabrir '+ST.cx+' · '+ymTxt(ST.apur.ym)+' para revisão?\nA versão emitida v'+cs.versao+' continua guardada sem alteração e pode ser consultada na aba Versões.\n\nJustificativa (obrigatória):');if(!j)return;
+  cs.status='aberto';cs.calc=null;cs.ciente=null;delete ST.verSel[ST.apur.ym+'|'+ST.cx];ST.sub='val';await logar('Reabriu para revisão','v'+cs.versao+' · justificativa: '+j,null,ST.cx);invalidar(ST.cx);await salvarApur();render();}
+function serializar(v){if(v instanceof ArrayBuffer)return{__ab:btoaBuf(v)};if(v instanceof Float64Array)return{__f64:Array.from(v,function(x){return isNaN(x)?null:x;})};if(v instanceof Int16Array)return{__i16:Array.from(v)};if(v instanceof Uint8Array)return{__u8:Array.from(v)};
+  if(Array.isArray(v))return v.map(serializar);if(v&&typeof v==='object'){var o={};Object.keys(v).forEach(function(k){o[k]=serializar(v[k]);});return o;}return v;}
+function desserializar(v){if(v&&typeof v==='object'){if(v.__ab)return atobBuf(v.__ab);if(v.__f64)return Float64Array.from(v.__f64,function(x){return x==null?NaN:x;});if(v.__i16)return Int16Array.from(v.__i16);if(v.__u8)return Uint8Array.from(v.__u8);
+  if(Array.isArray(v))return v.map(desserializar);var o={};Object.keys(v).forEach(function(k){o[k]=desserializar(v[k]);});return o;}return v;}
+function btoaBuf(ab){var u=new Uint8Array(ab),s='',C=0x8000;for(var i=0;i<u.length;i+=C)s+=String.fromCharCode.apply(null,u.subarray(i,i+C));return btoa(s);}
+function atobBuf(b){var s=atob(b),u=new Uint8Array(s.length);for(var i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u.buffer;}
+async function exportarBackup(){var t=await DB.todas();var obj={app:'plataformaEng_disponibilidade',versao:1,gerado:agora(),por:ST.usuario,itens:t.map(function(x){return{k:x.k,v:serializar(x.v)};})};
+  var txt=JSON.stringify(obj),h=await shaTxt(txt);baixarBlob(new Blob([txt],{type:'application/json'}),'backup_disponibilidade_'+new Date().toISOString().slice(0,10)+'.json');
+  await logar('Exportou backup',t.length+' registros · SHA-256 '+h);aviso('✔ Backup gerado ('+t.length+' registros, inclui os modelos de saída e as versões emitidas). Guarde o arquivo na pasta da plataforma.');}
+async function importarBackup(file){var txt=new TextDecoder().decode(await lerArquivo(file,500));var o=JSON.parse(txt);if(o.app!=='plataformaEng_disponibilidade')throw new Error('Arquivo não é um backup deste módulo.');
+  if(!confirm('Restaurar '+o.itens.length+' registros do backup de '+Motor.fmtDH(o.gerado)+'?'))return;for(var i=0;i<o.itens.length;i++)await DB.set(o.itens[i].k,desserializar(o.itens[i].v));
+  await logar('Restaurou backup',file.name+' · '+o.itens.length+' registros');ST.vistas={};await iniciarDados();await abrirMes(ST.ym);}
+async function salvarCad(descr){ST.cad.versao=(ST.cad.versao||1)+1;await DB.set('cad',ST.cad);await logar('Alterou cadastro',descr);CXS.forEach(function(c){if(ST.apur&&!bloqueado(c))ST.apur.cx[c].calc=null;});invalidar();if(ST.apur)await salvarApur();render();}
+
+var avisoT=null;
+function aviso(msg,tipo){var el=$('aviso');el.innerHTML='<div class="banner b-'+(tipo||(String(msg).indexOf('✖')>=0?'bad':'ok'))+'" style="display:flex;gap:10px"><div style="flex:1">'+msg+'</div><button class="btn s" data-act="fecha-aviso">✕</button></div>';clearTimeout(avisoT);if(tipo!=='bad'&&tipo!=='info'&&String(msg).indexOf('✖')<0&&String(msg).indexOf('⚠')<0)avisoT=setTimeout(function(){el.innerHTML='';},20000);window.scrollTo({top:0,behavior:'smooth'});}
+var modalCb=null;
+function modal(tit,html,btns){$('md-t').textContent=tit;$('md-b').innerHTML=html;$('md-f').innerHTML=(btns||[['Fechar',null]]).map(function(b,i){return'<button class="btn '+(i===btns.length-1&&btns.length>1?'g':'')+'" data-mb="'+i+'">'+esc(b[0])+'</button>';}).join('');modalCb=btns;$('bd').classList.add('on');}
+function fecharModal(){$('bd').classList.remove('on');}
+function chipStatus(cs,c){if(cs.status==='emitido')return'<span class="chip c-navy">Emitida v'+cs.versao+'</span>';if(!c)return'<span class="chip c-gray">Sem dados</span>';if(calcValido(c,cs))return'<span class="chip c-ok">Calculada</span>';if(!c.serie)return'<span class="chip c-gray">Sem SCADA</span>';var p=pendentes(c).length;if(p)return'<span class="chip c-bad">'+p+' pendência(s)</span>';return'<span class="chip c-warn">Validar e calcular</span>';}
+function render(){document.querySelectorAll('.nav button').forEach(function(b){b.classList.toggle('on',b.dataset.aba===ST.aba);});$('usr').textContent='👤 '+(ST.usuario||'Identifique-se');var h='';
+  try{if(ST.aba==='painel')h=rPainel();else if(ST.aba==='apur')h=rApur();else if(ST.aba==='cad')h=rCad();else if(ST.aba==='log'){h='<div class="card">Carregando log…</div>';setTimeout(rLog,10);}else h=rMetodo();}catch(e){console.error(e);h='<div class="banner b-bad">Erro ao montar a tela: '+esc(e.message)+'</div>';}
+  $('conteudo').innerHTML=h;}
+function rPainel(){var ano=ST.ano||(ST.ym||'2026-01').slice(0,4),h='<div class="card"><h3>Painel anual · PBA por complexo</h3><div class="row" style="margin-bottom:12px"><label>Ano <input type="number" id="ano" value="'+ano+'" style="width:90px"></label><span class="sp"></span><label class="small"><input type="checkbox" id="rasc" '+(ST.inclRasc?'checked':'')+'> mostrar meses calculados e ainda não emitidos</label></div>';
+  var lin='',soma={},cont={};CXS.forEach(function(c){soma[c]={pre:0,pos:0};cont[c]=0;});
+  for(var m=1;m<=12;m++){var ym=ano+'-'+('0'+m).slice(-2);lin+='<tr><td><a href="#" data-act="abrir-mes" data-ym="'+ym+'">'+MESES[m-1]+'</a></td>';
+    CXS.forEach(function(c){var e=ultimaEmitida(ym,c),ai=(ST.apurIdx[ym]||{})[c];
+      if(e){soma[c].pre+=e.pre;soma[c].pos+=e.pos;cont[c]++;lin+='<td class="num"><a href="#" data-act="ver-v" data-ym="'+ym+'" data-cx="'+c+'" data-v="'+e.versao+'" title="Abrir o resultado da versão emitida"><b>'+pct(e.pos)+'</b></a><div class="small muted">pré '+pct(e.pre)+' · v'+e.versao+'</div></td>';}
+      else if(ST.inclRasc&&ai&&ai.calc)lin+='<td class="num" style="font-style:italic;color:#8a5a00">'+pct(ai.calc.pos)+'<div class="small">rascunho</div></td>';else lin+='<td class="num muted">—</td>';});lin+='</tr>';}
+  h+='<div class="tw"><table class="t"><tr><th>Mês</th>'+CXS.map(function(c){return'<th class="num">'+Motor.cxDe(ST.cad,c).nome+'</th>';}).join('')+'</tr>'+lin+'<tr style="background:#f4f7fb"><td><b>YTD · média dos PBAs mensais</b><div class="small muted">referência — consolidado oficial em outra área</div></td>'+CXS.map(function(c){return'<td class="num"><b>'+(cont[c]?pct(soma[c].pos/cont[c]):'—')+'</b><div class="small muted">pré '+(cont[c]?pct(soma[c].pre/cont[c]):'—')+' · '+cont[c]+' mês(es)</div></td>';}).join('')+'</tr></table></div><p class="small muted" style="margin-top:8px">Clique no PBA de um mês para abrir o resultado completo da versão emitida.</p></div>';
+  h+='<div class="card"><h3>Versões emitidas</h3>'+(ST.emisIdx.length?'<div class="tw" style="max-height:300px"><table class="t"><tr><th>Mês</th><th>Complexo</th><th>Versão</th><th class="num">PBA pré</th><th class="num">PBA pós</th><th class="num">TBA</th><th>Emitida por</th><th>Hash</th><th></th></tr>'+ST.emisIdx.slice().sort(function(a,b){return b.em-a.em;}).map(function(e){return'<tr><td>'+ymTxt(e.ym)+'</td><td>'+e.cx+'</td><td>v'+e.versao+'</td><td class="num">'+pct(e.pre)+'</td><td class="num">'+pct(e.pos)+'</td><td class="num">'+pct(e.tba)+'</td><td>'+esc(e.por)+' · '+Motor.fmtDH(e.em)+'</td><td class="mono">'+e.hashRes.slice(0,12)+'…</td><td style="white-space:nowrap"><button class="btn s n" data-act="ver-v" data-ym="'+e.ym+'" data-cx="'+e.cx+'" data-v="'+e.versao+'">Ver resultado</button> <button class="btn s" data-act="baixa-emis" data-ym="'+e.ym+'" data-cx="'+e.cx+'" data-v="'+e.versao+'">Baixar arquivos</button></td></tr>';}).join('')+'</table></div>':'<p class="muted">Nenhuma versão emitida ainda.</p>')+'</div>';return h;}
+function conteudoArq(f){var r=f.resumo||{},h='';
+  if(r.abas&&r.abas.length){h=r.abas.map(function(a){return'<div>aba <b>'+esc(a.aba)+'</b> → '+esc(a.cx)+' · '+a.linhas+' linha(s)'+(a.origemCx&&['nome da aba','calculadora'].indexOf(a.origemCx)<0?' <span class="chip c-warn">'+esc(a.origemCx)+'</span>':'')+'</div>';}).join('');if(r.abasIgnoradas&&r.abasIgnoradas.length)h+='<div class="muted">ignoradas: '+esc(r.abasIgnoradas.join(', '))+'</div>';if(r.calculadora)h='<div>dados 10 min: '+Object.keys(r.complexos).map(function(c){return c+' '+r.complexos[c];}).join(' · ')+'</div>'+h;return h;}
+  var cx=Object.keys(r.complexos||{}).map(function(c){return c+' '+r.complexos[c];}).join(' · ');
+  return(cx||'—')+(r.ordemDatas&&r.ordemDatas!=='?'?' · datas '+r.ordemDatas:'')+(r.demanda?'<br>demanda: <span class="chip '+(/antigo/.test(r.demanda)?'c-warn':'c-info')+'">'+esc(r.demanda)+'</span>':'')+(r.desconhecidos&&Object.keys(r.desconhecidos).length?'<br><span class="chip c-warn">sistemas ignorados: '+esc(Object.keys(r.desconhecidos).join(', '))+'</span>':'')+(r.faltando&&r.faltando.length?'<br><span class="chip c-bad">coluna ausente: '+esc(r.faltando.join(', '))+'</span>':'');}
+function rArquivos(){var ap=ST.apur,h='<div class="card"><h3>Entradas · '+ymTxt(ap.ym)+'</h3><div class="row" style="align-items:stretch">'+
+  '<div class="dz" data-dz="scada"><b>SCADA</b><span class="small muted">CSV ou Excel · um ou vários arquivos por complexo. Demanda: Input SetPoint to the SRL; em arquivos antigos, Active power demand setpoint</span></div>'+
+  '<div class="dz" data-dz="carve"><b>Carveouts</b><span class="small muted">Uma aba por complexo (todas as abas são lidas) · arquivo de aba única: <select id="cxCarve" onclick="event.stopPropagation()"><option value="auto">detectar</option>'+CXS.map(function(c){return'<option value="'+c+'">'+Motor.cxDe(ST.cad,c).nome+'</option>';}).join('')+'</select></span></div>'+
+  '<div class="dz" data-dz="calc"><b>PBA Calculator (.xlsm)</b><span class="small muted">Cadastrar como modelo de saída, conferir, ou usar um mês histórico como fonte</span></div></div>'+
+  '<input type="file" id="f-scada" multiple accept=".csv,.xlsx,.xls,.txt" hidden><input type="file" id="f-carve" multiple accept=".csv,.xlsx,.xlsm" hidden><input type="file" id="f-calc" accept=".xlsm,.xlsx" hidden>';
+  if(ap.arquivos.length)h+='<div class="tw" style="margin-top:12px;max-height:280px"><table class="t"><tr><th>Arquivo</th><th>Tipo</th><th>Conteúdo</th><th>SHA-256</th><th>Importado</th><th></th></tr>'+ap.arquivos.map(function(f){return'<tr><td><b>'+esc(f.nome)+'</b><div class="small muted">'+(f.tam/1024).toFixed(0)+' KB</div></td><td>'+esc(f.tipo)+'</td><td class="small">'+conteudoArq(f)+'</td><td class="mono" title="'+f.sha+'">'+f.sha.slice(0,16)+'…</td><td class="small">'+esc(f.por)+'<br>'+Motor.fmtDH(f.em)+'</td><td><button class="btn s r" data-act="rm-arq" data-id="'+f.id+'">Remover</button></td></tr>';}).join('')+'</table></div>';
+  else h+='<p class="muted" style="margin-top:10px">Nenhum arquivo carregado para este mês.</p>';return h+'</div>';}
+function kpisDe(r,cxNome,sub){return'<div class="kpis">'+[['PBA pós-carveout',pct(r.pos),'contratual · '+cxNome+(sub?' · '+sub:'')],['PBA pré-carveout',pct(r.pre),'antes dos carveouts'],['TBA',pct(r.tba),'disponibilidade por tempo'],['Energia produzida',nf(r.AP)+' MWh','Actual Prod'],['Perda pré',nf(r.LP)+' MWh','Lost Prod antes'],['Perda pós',nf(r.LPp)+' MWh','recuperado '+nf(r.LP-r.LPp)+' MWh']].map(function(k){return'<div class="kpi"><div class="l">'+k[0]+'</div><div class="v">'+k[1]+'</div><div class="s">'+k[2]+'</div></div>';}).join('')+'</div>';}
+function rApur(){if(!ST.apur)return'<div class="card">Selecione o mês.</div>';var h=rArquivos(),ym=ST.apur.ym;
+  h+='<div class="cxtabs">'+CXS.map(function(c){var cs=ST.apur.cx[c],k=null;try{k=computar(c);}catch(e){console.error(e);}var ue=ultimaEmitida(ym,c),v='';
+    if(cs.status==='emitido'&&ue)v=pct(ue.pos);else if(k&&calcValido(k,cs))v=pct(cs.calc.res.pos);
+    return'<button class="cxt'+(ST.cx===c?' on':'')+'" data-act="cx" data-cx="'+c+'"><b>'+Motor.cxDe(ST.cad,c).nome+'</b>'+chipStatus(cs,k)+(v?' <span class="small">PBA pós '+v+'</span>':'')+'<div class="small muted" style="margin-top:4px">'+(k&&k.cobertura.length?k.cos.length+' carveout(s)':'sem planilha de carveouts')+' · '+(ST.modIdx[c]?'modelo ✔':'<span style="color:#b42318">sem modelo</span>')+'</div></button>';}).join('')+'</div>';
+  var cs=ST.apur.cx[ST.cx],vv=versaoEmVista(),vers=versoesDe(ym,ST.cx),w=null,D;
+  if(vv){w=ST.vistas[chaveVista(ym,ST.cx,vv)];if(!w){carregarVista(ym,ST.cx,vv).then(function(){render();});w='carregando';}}
+  var sel=vers.length>1?' <select id="verSel">'+vers.map(function(e){return'<option value="'+e.versao+'" '+(e.versao===vv?'selected':'')+'>v'+e.versao+' · '+Motor.fmtDH(e.em)+'</option>';}).join('')+'</select>':'';
+  var integ=w&&w!=='carregando'&&!w.erro?(w.integro?'<span class="chip c-ok" title="Recalculado a partir do registro da emissão; hash SHA-256 confere">✔ integridade verificada</span>':'<span class="chip c-bad">✖ recálculo divergente</span>'):'';
+  if(cs.status==='emitido')h+='<div class="banner b-info row"><span class="sp">Versão v'+cs.versao+' emitida — apuração bloqueada para alteração. Resultados lidos do registro da emissão'+(vv!==cs.versao?' · <b>visualizando v'+vv+'</b>':'')+'.'+sel+' '+integ+'</span><button class="btn s" data-act="baixa-emis" data-ym="'+ym+'" data-cx="'+ST.cx+'" data-v="'+vv+'">Baixar arquivos v'+vv+'</button><button class="btn s r" data-act="reabrir">Reabrir para revisão</button></div>';
+  else if(vv)h+='<div class="banner b-warn row"><span class="sp">Visualizando a versão emitida <b>v'+vv+'</b> (somente leitura). A apuração em aberto não foi alterada.'+sel+' '+integ+'</span><button class="btn s" data-act="baixa-emis" data-ym="'+ym+'" data-cx="'+ST.cx+'" data-v="'+vv+'">Baixar arquivos v'+vv+'</button><button class="btn s n" data-act="ver-sair">Voltar à apuração em aberto</button></div>';
+  else if(vers.length)h+='<div class="banner b-info row small"><span class="sp">Este complexo tem '+vers.length+' versão(ões) emitida(s); a última é a v'+vers[0].versao+' (PBA pós '+pct(vers[0].pos)+'). A apuração está reaberta para revisão.</span><button class="btn s" data-act="ver-v" data-ym="'+ym+'" data-cx="'+ST.cx+'" data-v="'+vers[0].versao+'">Ver resultado da v'+vers[0].versao+'</button></div>';
+  if(w==='carregando')return h+'<div class="card muted">Carregando a versão v'+vv+' do registro da emissão e conferindo o hash SHA-256…</div>';
+  if(w&&w.erro)return h+'<div class="banner b-bad">'+esc(w.erro)+'</div>'+rVer(cs);
+  D=w||computar(ST.cx);
+  if(D.emitida)h+=kpisDe(D.res,D.cx.nome,'v'+D.versao);else if(calcValido(D,cs))h+=kpisDe(cs.calc.res,D.cx.nome);
+  var subs=[['val',D.emitida?'Validação (registro)':'Validação'],['res','Resultado'],['co','Carveouts ('+D.cos.length+')'],['dados','Dados 10 min'],['ver','Versões ('+vers.length+')']];
+  h+='<div class="sub">'+subs.map(function(s){return'<button class="'+(ST.sub===s[0]?'on':'')+'" data-act="sub" data-s="'+s[0]+'">'+s[1]+'</button>';}).join('')+'</div>';
+  if(ST.sub==='val')h+=rVal(D,cs);else if(ST.sub==='res')h+=rRes(D,cs);else if(ST.sub==='co')h+=rCO(D,cs);else if(ST.sub==='dados')h+=rDados(D,cs);else h+=rVer(cs);return h;}
+function decUI(a,c,cs){var lock=bloqueado(ST.cx)||!!(c&&c.emitida);if(a._dec){var d=a._dec,ch=a.cod==='C1'?'CO|'+a.uid:a.cod==='C5'?'CAT|'+a.uid:a.cod==='C3'?'OV|'+a.key:a.cod==='S15'?'CONF|'+a.idx:'ACK|'+a.key;
+    return'<div class="dec"><span class="chip c-ok">✔ Decidido</span><span>'+esc(d.txt)+'</span><span class="small muted">'+esc(d.por)+' · '+Motor.fmtDH(d.em)+(d.just?' · "'+esc(d.just)+'"':'')+'</span>'+(lock?'':'<button class="btn s" data-act="desfaz" data-k="'+esc(ch)+'">Desfazer</button>')+'</div>';}
+  if(lock)return'';var h='<div class="dec">';
+  if(['S1','S2','S12','S17'].indexOf(a.cod)>=0)h+='<button class="btn s n" data-act="ack" data-k="ACK|'+esc(a.key)+'" data-txt="Opção 1 — vazio conta como zero (igual à planilha)">Confirmar opção 1 (vazio = 0, igual à planilha)</button>';
+  else if(a.cod==='S4')h+='<button class="btn s n" data-act="ack" data-k="ACK|'+esc(a.key)+'" data-txt="Manter o valor lido do SCADA" data-just="1">Manter valor do SCADA</button><span class="small muted">Se for cadastro incorreto, ajuste na aba Cadastro.</span>';
+  else if(a.cod==='S15')h+='<button class="btn s" data-act="conf" data-i="'+a.idx+'" data-e="a">Usar valor A</button><button class="btn s" data-act="conf" data-i="'+a.idx+'" data-e="b">Usar valor B</button>';
+  else if(a.cod==='C1'){var cx=Motor.cxDe(ST.cad,ST.cx),todas=Motor.listaTurbinas(cx),cand=(a.interp.candidatos||[]).filter(function(x){return todas.indexOf(x)>=0;});
+    h+='<select data-sel="'+esc(a.uid)+'">'+(cand.length?'<optgroup label="Leituras possíveis">'+cand.map(function(x){return'<option>'+x+'</option>';}).join('')+'</optgroup>':'')+'<optgroup label="Todas as turbinas de '+cx.nome+'">'+todas.map(function(x){return'<option>'+x+'</option>';}).join('')+'</optgroup></select><label class="small"><input type="checkbox" data-alias="'+esc(a.uid)+'" checked> registrar como apelido</label><button class="btn s n" data-act="usar-id" data-uid="'+esc(a.uid)+'">Usar esta turbina</button>';
+    if(a.interp.status==='outro_complexo')h+='<button class="btn s" data-act="mover" data-uid="'+esc(a.uid)+'" data-cx="'+a.interp.complexoCorreto+'">Mover para '+a.interp.complexoCorreto+'</button>';h+='<button class="btn s r" data-act="excluir" data-uid="'+esc(a.uid)+'">Excluir linha</button>';}
+  else if(a.cod==='C4')h+='<button class="btn s r" data-act="excluir" data-uid="'+esc(a.uid)+'">Excluir linha</button><span class="small muted">ou corrija o arquivo e importe novamente.</span>';
+  else if(a.cod==='C5')h+='<select data-cat="'+esc(a.uid)+'">'+ST.cad.categorias.map(function(x){return'<option value="'+esc(x)+'">'+esc(x.trim())+'</option>';}).join('')+'</select><button class="btn s n" data-act="mapcat" data-uid="'+esc(a.uid)+'">Usar esta categoria</button><button class="btn s" data-act="mantcat" data-uid="'+esc(a.uid)+'">Manter (sai do detalhamento)</button>';
+  else if(a.cod==='C3')h+='<button class="btn s" data-act="ack-ov" data-k="OV|'+esc(a.key)+'">Manter as duas (conta 2×, igual à planilha)</button><button class="btn s r" data-act="excluir" data-uid="'+esc(a.par[0])+'">Excluir a 1ª</button><button class="btn s r" data-act="excluir" data-uid="'+esc(a.par[1])+'">Excluir a 2ª</button>';
+  else if(a.uid&&a.nivel!=='info')h+='<button class="btn s r" data-act="excluir" data-uid="'+esc(a.uid)+'">Excluir esta linha do cálculo</button>';else return'';return h+'</div>';}
+function rAlerta(a,c,cs){var ch={bloqueia:'<span class="chip c-bad">Bloqueia</span>',alerta:'<span class="chip c-warn">'+(a.forte?'Alerta forte':'Alerta')+'</span>',info:'<span class="chip c-info">Informativo</span>'}[a.nivel];
+  return'<div class="al '+(a._dec?'ok':a.nivel)+'"><div class="h">'+ch+'<span class="chip c-gray">'+a.cod+'</span><span class="tx">'+esc(a.titulo)+'</span><span class="chip c-gray">'+a.grupo+'</span></div>'+(a.det?'<div class="d">'+esc(a.det)+'</div>':'')+
+    (a.ocorr&&a.ocorr.length?'<details><summary>Ver '+a.ocorr.length+' ocorrência(s)</summary><div class="oc">'+a.ocorr.slice(0,500).map(esc).join('<br>')+'</div></details>':'')+(a.nivel==='bloqueia'||a.uid||a._dec?decUI(a,c,cs):'')+'</div>';}
+function rVal(c,cs){var h='',av=c.alertas.filter(function(a){return a.nivel==='alerta';}),inf=c.alertas.filter(function(a){return a.nivel==='info';}),blk=c.alertas.filter(function(a){return a.nivel==='bloqueia';});
+  function grupo(t,L){return L.length?'<div class="card"><h3>'+t+' ('+L.length+')</h3>'+L.map(function(a){return rAlerta(a,c,cs);}).join('')+'</div>':'';}
+  if(c.emitida){var s=c.snap;h+='<div class="banner b-info">Registro da validação no momento da emissão da v'+c.versao+' (somente leitura). Decisões, ciência dos alertas e achados ficam congelados junto com a versão.</div>';
+    h+=grupo('Decisões registradas',blk)+grupo('Alertas',av)+grupo('Informativos',inf);
+    return h+'<div class="gate"><div><b>'+c.cx.nome+' · '+ymTxt(ST.apur.ym)+' · v'+c.versao+'</b><div class="small muted">'+blk.length+' decisão(ões) · '+av.length+' alerta(s)'+(s.ciente?' · ciente: '+esc(s.ciente.por)+' em '+Motor.fmtDH(s.ciente.em):'')+'</div></div><span class="sp"></span><span class="chip c-navy">Emitida por '+esc(s.por)+' em '+Motor.fmtDH(s.em)+'</span></div>';}
+  var p=pendentes(c);
+  h+='<div class="banner b-info">Nenhum cálculo é liberado antes da revisão: itens que <b>bloqueiam</b> exigem decisão registrada e os <b>alertas</b> exigem ciência. Demanda usada: <b>'+esc(c.demanda)+'</b>.</div>';
+  h+=grupo('Exigem decisão',blk)+grupo('Alertas',av)+grupo('Informativos',inf);if(!c.alertas.length)h+='<div class="card muted">Nenhum achado.</div>';
+  var lock=bloqueado(ST.cx),ok=cienteOK(c,cs),cv=calcValido(c,cs),mod=ST.modIdx[ST.cx];
+  h+='<div class="gate"><div><b>'+c.cx.nome+' · '+ymTxt(ST.apur.ym)+'</b><div class="small muted">'+(c.serie?'':'Sem dados do SCADA · ')+p.length+' pendência(s) · '+av.length+' alerta(s)</div></div>';
+  if(lock)h+='<span class="chip c-navy">Emitida v'+cs.versao+'</span>';
+  else{h+='<label class="row small" style="gap:6px"><input type="checkbox" data-act="ciente" '+(ok?'checked disabled':'')+(p.length||!c.serie?' disabled':'')+'> '+(ok?'Ciente — '+esc(cs.ciente.por)+' em '+Motor.fmtDH(cs.ciente.em):'Li e estou ciente dos '+av.length+' alerta(s)')+'</label><span class="sp"></span><button class="btn g" data-act="calcular" '+(p.length||!ok||!c.serie?'disabled':'')+'>Calcular disponibilidade</button>';
+    if(cv)h+='<button class="btn" data-act="aud">Gerar arquivos (rascunho)</button><button class="btn n" data-act="emitir" '+(mod?'':'disabled title="Cadastre o modelo do PBA Calculator"')+'>Emitir versão v'+(cs.versao+1)+'</button>'+(mod?'':'<span class="small" style="color:#b42318">Emissão exige o modelo do PBA Calculator (aba Cadastro)</span>');}
+  return h+'</div>';}
+/* indicadores por SPE (informativos: o PBA contratual é do complexo) */
+function porSPE(c){var se=c.serie,sp=c.cx.spes,n=se.n,r=c.res,ix={};c.inc.forEach(function(x,k){ix[x.uid]=k;});
+  return sp.map(function(s,j){var e=0,dm=0,somaA=0,lac=0,cheia=0;for(var i=0;i<n;i++){var p=se.P[j][i],d=se.Dm[j][i],a=se.A[j][i];if(isNaN(p)||isNaN(d)||isNaN(a))lac++;if(!isNaN(p))e+=p/6;if(!isNaN(d))dm+=d/6;var av=isNaN(a)?0:a;somaA+=av;if(s.n-av<0.05)cheia++;}
+    var co=c.inc.filter(function(x){return x.spe===s.cod;}),rec=co.reduce(function(a,x){var pl=r.porLinha[ix[x.uid]];return a+(pl?pl.mwh:0);},0),hs=co.reduce(function(a,x){return a+(x.fim-x.ini)/3600000;},0);
+    return{s:s,e:e,dm:dm,tba:somaA/(n*s.n),indMed:s.n-somaA/n,lac:lac,cheia:cheia/n,nco:co.length,hco:hs,rec:rec,fc:s.cap?e/(s.cap*n/6):null};});}
+function rRes(c,cs){
+  if(!c.emitida&&!calcValido(c,cs)){var ue=ultimaEmitida(ST.apur.ym,ST.cx);
+    return'<div class="banner b-warn row"><span class="sp">O resultado da apuração em aberto só é exibido depois de concluir a validação e clicar em <b>Calcular disponibilidade</b>.'+(cs.calc?' As entradas ou decisões mudaram desde o último cálculo; calcule novamente.':'')+'</span>'+(ue?'<button class="btn s n" data-act="ver-v" data-ym="'+ST.apur.ym+'" data-cx="'+ST.cx+'" data-v="'+ue.versao+'">Ver resultado da versão emitida v'+ue.versao+'</button>':'')+'</div>';}
+  var r=c.res,h='';
+  if(c.emitida){var s=c.snap;h+='<div class="card"><h3>Conferência da versão v'+c.versao+'</h3><table class="t"><tr><th>Indicador</th><th class="num">Registrado na emissão</th><th class="num">Recalculado agora</th><th class="num">Diferença</th></tr>'+
+      [['PBA pós-carveout','pos',1],['PBA pré-carveout','pre',1],['TBA','tba',1],['Energia produzida (MWh)','AP',0],['Perda pré (MWh)','LP',0],['Perda pós (MWh)','LPp',0]].map(function(x){var a=s.res[x[1]],b=r[x[1]];return'<tr><td>'+x[0]+'</td><td class="num">'+(x[2]?pct(a,4):nf(a,3))+'</td><td class="num">'+(x[2]?pct(b,4):nf(b,3))+'</td><td class="num">'+(Math.abs((b||0)-(a||0))<1e-9?'<span class="chip c-ok">0</span>':'<span class="chip c-bad">'+(x[2]?pp(b-a):nf(b-a,4))+'</span>')+'</td></tr>';}).join('')+'</table>'+
+      '<div class="row small" style="margin-top:10px;gap:14px"><span>'+(c.integro?'<span class="chip c-ok">✔ hash SHA-256 confere</span>':'<span class="chip c-bad">✖ hash divergente</span>')+'</span><span class="muted">Registrado <span class="mono">'+s.hashRes.slice(0,24)+'…</span> · recalculado <span class="mono">'+c.hr.slice(0,24)+'…</span></span></div>'+
+      '<p class="small muted" style="margin-top:8px">Emitida por '+esc(s.por)+' em '+Motor.fmtDH(s.em)+(s.obs?' · obs.: "'+esc(s.obs)+'"':'')+' · método '+esc(s.metodo)+' · demanda: '+esc(s.demanda||'—')+' · modelo '+esc(s.modelo?s.modelo.nome:'—')+'. Os números desta página são recalculados a partir das entradas guardadas na emissão, sem depender dos arquivos carregados hoje.</p></div>';}
+  h+='<div class="card"><h3>Perda recuperada por categoria de carveout</h3><table class="t"><tr><th>Categoria</th><th class="num">MWh</th><th class="num">Impacto no PBA pós</th></tr>';
+  (c.cad||ST.cad).categorias.forEach(function(ct){var v=r.porCat[ct]||0;if(!v)return;h+='<tr><td>'+esc(ct.trim())+'</td><td class="num">'+nf(v,3)+'</td><td class="num">'+pp(v/(r.AP+r.LPp))+'</td></tr>';});
+  if(r.foraLista)h+='<tr><td>Categoria fora da lista (mantida por decisão)</td><td class="num">'+nf(r.foraLista,3)+'</td><td class="num">'+pp(r.foraLista/(r.AP+r.LPp))+'</td></tr>';
+  h+='<tr style="background:#f4f7fb"><td><b>Total recuperado</b> (perda pré − perda pós)</td><td class="num"><b>'+nf(r.removida,3)+'</b></td><td class="num"><b>'+pp(r.pos-r.pre)+'</b></td></tr></table>';
+  var fe=Math.abs(r.removida-(r.somaCats+r.foraLista))<1e-6;h+='<p class="small" style="margin-top:8px">'+(fe?'<span class="chip c-ok">Fechamento OK</span> soma das categorias = perda pré − perda pós (Summary F15 = G15).':'<span class="chip c-bad">Fechamento divergente</span>')+'</p></div>';
+  if(c.serie){var S=porSPE(c);h+='<div class="card"><h3>Indicadores por SPE</h3><p class="small muted" style="margin-bottom:8px">Leitura de apoio para revisão. O PBA contratual é calculado no complexo, com as SPEs somadas.</p><div class="tw"><table class="t"><tr><th>SPE</th><th class="num">Turbinas</th><th class="num">Energia (MWh)</th><th class="num">Demanda (MWh)</th><th class="num">Fator de capacidade</th><th class="num">TBA da SPE</th><th class="num">Indisp. média</th><th class="num">Tempo 100% disp.</th><th class="num">Intervalos sem dado</th><th class="num">Carveouts</th><th class="num">Horas de carveout</th><th class="num">MWh recuperados</th></tr>'+
+    S.map(function(x){return'<tr><td><b>'+x.s.cod+'</b> <span class="small muted">'+x.s.scada+'</span></td><td class="num">'+x.s.n+'</td><td class="num">'+nf(x.e,1)+'</td><td class="num">'+nf(x.dm,1)+'</td><td class="num">'+pct(x.fc,1)+'</td><td class="num">'+pct(x.tba,2)+'</td><td class="num">'+nf(x.indMed,2)+'</td><td class="num">'+pct(x.cheia,1)+'</td><td class="num">'+(x.lac?'<span class="chip c-warn">'+x.lac+'</span>':'0')+'</td><td class="num">'+x.nco+'</td><td class="num">'+nf(x.hco,1)+'</td><td class="num">'+nf(x.rec,3)+'</td></tr>';}).join('')+
+    '<tr style="background:#f4f7fb"><td><b>Complexo</b></td><td class="num">'+Motor.totalWTG(c.cx)+'</td><td class="num"><b>'+nf(S.reduce(function(a,x){return a+x.e;},0),1)+'</b></td><td class="num">'+nf(S.reduce(function(a,x){return a+x.dm;},0),1)+'</td><td></td><td class="num"><b>'+pct(r.tba,2)+'</b></td><td></td><td></td><td></td><td class="num">'+c.inc.length+'</td><td></td><td class="num"><b>'+nf(r.removida,3)+'</b></td></tr></table></div><p class="small muted" style="margin-top:6px">Energia por SPE soma os valores lidos; o "Actual Prod" do complexo zera apenas intervalos com soma negativa, por isso pode diferir levemente. Carveouts "Full Site" não entram na linha de nenhuma SPE.</p></div>';}
+  var mx=Math.max.apply(null,r.porDia.map(function(d){return d.lp;}).concat([0.001]));
+  h+='<div class="card"><h3>Perda diária</h3><div class="bar">'+r.porDia.map(function(d){return'<div title="Dia '+d.d+': produzido '+nf(d.ap,1)+' MWh · perda pré '+nf(d.lp,2)+' MWh · pós '+nf(d.lpp,2)+' MWh"><i style="height:'+(d.lpp/mx*120)+'px;background:#1a3c5e"></i><i style="height:'+((d.lp-d.lpp)/mx*120)+'px;background:#78BE20"></i></div>';}).join('')+'</div><div class="small muted" style="margin-top:6px"><span style="color:#1a3c5e">■</span> perda pós-carveout &nbsp; <span style="color:#5f9a17">■</span> recuperada pelos carveouts · passe o mouse sobre a barra</div>'+
+    '<details style="margin-top:10px"><summary class="small" style="cursor:pointer;color:#1a5490">Ver tabela diária</summary><div class="tw" style="max-height:320px;margin-top:6px"><table class="t"><tr><th>Dia</th><th class="num">Produzido (MWh)</th><th class="num">Perda pré (MWh)</th><th class="num">Perda pós (MWh)</th><th class="num">PBA pré do dia</th><th class="num">PBA pós do dia</th></tr>'+r.porDia.map(function(d){return'<tr><td>'+d.d+'</td><td class="num">'+nf(d.ap,2)+'</td><td class="num">'+nf(d.lp,3)+'</td><td class="num">'+nf(d.lpp,3)+'</td><td class="num">'+pct(d.ap+d.lp>0?d.ap/(d.ap+d.lp):null,3)+'</td><td class="num">'+pct(d.ap+d.lpp>0?d.ap/(d.ap+d.lpp):null,3)+'</td></tr>';}).join('')+'</table></div></details></div>';
+  var ref=c.emitida?c.snap.ref:ST.apur.ref[ST.cx];if(ref&&ref.resumo&&ref.resumo.pre!=null)h+='<div class="card"><h3>Referência: calculadora importada</h3><table class="t"><tr><th></th><th class="num">Calculadora</th><th class="num">Plataforma</th><th class="num">Diferença</th></tr>'+[['PBA pré',ref.resumo.pre,r.pre],['PBA pós',ref.resumo.pos,r.pos],['TBA',ref.resumo.tba,r.tba]].map(function(x){return'<tr><td>'+x[0]+'</td><td class="num">'+pct(x[1],4)+'</td><td class="num">'+pct(x[2],4)+'</td><td class="num">'+pp(x[2]-x[1])+'</td></tr>';}).join('')+'</table></div>';
+  if(c.emitida)h+='<div class="card"><h3>Entradas da versão v'+c.versao+'</h3><table class="t"><tr><th>Arquivo</th><th>Tipo</th><th>SHA-256</th><th>Importado</th></tr>'+(c.snap.arquivos||[]).map(function(f){return'<tr><td>'+esc(f.nome)+'</td><td>'+esc(f.tipo)+'</td><td class="mono">'+f.sha+'</td><td class="small">'+esc(f.por)+' · '+Motor.fmtDH(f.em)+'</td></tr>';}).join('')+'</table></div>';
+  else h+='<div class="card small muted">Cálculo: '+esc(Motor.VERSAO_METODO)+' · demanda: '+esc(c.demanda)+' · calculado por '+esc(cs.calc.por)+' em '+Motor.fmtDH(cs.calc.em)+' · hash <span class="mono">'+cs.calc.hashRes+'</span></div>';
+  return h;}
+
+function rCO(c,cs){var r=c.res,ix={};c.inc.forEach(function(x,k){ix[x.uid]=k;});var porUid={};c.alertas.forEach(function(a){(a.par||(a.uid?[a.uid]:[])).forEach(function(u){(porUid[u]=porUid[u]||[]).push(a.cod);});});
+  var lock=bloqueado(ST.cx)||!!c.emitida,mostra=c.emitida||calcValido(c,cs);
+  var L=c.cos.map(function(x){var k=ix[x.uid],pl=k!=null&&r?r.porLinha[k]:null;return{x:x,mwh:pl?pl.mwh:null,int:pl?pl.int:null,iso:k!=null&&r?r.isolado[k]:null};});if(ST.ordCO==='mwh')L.sort(function(a,b){return(b.mwh||0)-(a.mwh||0);});
+  var tot=L.reduce(function(a,y){return a+(y.mwh||0);},0),den=r?(r.AP+r.LPp):1,h='<div class="card"><h3>Carveouts · impacto por linha'+(c.emitida?' · v'+c.versao:'')+'</h3>';
+  h+=c.cobertura.length?'<div class="row small" style="margin-bottom:8px">'+c.cobertura.map(function(x){return'<span class="chip c-info">'+esc(x.arquivo)+' › '+esc(x.aba)+' · '+x.linhas+' linha(s)</span>';}).join(' ')+'</div>':'<div class="banner b-warn small">Nenhuma planilha de carveouts carregada para '+esc(c.cx.nome)+'.</div>';
+  h+='<div class="row" style="margin-bottom:10px"><span class="small muted">MWh recuperados = parcela da perda removida atribuída à linha pelo método da planilha. Isolado = quanto o PBA pós cairia sem a linha.</span><span class="sp"></span><select id="ordCO"><option value="arquivo" '+(ST.ordCO==='arquivo'?'selected':'')+'>Ordem do arquivo</option><option value="mwh" '+(ST.ordCO==='mwh'?'selected':'')+'>Maior impacto</option></select></div>';
+  if(!mostra&&c.cos.length)h+='<div class="banner b-warn small">Valores de impacto são preliminares até o cálculo ser concluído na aba Validação.</div>';
+  h+='<div class="tw"><table class="t"><tr><th>Aba · linha</th><th>Nome no arquivo</th><th>Turbina</th><th>SPE</th><th>Início</th><th>Fim</th><th class="num">Horas</th><th>Categoria</th><th>Split</th><th class="num">Intervalos</th><th class="num">MWh recuperados</th><th class="num">PBA (pp)</th><th class="num">Isolado (pp)</th><th class="num">SPE 100% disp.</th><th>Alertas</th><th>Situação</th><th></th></tr>';
+  L.forEach(function(y){var x=y.x,st=x.incluida?'<span class="chip c-ok">Incluída</span>':x.excluida?'<span class="chip c-gray">Excluída</span>':'<span class="chip c-bad">Pendente</span>';
+    h+='<tr><td class="small">'+esc(x.orig.aba||x.orig.arquivo)+' · '+x.orig.linhaOrig+'</td><td class="mono">'+esc(x.orig.nome)+'</td><td><b>'+esc(x.id||'—')+'</b></td><td>'+esc(x.spe||(x.id==='Full Site'?'Complexo':'—'))+'</td><td class="small">'+Motor.fmtDH(x.ini)+'</td><td class="small">'+Motor.fmtDH(x.fim)+'</td><td class="num">'+(x.ini&&x.fim?nf((x.fim-x.ini)/3600000,1):'—')+'</td><td class="small">'+esc(String(x.cat).trim())+'</td><td class="small">'+esc(x.orig.split||'')+'</td><td class="num">'+(y.int==null?'—':y.int)+'</td><td class="num"><b>'+(y.mwh==null?'—':nf(y.mwh,3))+'</b></td><td class="num">'+(y.mwh==null?'—':pp(y.mwh/den))+'</td><td class="num">'+(y.iso==null?'—':pp(y.iso))+'</td><td class="num">'+(x._speTot?Math.round(x._spe100/x._speTot*100)+'%':'—')+'</td><td>'+(porUid[x.uid]||[]).map(function(cd){return'<span class="chip c-warn">'+cd+'</span>';}).join(' ')+'</td><td>'+st+'</td><td>'+(lock?'':(x.excluida?'<button class="btn s" data-act="desfaz" data-k="CO|'+esc(x.uid)+'">Restaurar</button>':'<button class="btn s r" data-act="excluir" data-uid="'+esc(x.uid)+'">Excluir</button>'))+'</td></tr>';});
+  h+='<tr style="background:#f4f7fb"><td colspan="10"><b>Total</b></td><td class="num"><b>'+nf(tot,3)+'</b></td><td class="num"><b>'+(r?pp(tot/den):'—')+'</b></td><td colspan="5"></td></tr></table></div><div class="row" style="margin-top:10px"><button class="btn s" data-act="csv-co">Exportar tabela (CSV)</button></div></div>';return h;}
+function rDados(c){if(!c.serie)return'<div class="card muted">Sem dados do SCADA.</div>';var k=c.emitida?c:computar(ST.cx,true),d=k.res.det,n=k.serie.n,t0=k.serie.t0,sp=k.cx.spes,falta=new Uint8Array(n);
+  for(var j=0;j<sp.length;j++)for(var i=0;i<n;i++)if(isNaN(k.serie.P[j][i])||isNaN(k.serie.Dm[j][i])||isNaN(k.serie.A[j][i]))falta[i]=1;
+  var idx=[];for(var i2=0;i2<n;i2++){if(ST.filtro==='todos'||(ST.filtro==='co'&&d.R[i2]>0)||(ST.filtro==='falta'&&falta[i2])||(ST.filtro==='perda'&&d.O[i2]>0)||(ST.filtro==='exc'&&d.R[i2]>d.D[i2]+1e-9)||(ST.filtro==='lim'&&d.B[i2]>d.C[i2]))idx.push(i2);}
+  var pg=200,np=Math.max(1,Math.ceil(idx.length/pg));if(ST.pagina>=np)ST.pagina=np-1;var vis=idx.slice(ST.pagina*pg,(ST.pagina+1)*pg);
+  var h='<div class="card"><h3>Dados de 10 minutos · '+k.cx.nome+(c.emitida?' · v'+c.versao:'')+'</h3><div class="row" style="margin-bottom:10px"><select id="filtro">'+[['todos','Todos os intervalos'],['co','Com carveout ativo'],['falta','Com dado faltando'],['perda','Com perda pré > 0'],['exc','Carveouts > indisponíveis'],['lim','Geração > demanda']].map(function(o){return'<option value="'+o[0]+'" '+(ST.filtro===o[0]?'selected':'')+'>'+o[1]+'</option>';}).join('')+'</select><label class="small"><input type="checkbox" id="mostraSPE" '+(ST.mostraSPE?'checked':'')+'> disponíveis por SPE</label><span class="sp"></span><span class="small muted">'+idx.length+' intervalo(s) · demanda: '+esc(k.demanda)+'</span></div>';
+  h+='<div class="tw"><table class="t"><tr><th>Início do intervalo</th><th class="num">Geração (MW)</th><th class="num">Demanda (MW)</th><th class="num">Indisponíveis</th><th class="num">Carveouts</th><th class="num">Perda pré (kWh)</th><th class="num">Perda pós (kWh)</th>'+(ST.mostraSPE?sp.map(function(s){return'<th class="num">'+s.cod+'</th>';}).join(''):'')+'<th></th></tr>'+
+    vis.map(function(i){return'<tr><td>'+Motor.fmtDH(t0+i*600000)+'</td><td class="num">'+nf(d.B[i],3)+'</td><td class="num">'+nf(d.C[i],3)+'</td><td class="num">'+nf(d.D[i],3)+'</td><td class="num">'+(d.R[i]||'')+'</td><td class="num">'+nf(d.O[i],1)+'</td><td class="num">'+nf(d.V[i],1)+'</td>'+(ST.mostraSPE?sp.map(function(s,j){var v=k.serie.A[j][i];return'<td class="num">'+(isNaN(v)?'vazio':nf(v,2))+'</td>';}).join(''):'')+'<td>'+(falta[i]?'<span class="chip c-bad">dado faltando</span>':'')+(d.R[i]>d.D[i]+1e-9?'<span class="chip c-warn">carveout > indisp.</span>':'')+'</td></tr>';}).join('')+'</table></div>';
+  return h+'<div class="pg"><button class="btn s" data-act="pg" data-p="-1" '+(ST.pagina?'':'disabled')+'>◀</button><span class="small">Página '+(ST.pagina+1)+' de '+np+'</span><button class="btn s" data-act="pg" data-p="1" '+(ST.pagina<np-1?'':'disabled')+'>▶</button></div></div>';}
+function rVer(){var L=versoesDe(ST.apur.ym,ST.cx),vv=versaoEmVista();
+  return'<div class="card"><h3>Versões emitidas · '+ST.cx+' · '+ymTxt(ST.apur.ym)+'</h3>'+(L.length?'<table class="t"><tr><th>Versão</th><th>Emitida</th><th class="num">PBA pré</th><th class="num">PBA pós</th><th class="num">TBA</th><th>Hash</th><th>Observação</th><th></th></tr>'+L.map(function(e){return'<tr'+(e.versao===vv?' style="background:#eef6e3"':'')+'><td><b>v'+e.versao+'</b>'+(e.versao===vv?' <span class="chip c-ok">em tela</span>':'')+'</td><td>'+esc(e.por)+'<br><span class="small">'+Motor.fmtDH(e.em)+'</span></td><td class="num">'+pct(e.pre,4)+'</td><td class="num">'+pct(e.pos,4)+'</td><td class="num">'+pct(e.tba,4)+'</td><td class="mono">'+e.hashRes+'</td><td>'+esc(e.obs||'')+'</td><td style="white-space:nowrap"><button class="btn s n" data-act="ver-v" data-ym="'+e.ym+'" data-cx="'+e.cx+'" data-v="'+e.versao+'">Ver resultado</button> <button class="btn s" data-act="baixa-emis" data-ym="'+e.ym+'" data-cx="'+e.cx+'" data-v="'+e.versao+'">Baixar arquivos</button></td></tr>';}).join('')+'</table><p class="small muted" style="margin-top:8px">Cada versão é recalculada a partir do registro guardado na emissão e conferida com o hash SHA-256 antes de ser exibida ou exportada.</p>':'<p class="muted">Nenhuma versão emitida.</p>')+'</div>';}
+function rCad(){var h='<div class="card"><h3>Modelos de saída · PBA Calculator</h3><p class="small muted" style="margin-bottom:10px">O arquivo de saída de cada apuração é o próprio PBA Calculator do complexo: a plataforma cola os dados do mês nos mesmos lugares (Data Pulls, Data Pull &amp; Calculation e Carveout data) e recalcula os valores das fórmulas. Abas, gráficos, macros, formatação e fórmulas são preservados.</p><table class="t"><tr><th>Complexo</th><th>Modelo cadastrado</th><th>SHA-256</th><th>Cadastrado</th><th>Conferência</th><th></th></tr>'+
+  CXS.map(function(c){var m=ST.modIdx[c];return'<tr><td><b>'+Motor.cxDe(ST.cad,c).nome+'</b></td><td>'+(m?esc(m.nome):'<span class="chip c-bad">não cadastrado</span>')+'</td><td class="mono">'+(m?m.sha.slice(0,16)+'…':'—')+'</td><td class="small">'+(m?esc(m.por)+'<br>'+Motor.fmtDH(m.em):'—')+'</td><td class="small">'+(m?'<span class="chip c-ok">estrutura e fórmulas conferem</span><br>'+(m.vba?'macros preservadas · ':'')+m.graficos+' gráfico(s) · cálculo '+(m.calcMode==='manual'?'manual':'automático'):'—')+'</td><td><button class="btn s" data-act="mod-up">'+(m?'Substituir':'Cadastrar')+'</button></td></tr>';}).join('')+
+  '</table><input type="file" id="f-mod" accept=".xlsm,.xlsx" hidden></div>';
+  h+='<div class="banner b-info">Alterações no cadastro ficam no log, invalidam cálculos em aberto e não afetam versões já emitidas (cada versão guarda o cadastro usado).</div>';
+  ST.cad.complexos.forEach(function(cx){h+='<div class="card"><h3>'+cx.nome+' · '+Motor.totalWTG(cx)+' WTG · '+cx.spes.reduce(function(a,s){return a+s.cap;},0).toFixed(2)+' MW</h3><table class="t"><tr><th>Código</th><th>Sistema SCADA</th><th>Tag</th><th>Turbinas</th><th>Capacidade (MW)</th><th>Nome comercial</th></tr>'+
+    cx.spes.map(function(s,j){return'<tr><td><b>'+s.cod+'</b></td><td class="mono">'+s.scada+'</td><td class="mono small">'+esc(cx.tag+s.wfms)+'</td><td><input type="number" min="1" max="30" value="'+s.n+'" data-cad="'+cx.id+'|'+j+'|n" style="width:70px"></td><td><input type="number" step="0.01" value="'+s.cap+'" data-cad="'+cx.id+'|'+j+'|cap" style="width:90px"></td><td><input type="text" value="'+esc(s.comercial)+'" data-cad="'+cx.id+'|'+j+'|comercial" style="width:260px"></td></tr>';}).join('')+'</table></div>';});
+  var al=Object.keys(ST.cad.aliases);h+='<div class="card"><h3>Apelidos de turbinas ('+al.length+')</h3>'+(al.length?'<table class="t"><tr><th>Como aparece</th><th>Complexo</th><th>Turbina</th><th></th></tr>'+al.map(function(k){var p=k.split('|');return'<tr><td class="mono">'+esc(p[0])+'</td><td>'+esc(p[1])+'</td><td><b>'+esc(ST.cad.aliases[k])+'</b></td><td><button class="btn s r" data-act="rm-alias" data-k="'+esc(k)+'">Remover</button></td></tr>';}).join('')+'</table>':'<p class="muted">Os apelidos são criados ao resolver nomes não reconhecidos na validação.</p>')+'</div>';
+  h+='<div class="card"><h3>Parques fora do contrato</h3><p>'+ST.cad.foraContrato.map(function(x){return'<span class="chip c-gray">'+x+'</span>';}).join(' ')+'</p></div>';
+  h+='<div class="card"><h3>Categorias de carveout</h3><ol style="margin-left:18px;line-height:1.8">'+ST.cad.categorias.map(function(c){return'<li>'+esc(c)+(c!==c.trim()?' <span class="chip c-info">com espaço no final</span>':'')+'</li>';}).join('')+'</ol></div>';
+  h+='<div class="card"><h3>Premissas registradas</h3><ul style="margin-left:18px;line-height:1.7">'+ST.cad.premissas.map(function(p){return'<li>'+esc(p)+'</li>';}).join('')+'</ul></div><div class="row"><button class="btn r" data-act="cad-reset">Restaurar cadastro padrão</button></div>';return h;}
+async function rLog(){var L=(await DB.range('log:')).map(function(x){return x.v;}).sort(function(a,b){return b.em-a.em;}),q=(ST.qlog||'').toLowerCase(),F=q?L.filter(function(e){return(e.acao+' '+e.det+' '+e.por+' '+e.ym+' '+e.cx).toLowerCase().indexOf(q)>=0;}):L;
+  $('conteudo').innerHTML='<div class="card"><h3>Backup</h3><p class="small muted" style="margin-bottom:10px">Os dados ficam neste navegador (IndexedDB), inclusive os modelos de saída e as versões emitidas. Exporte um backup periodicamente e guarde na pasta da plataforma.</p><div class="row"><button class="btn n" data-act="bkp">Exportar backup (.json)</button><button class="btn" data-act="bkp-in">Restaurar backup</button><input type="file" id="f-bkp" accept=".json" hidden></div></div>'+
+    '<div class="card"><h3>Log de auditoria ('+L.length+')</h3><div class="row" style="margin-bottom:10px"><input type="text" id="qlog" placeholder="Filtrar…" value="'+esc(ST.qlog||'')+'" style="flex:1"></div><div class="tw"><table class="t"><tr><th>Quando</th><th>Quem</th><th>Mês</th><th>Cx</th><th>Ação</th><th>Detalhe</th></tr>'+F.slice(0,1000).map(function(e){return'<tr><td class="small">'+Motor.fmtDH(e.em)+'</td><td>'+esc(e.por)+'</td><td>'+esc(e.ym)+'</td><td>'+esc(e.cx)+'</td><td><b>'+esc(e.acao)+'</b></td><td class="small">'+esc(e.det)+'</td></tr>';}).join('')+'</table></div></div>';}
+function rMetodo(){return'<div class="card"><h3>Método de cálculo</h3><p class="small muted" style="margin-bottom:10px">'+esc(Motor.VERSAO_METODO)+'</p><ol style="margin-left:18px;line-height:1.8">'+
+  '<li><b>Entrada:</b> por SPE e por intervalo de 10 min — geração (<i>Actual active power</i>), demanda e turbinas disponíveis. Período: dia 1 às 00:00 até o último dia às 23:50.</li>'+
+  '<li><b>Demanda:</b> <i>Input SetPoint to the SRL</i>. Quando o arquivo exportado não tem essa coluna (exportações antigas), usa-se <i>Active power demand setpoint</i>.</li>'+
+  '<li><b>Carveouts:</b> todas as abas da planilha são lidas; cada aba é atribuída a um complexo pelo nome.</li>'+
+  '<li><b>Soma do complexo:</b> B = Σ geração · C = Σ demanda · D = nº de turbinas − Σ disponíveis. Dado faltando conta como zero (opção 1).</li>'+
+  '<li><b>Pré-carveout:</b> M = B×1000/6 (0 se B&lt;0) · perda O = máx(mín(M ÷ (N/6 − D/6) × D/6 ; (C−B)×1000/6) ; 0).</li>'+
+  '<li><b>Pós-carveout:</b> carveout ativo quando início ≤ meio do intervalo ≤ fim · S = máx(D − carveouts ; 0)/6 · V = máx(mín(M ÷ (N/6 − S) × S ; (C−B)×1000/6) ; 0).</li>'+
+  '<li><b>Mês:</b> PBA = ΣM ÷ (ΣM + Σperda) · TBA = 1 − ΣD ÷ (intervalos × N). <b>YTD:</b> média simples dos PBAs mensais emitidos.</li></ol></div>'+
+  '<div class="card"><h3>Versões emitidas</h3><ul style="margin-left:18px;line-height:1.8"><li>A emissão grava um registro próprio com as séries de 10 min, os carveouts, as decisões, o cadastro e o hash SHA-256 do resultado.</li><li>Depois de emitida, a versão é consultada na plataforma a partir desse registro: resultado, carveouts, dados de 10 min, indicadores por SPE e validação. Antes de exibir, a plataforma recalcula e confere o hash.</li><li>Remover ou trocar arquivos da apuração depois da emissão não altera a versão emitida.</li></ul></div>';}
+
+document.addEventListener('click',async function(e){var t=e.target.closest('[data-act],[data-dz],[data-mb],.nav button');if(!t)return;
+  if(t.dataset.mb!=null){var b=modalCb&&modalCb[+t.dataset.mb];fecharModal();if(b&&b[1])b[1]();return;}
+  if(t.dataset.aba){ST.aba=t.dataset.aba;render();return;}
+  if(t.dataset.dz){if(e.target.tagName==='SELECT'||e.target.tagName==='OPTION')return;
+    if(t.dataset.dz==='calc'){modal('PBA Calculator (.xlsm)','<ul style="margin:0 0 0 18px;line-height:1.8"><li><b>Cadastrar como modelo de saída</b>: passa a ser o arquivo gerado em cada apuração do complexo.</li><li><b>Conferir</b>: compara colunas e resultado com os dados já carregados. Não altera a apuração.</li><li><b>Usar como fonte</b>: para meses históricos sem exportação do SCADA.</li></ul>',[['Cancelar',null],['Usar como fonte',function(){ST.modoCalc='fonte';$('f-calc').click();}],['Conferir',function(){ST.modoCalc='conferir';$('f-calc').click();}],['Cadastrar como modelo',function(){ST.modoCalc='modelo';$('f-calc').click();}]]);return;}
+    $('f-'+t.dataset.dz).click();return;}
+  var a=t.dataset.act;try{
+  if(a==='fecha-aviso')$('aviso').innerHTML='';
+  else if(a==='cx'){ST.cx=t.dataset.cx;ST.pagina=0;render();}
+  else if(a==='sub'){ST.sub=t.dataset.s;ST.pagina=0;render();}
+  else if(a==='abrir-mes'){e.preventDefault();ST.aba='apur';await abrirMes(t.dataset.ym);}
+  else if(a==='ver-v'){e.preventDefault();var ym=t.dataset.ym,cx=t.dataset.cx,v=+t.dataset.v;ST.verSel[ym+'|'+cx]=v;ST.cx=cx;ST.sub='res';ST.pagina=0;ST.aba='apur';if(!ST.apur||ST.apur.ym!==ym)await abrirMes(ym);else render();window.scrollTo({top:0});}
+  else if(a==='ver-sair'){delete ST.verSel[ST.apur.ym+'|'+ST.cx];ST.sub='val';render();}
+  else if(a==='rm-arq')await removerArquivo(t.dataset.id);
+  else if(a==='ack'){var just='';if(t.dataset.just){just=prompt('Justificativa:');if(!just)return;}await decidir(t.dataset.k,{txt:t.dataset.txt,just:just},t.dataset.txt);}
+  else if(a==='ack-ov'){var j=prompt('Justificativa para manter as duas linhas:');if(!j)return;await decidir(t.dataset.k,{txt:'Manter as duas linhas (conta 2× no período comum)',just:j},'Sobreposição mantida');}
+  else if(a==='conf')await decidir('CONF|'+t.dataset.i,{escolha:t.dataset.e,txt:'Usar valor '+t.dataset.e.toUpperCase()},'Conflito de dados');
+  else if(a==='usar-id'){var uid=t.dataset.uid,sel=document.querySelector('[data-sel="'+CSS.escape(uid)+'"]').value,ap=document.querySelector('[data-alias="'+CSS.escape(uid)+'"]').checked,c=computar(ST.cx),x=c.cos.filter(function(y){return y.uid===uid;})[0];
+    if(ap){ST.cad.aliases[Motor.chaveAlias(x.orig.nome,ST.cx)]=sel;await DB.set('cad',ST.cad);await logar('Criou apelido','"'+x.orig.nome+'" ('+ST.cx+') → '+sel,null,ST.cx);}
+    await decidir('CO|'+uid,{acao:'id',id:sel,txt:'"'+x.orig.nome+'" = '+sel+(ap?' (apelido registrado)':'')},'Turbina definida');}
+  else if(a==='excluir'){var j2=prompt('Excluir esta linha de carveout do cálculo? Justificativa:');if(!j2)return;await decidir('CO|'+t.dataset.uid,{acao:'excluir',txt:'Linha excluída do cálculo',just:j2},'Linha de carveout excluída');}
+  else if(a==='mover')await moverLinha(t.dataset.uid,t.dataset.cx);
+  else if(a==='mapcat'){var v2=document.querySelector('[data-cat="'+CSS.escape(t.dataset.uid)+'"]').value;await decidir('CAT|'+t.dataset.uid,{acao:'mapear',cat:v2,txt:'Categoria mapeada para "'+v2.trim()+'"'},'Categoria mapeada');}
+  else if(a==='mantcat'){var j3=prompt('Justificativa:');if(!j3)return;await decidir('CAT|'+t.dataset.uid,{acao:'manter',txt:'Categoria mantida (fora do detalhamento)',just:j3},'Categoria mantida');}
+  else if(a==='desfaz')await desfazer(t.dataset.k);
+  else if(a==='calcular')await calcularCx();
+  else if(a==='aud')await exportarRascunho();
+  else if(a==='emitir')await emitir();
+  else if(a==='reabrir')await reabrir();
+  else if(a==='baixa-emis')await baixarEmissao(t.dataset.ym,t.dataset.cx,+t.dataset.v);
+  else if(a==='pg'){ST.pagina+=+t.dataset.p;render();}
+  else if(a==='csv-co')csvCO();
+  else if(a==='mod-up')$('f-mod').click();
+  else if(a==='rm-alias'){var k=t.dataset.k,v3=ST.cad.aliases[k];delete ST.cad.aliases[k];await salvarCad('Removeu apelido '+k+' → '+v3);}
+  else if(a==='cad-reset'){if(!confirm('Restaurar o cadastro padrão? Apelidos são mantidos.'))return;var al=ST.cad.aliases;ST.cad=Motor.clone(Motor.CAD_PADRAO);ST.cad.aliases=al;await salvarCad('Restaurou cadastro padrão');}
+  else if(a==='bkp')await exportarBackup();else if(a==='bkp-in')$('f-bkp').click();else if(a==='usuario')pedirUsuario();
+  }catch(err){console.error(err);aviso('✖ '+esc(err.message),'bad');}});
+document.addEventListener('change',async function(e){var t=e.target;try{
+  if(t.dataset.act==='ciente'&&t.checked)await marcarCiente();
+  else if(t.id==='f-scada'){await importarScada(Array.from(t.files));t.value='';}
+  else if(t.id==='f-carve'){await importarCarve(Array.from(t.files),$('cxCarve').value);t.value='';}
+  else if(t.id==='f-calc'){if(t.files[0])await importarCalculadora(t.files[0],ST.modoCalc);t.value='';}
+  else if(t.id==='f-mod'){if(t.files[0])await registrarModelo(t.files[0]);t.value='';}
+  else if(t.id==='f-bkp'){if(t.files[0])await importarBackup(t.files[0]);t.value='';}
+  else if(t.id==='mes'){if(t.value)await abrirMes(t.value);}
+  else if(t.id==='verSel'){ST.verSel[ST.apur.ym+'|'+ST.cx]=+t.value;ST.pagina=0;render();}
+  else if(t.id==='ano'){ST.ano=t.value;render();}else if(t.id==='rasc'){ST.inclRasc=t.checked;render();}else if(t.id==='ordCO'){ST.ordCO=t.value;render();}
+  else if(t.id==='filtro'){ST.filtro=t.value;ST.pagina=0;render();}else if(t.id==='mostraSPE'){ST.mostraSPE=t.checked;render();}
+  else if(t.dataset.cad){var p=t.dataset.cad.split('|'),cx=Motor.cxDe(ST.cad,p[0]),s=cx.spes[+p[1]],old=s[p[2]],nv=p[2]==='comercial'?t.value:+t.value;if(p[2]!=='comercial'&&(!isFinite(nv)||nv<=0)){t.value=old;return;}
+    if(!confirm('Alterar '+p[2]+' de '+s.cod+' de "'+old+'" para "'+nv+'"?')){t.value=old;return;}s[p[2]]=nv;await salvarCad(s.cod+' · '+p[2]+': '+old+' → '+nv);}
+  }catch(err){console.error(err);aviso('✖ '+esc(err.message),'bad');}});
+document.addEventListener('input',function(e){if(e.target.id==='qlog'){ST.qlog=e.target.value;clearTimeout(ST._q);ST._q=setTimeout(function(){rLog().then(function(){var q=$('qlog');q.focus();q.setSelectionRange(q.value.length,q.value.length);});},250);}});
+['dragover','dragenter'].forEach(function(ev){document.addEventListener(ev,function(e){var z=e.target.closest&&e.target.closest('.dz');if(z){e.preventDefault();z.classList.add('over');}});});
+document.addEventListener('dragleave',function(e){var z=e.target.closest&&e.target.closest('.dz');if(z)z.classList.remove('over');});
+document.addEventListener('drop',async function(e){var z=e.target.closest&&e.target.closest('.dz');if(!z)return;e.preventDefault();z.classList.remove('over');var fs=Array.from(e.dataTransfer.files);
+  if(z.dataset.dz==='scada')await importarScada(fs);else if(z.dataset.dz==='carve')await importarCarve(fs,$('cxCarve').value);else if(fs[0])await importarCalculadora(fs[0],'conferir');});
+function dadosEmTela(){var vv=versaoEmVista();if(vv){var w=ST.vistas[chaveVista(ST.apur.ym,ST.cx,vv)];if(w&&w!=='carregando'&&!w.erro)return w;}return computar(ST.cx);}
+function csvCO(){var c=dadosEmTela(),r=c.res,ix={};c.inc.forEach(function(x,k){ix[x.uid]=k;});var q=function(v){v=String(v==null?'':v);if(/^[=+\-@]/.test(v))v="'"+v;return'"'+v.replace(/"/g,'""')+'"';},den=r?(r.AP+r.LPp):1;
+  var L=[['Arquivo','Aba','Linha','Nome no arquivo','Turbina','SPE','Início','Fim','Categoria','Situação','Intervalos','MWh recuperados','PBA (pp)','Isolado (pp)'].map(q).join(';')];
+  c.cos.forEach(function(x){var k=ix[x.uid],pl=k!=null&&r?r.porLinha[k]:null;L.push([String(x.orig.arquivo).split(' › ')[0],x.orig.aba||'',x.orig.linhaOrig,x.orig.nome,x.id,x.spe,Motor.fmtDH(x.ini),Motor.fmtDH(x.fim),String(x.cat).trim(),x.incluida?'Incluída':x.excluida?'Excluída':'Pendente',pl?pl.int:'',pl?pl.mwh.toFixed(4).replace('.',','):'',pl?(pl.mwh/den*100).toFixed(5).replace('.',','):'',k!=null&&r?(r.isolado[k]*100).toFixed(5).replace('.',','):''].map(q).join(';'));});
+  baixarBlob(new Blob(['\ufeff'+L.join('\r\n')],{type:'text/csv;charset=utf-8'}),'Carveouts_'+ST.cx+'_'+ST.apur.ym+(c.emitida?'_v'+c.versao:'')+'.csv');}
+function pedirUsuario(){modal('Identificação','<p style="margin-bottom:10px">Informe seu nome. Ele é registrado em cada importação, decisão, cálculo e emissão.</p><input type="text" id="nomeU" value="'+esc(ST.usuario)+'" style="width:100%" placeholder="Nome e sobrenome">',[['Salvar',null]]);
+  $('md-f').querySelector('[data-mb="0"]').onclick=async function(ev){ev.stopPropagation();var v=$('nomeU').value.trim();if(!v){$('nomeU').focus();return;}var old=ST.usuario;ST.usuario=v;await DB.set('usuario',v);await logar('Identificação',old?'Trocou de "'+old+'" para "'+v+'"':'Primeiro acesso');fecharModal();render();};}
+async function iniciarDados(){ST.cad=(await DB.get('cad'))||Motor.clone(Motor.CAD_PADRAO);if(!ST.cad.aliases)ST.cad.aliases={};
+  Motor.CAD_PADRAO.premissas.forEach(function(p){if(ST.cad.premissas.indexOf(p)<0)ST.cad.premissas.push(p);});ST.cad.demandaTag=Motor.CAD_PADRAO.demandaTag;
+  ST.usuario=(await DB.get('usuario'))||'';ST.emisIdx=(await DB.get('emisidx'))||[];ST.apurIdx=(await DB.get('apuridx'))||{};ST.modIdx=(await DB.get('modidx'))||{};}
+(async function(){try{await DB.open();await iniciarDados();await DB.set('cad',ST.cad);var d=new Date();d.setMonth(d.getMonth()-1);await abrirMes(d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2));if(!ST.usuario)pedirUsuario();}
+  catch(e){console.error(e);document.body.insertAdjacentHTML('afterbegin','<div class="banner b-bad">Não foi possível abrir o armazenamento local: '+esc(e.message)+'</div>');}})();
+</script></body></html>

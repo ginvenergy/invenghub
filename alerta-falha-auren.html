@@ -1,0 +1,1841 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório de Falha de Grande Componente — Auren</title>
+<style>
+/* ===================== FONTS ===================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ===================== VARIABLES ===================== */
+:root {
+  --navy: #1A0B4F;
+  --navy-dark: #14083D;
+  --navy-deep: #0D0528;
+  --primary: #1A0B4F;
+  --brand: #E6007E;
+  --brand-dark: #C10069;
+  --brand-soft: #FDEAF4;
+  --brand-soft-bd: #F5B8D8;
+  --brand-soft-tx: #A30059;
+  --accent: #7B3FE4;
+  --accent-dark: #6229C4;
+  --accent-soft: #F1EAFD;
+  --accent-soft-bd: #CDB6F5;
+  --accent-soft-tx: #4E1C9E;
+  --accent-glow: rgba(123,63,228,0.18);
+  --yellow: #FFD700;
+  --border: #ded8ea;
+  --bg: #f2eff7;
+  --card: #ffffff;
+  --text: #1a2b3c;
+  --muted: #607d8b;
+  --muted-light: #8fa6b5;
+  --label-color: #1A0B4F;
+  --input-bg: #faf8fc;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===================== TOP BAR ===================== */
+.topbar {
+  background: var(--navy);
+  padding: 0 28px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,.12);
+}
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.topbar img.inv-logo { height: 24px; filter: brightness(0) invert(1); }
+.topbar img.client-logo { height: 22px; background:#fff; padding:3px 7px; border-radius:4px; }
+.topbar-divider { width: 1px; height: 22px; background: rgba(255,255,255,.25); }
+.topbar-title { color: #fff; font-size: 13.5px; font-weight: 600; letter-spacing: .3px; }
+.topbar-title span { color: var(--brand); font-weight: 700; }
+.topbar-right { display: flex; align-items: center; gap: 13px; }
+.topbar-client {
+  display: flex; align-items: center; gap: 9px;
+  padding: 5px 13px; border-radius: 6px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.16);
+}
+.topbar-client-lbl {
+  font-size: 9px; font-weight: 700; letter-spacing: .9px;
+  text-transform: uppercase; color: rgba(255,255,255,.55);
+}
+.topbar-back {
+  display: flex; align-items: center; gap: 7px;
+  color: rgba(255,255,255,.8); font-size: 12.5px; font-weight: 500;
+  text-decoration: none; padding: 6px 13px; border-radius: 6px;
+  border: 1px solid rgba(255,255,255,.22);
+  transition: background .15s, color .15s;
+}
+.topbar-back:hover { background: rgba(255,255,255,.12); color: #fff; }
+
+/* ===================== PAGE HERO ===================== */
+.page-hero {
+  position: relative;
+  background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 60%, #3A1E82 100%);
+  padding: 30px 28px 34px;
+  overflow: hidden;
+}
+.page-hero-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),
+                    linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size: 52px 52px;
+  pointer-events: none;
+}
+.page-hero-turbine {
+  position: absolute; right: 26px; bottom: -14px; height: 150%;
+  opacity: .2; pointer-events: none;
+}
+.page-hero::after {
+  content: '';
+  position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+  background: linear-gradient(90deg, var(--brand) 0%, var(--brand) 42%, var(--accent) 42%, var(--accent) 100%);
+  z-index: 3;
+}
+.page-hero-inner { position: relative; max-width: 880px; margin: 0 auto; z-index: 2; }
+.page-hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 11px;
+}
+.page-hero-eyebrow::before { content: ''; width: 24px; height: 2px; background: var(--accent); display: block; }
+.page-hero h1 { color: #fff; font-size: 24px; font-weight: 800; letter-spacing: -.4px; line-height: 1.2; }
+.page-hero h1 em { font-style: normal; color: var(--brand); }
+.page-hero p {
+  color: rgba(255,255,255,.66); font-size: 13px; line-height: 1.6;
+  margin-top: 9px; font-weight: 300; max-width: 570px;
+}
+
+/* ===================== EDITOR ===================== */
+#editor { max-width: 880px; margin: 0 auto; padding: 26px 28px 110px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+
+.card-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--navy);
+  margin-bottom: 17px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #edf2f7;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-title::before {
+  content: '';
+  width: 4px; height: 15px;
+  background: linear-gradient(180deg, var(--brand) 0%, var(--brand) 55%, var(--accent) 55%, var(--accent) 100%);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.shared-badge {
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-soft-bd);
+  color: var(--accent-soft-tx);
+  font-size: 11.5px;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 9px 12px;
+  margin-bottom: 17px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.span2 { grid-column: span 2; }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+
+label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--label-color);
+}
+
+input[type=text], input[type=date], select, textarea {
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 13.5px;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  background: var(--input-bg);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(230,0,126,0.18);
+  background: #fff;
+}
+
+textarea { resize: vertical; min-height: 90px; line-height: 1.55; }
+
+.obj-preview-box {
+  margin-top: 15px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 7px;
+  padding: 11px 14px;
+}
+.obj-preview-lbl {
+  font-size: 9.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .8px; color: var(--muted); margin-bottom: 6px;
+}
+
+@media(max-width:820px){
+  .topbar { padding: 0 16px; }
+  .topbar-title, .topbar-client-lbl { display: none; }
+  .page-hero { padding: 24px 18px 28px; }
+  .page-hero h1 { font-size: 19px; }
+  .page-hero-turbine { display: none; }
+  #editor { padding: 20px 16px 110px; }
+  .grid3, .grid2 { grid-template-columns: 1fr; }
+  .span2 { grid-column: span 1; }
+}
+
+/* ---- Images Section ---- */
+.img-list { display: flex; flex-direction: column; gap: 12px; }
+
+.img-item {
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--input-bg);
+}
+
+.img-item-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #f0f5fa;
+  border-bottom: 1px solid var(--border);
+}
+
+.img-num-badge {
+  background: var(--accent);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.img-caption-input {
+  flex: 1;
+  font-size: 13px;
+  padding: 5px 9px;
+  border: 1.5px solid var(--border);
+  border-radius: 5px;
+  background: white;
+  outline: none;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+.img-caption-input:focus {
+  border-color: var(--brand);
+}
+
+.img-remove-btn {
+  background: #fee2e2;
+  border: none;
+  color: #dc2626;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.img-remove-btn:hover { background: #fca5a5; }
+
+.img-item-body {
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.img-upload-zone {
+  position: relative;
+  width: 160px;
+  min-height: 110px;
+  border: 2px dashed var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: white;
+  transition: border-color 0.15s;
+}
+
+.img-upload-zone:hover { border-color: var(--accent); }
+
+.img-upload-zone input[type=file] {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer;
+  width: 100%; height: 100%;
+  padding: 0; border: none; background: transparent;
+}
+
+.img-upload-zone .up-placeholder {
+  text-align: center;
+  color: var(--muted);
+  font-size: 11px;
+  pointer-events: none;
+  padding: 10px;
+  line-height: 1.5;
+}
+
+.img-upload-zone img.thumb {
+  width: 100%; height: 110px;
+  object-fit: cover;
+  display: block;
+}
+
+.img-item-note {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+.add-img-btn {
+  margin-top: 10px;
+  background: none;
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', Arial, sans-serif;
+  transition: all 0.15s;
+  width: 100%;
+}
+
+.add-img-btn:hover { border-color: var(--accent); color: var(--accent-dark); background: var(--accent-soft); }
+
+/* ===================== ACTIONS BAR ===================== */
+.actions-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--navy);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 9999;
+  box-shadow: 0 -3px 16px rgba(0,0,0,0.2);
+}
+
+.btn-home {
+  background: transparent;
+  color: rgba(255,255,255,.82);
+  border: 1px solid rgba(255,255,255,0.26);
+  padding: 10px 18px;
+  border-radius: 7px;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 7px;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+.btn-home:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+.btn-preview {
+  background: rgba(255,255,255,0.14);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 10px 20px;
+  border-radius: 7px;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 7px;
+  transition: background 0.15s;
+}
+.btn-preview:hover { background: rgba(255,255,255,0.22); }
+
+.btn-pdf {
+  background: var(--brand);
+  color: #ffffff;
+  border: none;
+  padding: 10px 26px;
+  border-radius: 7px;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 7px;
+  box-shadow: 0 2px 8px rgba(230,0,126,0.18);
+  transition: background 0.15s, transform 0.15s;
+}
+.btn-pdf:hover { background: var(--brand-dark); transform: translateY(-1px); }
+
+.actions-hint { color: rgba(255,255,255,0.45); font-size: 11.5px; }
+
+@media(max-width:820px){
+  .actions-hint { display: none; }
+  .actions-bar { padding: 10px 14px; gap: 8px; }
+}
+
+/* ===================== PRINT / PDF OUTPUT ===================== */
+#print-view { display: none; }
+
+@media screen {
+  #print-view.showing {
+    display: block;
+    background: #e8eaed;
+    padding: 12mm 0;
+  }
+  .doc-page,
+  .doc-page-auto {
+    margin: 0 auto 8mm auto;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  }
+}
+
+@media print {
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+  #editor        { display: none !important; }
+  .actions-bar   { display: none !important; }
+  .topbar        { display: none !important; }
+  .page-hero     { display: none !important; }
+  #print-view {
+    display: block !important;
+    background: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .doc-page {
+    width: 100% !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+  .doc-page-auto {
+    width: 100% !important;
+    min-height: 297mm !important;
+    height: auto !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+  .doc-page:last-child, .doc-page-auto:last-child {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+}
+
+/* ---------- Page structure ---------- */
+.doc-page {
+  width: 210mm;
+  height: 297mm; /* altura fixa = folha A4 exata */
+  /* Margens: Superior 1cm | Inferior 1cm | Esquerda 2cm | Direita 2cm */
+  padding: 10mm 20mm 8mm 20mm;
+  background: white;
+  font-family: Arial, sans-serif;
+  font-size: 10pt;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  page-break-after: always;
+  break-after: page;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Página de conteúdo variável (p.ex. página com imagens):
+   sem altura fixa, o Chrome faz a quebra automaticamente */
+.doc-page-auto {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 10mm 20mm 8mm 20mm;
+  background: white;
+  font-family: Arial, sans-serif;
+  font-size: 10pt;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  page-break-after: always;
+  break-after: page;
+  box-sizing: border-box;
+}
+
+/* ---------- Page header (pages 2+) ---------- */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 8mm;
+  padding-bottom: 0;
+}
+
+.page-header-logo { height: 10mm; }
+
+.page-header-text { text-align: center; }
+
+.page-header-text .hdr-title {
+  font-family: Arial, sans-serif;
+  font-size: 8pt;
+  font-weight: 700;
+  color: #000;
+  text-transform: uppercase;
+}
+
+.page-header-text .hdr-sub {
+  font-family: Arial, sans-serif;
+  font-size: 8pt;
+  font-weight: 700;
+  background: #FFD700;
+  color: #000;
+  padding: 0 2px;
+  display: inline-block;
+}
+
+.page-num {
+  font-size: 8pt;
+  color: #555;
+  line-height: 1;
+}
+
+/* Footer: no fluxo normal, empurrado para baixo via flexbox — compatível com Chrome */
+.page-footer {
+  margin-top: auto;
+  padding-top: 3mm;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+/* Content area — ocupa todo o espaço disponível */
+.page-content {
+  flex: 1;
+}
+
+/* ---------- CAPA (Page 1) ---------- */
+.cover-logo {
+  margin-top: 10mm;
+  margin-bottom: 0;
+}
+
+.cover-logo img { height: 30mm; }
+
+.cover-title-block {
+  margin-top: 38mm;
+  text-align: right;
+}
+
+.cover-title {
+  font-family: Arial, sans-serif;
+  font-size: 18pt;
+  font-weight: 700;
+  color: #000;
+}
+
+.cover-title .wtg-highlight {
+  background: #FFD700;
+  padding: 0 3px;
+}
+
+.cover-component {
+  font-family: Arial, sans-serif;
+  font-size: 18pt;
+  font-weight: 700;
+  background: #FFD700;
+  display: inline-block;
+  padding: 0 3px;
+  margin-top: 4mm;
+}
+
+.cover-meta-block {
+  margin-top: 48mm;
+  text-align: right;
+}
+
+.cover-meta-line {
+  font-family: Arial, sans-serif;
+  font-size: 10pt;
+  font-weight: 400;
+  background: #FFD700;
+  display: inline-block;
+  padding: 0 3px;
+  margin-bottom: 3mm;
+  color: #000;
+}
+
+/* ---------- SUMÁRIO (Page 2) ---------- */
+.sumario-title {
+  font-family: Arial, sans-serif;
+  font-size: 14pt;
+  font-weight: 700;
+  margin-bottom: 10mm;
+}
+
+.sumario-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sumario-table td {
+  font-family: Arial, sans-serif;
+  font-size: 10pt;
+  padding: 3mm 2mm;
+  vertical-align: top;
+}
+
+.sumario-num { font-weight: 700; width: 12mm; }
+.sumario-text { }
+.sumario-page { text-align: right; width: 12mm; }
+
+/* ---------- CONTENT PAGES ---------- */
+.section-num-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 6mm;
+  margin-bottom: 6mm;
+}
+
+.section-num-badge {
+  font-family: Arial, sans-serif;
+  font-size: 12pt;
+  font-weight: 700;
+  min-width: 10mm;
+}
+
+.section-heading {
+  font-family: Arial, sans-serif;
+  font-size: 10pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding-top: 1.5mm;
+}
+
+.sub-heading {
+  font-family: Arial, sans-serif;
+  font-size: 10pt;
+  font-weight: 700;
+  margin-bottom: 4mm;
+  margin-top: 6mm;
+}
+
+.sub-heading-inline {
+  display: flex;
+  gap: 8mm;
+  margin-bottom: 1.5mm;
+  align-items: baseline;
+}
+
+.sub-heading-inline .num { font-family: Arial, sans-serif; font-size: 10pt; font-weight: 700; min-width: 10mm; }
+.sub-heading-inline .txt { font-family: Arial, sans-serif; font-size: 10pt; font-weight: 700; }
+
+.comp-info-block { margin-bottom: 5mm; }
+
+.comp-info-line {
+  font-family: Arial, sans-serif;
+  font-size: 10pt;
+  margin-bottom: 1.5mm;
+  line-height: 1.4;
+}
+
+.comp-info-line b { font-weight: 700; }
+
+.body-text {
+  font-family: Arial, sans-serif;
+  font-size: 10pt;
+  line-height: 1.6;
+  text-align: justify;
+  margin-bottom: 4mm;
+  text-indent: 10mm;
+  orphans: 2;
+  widows: 2;
+}
+
+.body-text.no-indent { text-indent: 0; }
+
+.body-list {
+  font-family: Arial, sans-serif;
+  font-size: 10pt;
+  line-height: 1.55;
+  text-align: justify;
+  margin: 0 0 4mm 0;
+  padding-left: 16mm;
+  list-style: none;
+}
+
+.body-list li {
+  position: relative;
+  margin-bottom: 2.5mm;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.body-list li:last-child { margin-bottom: 0; }
+
+.body-list li .li-marker {
+  position: absolute;
+  left: -6mm;
+  width: 5mm;
+  font-weight: 700;
+  text-align: left;
+}
+
+.body-list li .li-label { font-weight: 700; }
+
+/* ---------- Images in document ---------- */
+.doc-img-2col {
+  display: flex;
+  gap: 6mm;
+  margin: 6mm 0 2mm;
+  justify-content: flex-start;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.doc-img-2col .img-block {
+  flex: 1;
+  max-width: calc(50% - 3mm);
+}
+
+.doc-img-1col {
+  display: flex;
+  justify-content: center;
+  margin: 6mm 0 2mm;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.doc-img-1col .img-block {
+  max-width: 80%;
+}
+
+.img-block {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.img-block img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 0.5pt solid #ccc;
+}
+
+.img-block .img-label {
+  font-family: Arial, sans-serif;
+  font-size: 9pt;
+  color: #333;
+  text-align: center;
+  margin-top: 2mm;
+  font-style: italic;
+}
+
+/* Disposição */
+.disposicao-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 6mm;
+  margin-bottom: 6mm;
+}
+
+.disposicao-heading .num {
+  font-family: Arial, sans-serif;
+  font-size: 10pt;
+  font-weight: 700;
+  min-width: 10mm;
+}
+
+.disposicao-heading .txt {
+  font-family: Arial, sans-serif;
+  font-size: 10pt;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* ===================== ESTILOS DE IMPRESSÃO ACIMA ===================== */
+/* ===== v3 · disposição por modelo ===== */
+.hint{font-size:11.5px;color:var(--muted);line-height:1.5}
+.chk{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text);font-weight:500;cursor:pointer;text-transform:none;letter-spacing:0}
+.chk input{width:15px;height:15px;accent-color:var(--brand)}
+.roteiro{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.roteiro div{background:var(--brand-soft);border:1px solid var(--brand-soft-bd);border-radius:7px;padding:8px 10px;font-size:11.5px;color:var(--brand-soft-tx);line-height:1.4}
+.roteiro b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+@media(max-width:820px){.roteiro{grid-template-columns:1fr 1fr}}
+.modelo-bar{display:flex;gap:10px;align-items:flex-end;margin-bottom:12px}
+.modelo-bar .field{flex:1}
+.btn-ins{background:var(--brand);color:#fff;border:0;border-radius:7px;padding:10px 16px;font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit;white-space:nowrap}
+.btn-ins:hover{background:var(--brand-dark)}
+.pend{display:none;margin-top:6px;font-size:12px;color:#b3261e;background:#fdecea;border:1px solid #f3c1bc;border-radius:6px;padding:6px 10px}
+.pend.on{display:block}
+.modelo-info{font-size:11.5px;color:var(--muted);margin:-4px 0 12px;line-height:1.5}
+.modelo-info:empty{display:none}
+.modelo-prev{margin-top:6px;padding:9px 11px;background:var(--input-bg);border:1px dashed var(--border);border-radius:7px;color:var(--text);font-size:12px}
+select:disabled{opacity:.55;cursor:not-allowed}
+.btn-ins:disabled{background:#9fb3c0;cursor:not-allowed}
+.rasc{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border:1px solid var(--border);border-radius:9px;padding:9px 14px;margin-bottom:14px;font-size:12px;color:var(--muted)}
+.rasc b{color:var(--navy)}
+.rasc button{border:1px solid var(--border);background:#fff;color:var(--navy);border-radius:6px;padding:6px 12px;font-weight:600;font-size:12px;cursor:pointer;font-family:inherit}
+.rasc button:hover{background:var(--brand-soft)}
+textarea.tem-pend{border-color:#e3a39d;background:#fffafa}
+</style>
+</head>
+<body>
+
+<!-- ==================== EDITOR ==================== -->
+<!-- ==================== TOP BAR ==================== -->
+<div class="topbar">
+  <div class="topbar-left">
+    <img class="inv-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaoAAACsCAYAAAAqoehfAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NzhDOUE5OUQ3RDFCMTFFN0I5RENEMUZBMzU0QTg0RDAiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NzhDOUE5OUU3RDFCMTFFN0I5RENEMUZBMzU0QTg0RDAiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxMTg2RTAzODdDMjExMUU3QjlEQ0QxRkEzNTRBODREMCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3OEM5QTk5QzdEMUIxMUU3QjlEQ0QxRkEzNTRBODREMCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PrH+jUQAAC64SURBVHja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" alt="Invenergy">
+    <div class="topbar-divider"></div>
+    <div class="topbar-title">Plataforma de <span>Engenharia</span></div>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-client">
+      <span class="topbar-client-lbl">Cliente</span>
+      <img class="client-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='34' viewBox='0 0 120 34'><text x='4' y='25' font-family='Arial,Helvetica,sans-serif' font-size='24' font-weight='700' fill='%23E6007E' letter-spacing='-0.5'>auren</text><text x='76' y='25' font-family='Arial,Helvetica,sans-serif' font-size='11' fill='%231A0B4F'>energia</text></svg>" alt="Auren Energia">
+    </div>
+    <a href="alerta-falha.html" class="topbar-back">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Voltar
+    </a>
+  </div>
+</div>
+
+<!-- ==================== HERO ==================== -->
+<div class="page-hero">
+  <div class="page-hero-grid"></div>
+    <svg class="page-hero-turbine" viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+      <g stroke="#E6007E" stroke-width="2.4" stroke-linecap="round">
+        <line x1="100" y1="300" x2="100" y2="112"/>
+        <circle cx="100" cy="110" r="6.5" fill="#E6007E" stroke="none"/>
+        <path d="M100 110 L100 24" stroke-width="4.5"/>
+        <path d="M100 110 L175 154" stroke-width="4.5"/>
+        <path d="M100 110 L25 154" stroke-width="4.5"/>
+      </g>
+    </svg>
+  <div class="page-hero-inner">
+    <div class="page-hero-eyebrow">Documentação Técnica · Auren Energia</div>
+    <h1>Relatório de Falha de <em>Grande Componente</em></h1>
+    <p>Modelo Auren Energia. Preencha os campos abaixo para gerar o documento. Os campos marcados com ★ são replicados automaticamente na capa, cabeçalho e sumário.</p>
+  </div>
+</div>
+
+<div id="editor">
+  <div class="rasc"><span id="rasc-txt">O preenchimento é salvo automaticamente neste navegador.</span><button type="button" id="rasc-novo">Novo alerta</button></div>
+  <!-- Dados Gerais -->
+  <div class="card">
+    <div class="card-title">1. Dados Gerais ★</div>
+    <div class="shared-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Estas informações são replicadas automaticamente na capa, cabeçalho e sumário
+    </div>
+    <div class="grid3">
+      <div class="field">
+        <label>Complexo / Parque</label>
+        <input type="text" id="complexo" placeholder="Ex: EBR" oninput="updateObjPreview()">
+      </div>
+      <div class="field">
+        <label>Cliente</label>
+        <input type="text" id="cliente" placeholder="Ex: Invenergy">
+      </div>
+      <div class="field">
+        <label>Data do Alerta</label>
+        <input type="date" id="data_alerta">
+      </div>
+      <div class="field">
+        <label>WTG / Turbina</label>
+        <input type="text" id="wtg" placeholder="Ex: EBR04-13" oninput="updateObjPreview()">
+      </div>
+      <div class="field">
+        <label>Modelo da Turbina</label>
+        <input type="text" id="modelo_turbina" list="modelos-turbina" placeholder="Ex: GE 1.7-100 (ou digite outro)" autocomplete="off">
+        <datalist id="modelos-turbina">
+          <option value="GE 1.7-100"></option>
+          <option value="GE 1.85-82.5"></option>
+          <option value="GE 1.6-82.5"></option>
+        </datalist>
+      </div>
+      <div class="field">
+        <label>Componente</label>
+        <select id="comp_sel"></select>
+        <input type="hidden" id="componente">
+        <div id="w_comp_outro" style="display:none;margin-top:6px"><input type="text" id="comp_outro" placeholder="Digite o componente"></div>
+      </div>
+      <div class="field" style="grid-column:3">
+        <label for="sub_sel">Subcomponente</label>
+        <select id="sub_sel" disabled></select>
+        <div id="w_sub_outro" style="display:none;margin-top:6px"><input type="text" id="sub_outro" placeholder="Digite o subcomponente"></div>
+        <div class="hint">Libera após o componente. Filtra as disposições do item 3.</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:18px;flex-wrap:wrap">
+      <label class="chk"><input type="checkbox" id="adendo"> Emitir como <b>Adendo</b> (atualiza disposição de alerta já emitido)</label>
+    </div>
+    <div class="obj-preview-box">
+      <div class="obj-preview-lbl">Texto de objetivo gerado automaticamente</div>
+      <div id="obj-preview" style="font-size:13px; color:var(--text); line-height:1.5; font-style:italic;">Este documento apresenta o descritivo da falha do <b>[COMPONENTE]</b> da <b>[WTG/TURBINA]</b>, juntamente com a disposição de engenharia recomendada para o caso.</div>
+    </div>
+  </div>
+
+  <!-- Informações do Componente -->
+  <div class="card">
+    <div class="card-title">2.1 — Informações do Componente</div>
+    <div class="grid2">
+      <div class="field">
+        <label>Fabricante / Modelo</label>
+        <input type="text" id="fabricante" placeholder="Vazio = Sem informação">
+      </div>
+      <div class="field">
+        <label>Data de Fabricação</label>
+        <input type="text" id="data_fab" placeholder="Vazio = Sem informação">
+      </div>
+      <div class="field">
+        <label>Data da Parada</label>
+        <input type="text" id="data_parada" placeholder="Ex: 18/02/2026 · vazio = Sem informação">
+        <label class="chk"><input type="checkbox" id="sem_parada"> Máquina não parou → "Não aplicável"</label>
+      </div>
+      <div class="field">
+        <label>Motivo da Parada (Alarme)</label>
+        <input type="text" id="motivo_parada" placeholder="Ex: EM222 – Yaw Runaway · ou: Identificado em boroscopia">
+      </div>
+    </div>
+    <div class="hint" style="margin-top:10px">Campo sem informação (placa ilegível, sem foto) pode ficar vazio: sai como <b>"Sem informação"</b> e não impede a emissão.</div>
+  </div>
+
+  <!-- Descritivo -->
+  <div class="card">
+    <div class="card-title">2.2 — Descritivo do Caso e Evidências</div>
+    <div class="roteiro">
+      <div><b>1 · Ocorrência</b>Data, alarme ou origem (preventiva, boroscopia, CMS) e condição da máquina.</div>
+      <div><b>2 · Atendimento</b>O que o time fez e os testes, com resultado.</div>
+      <div><b>3 · Achado</b>O dano confirmado, referenciando as imagens.</div>
+      <div><b>4 · Histórico</b>Opcional: categoria anterior, CMS, reincidência, garantia.</div>
+    </div>
+    <div class="field">
+      <label>Texto Descritivo</label>
+      <textarea id="descritivo" rows="8" placeholder="No dia 12/08/2026, a turbina AUG04-03 saiu de operação devido ao alarme EM222 – Yaw Runaway.&#10;Durante o atendimento, o time Invenergy realizou a abertura do redutor do yaw drive de posição 01:&#10;- Inspeção por estágio: 1º a 3º estágios sem anomalias&#10;Foram identificadas falhas no pinhão solar do 4º estágio, conforme imagens abaixo.&#10;Trata-se de modo de falha já conhecido na frota (redutores Nanjing)."></textarea>
+      <div class="hint">Um parágrafo por etapa do roteiro. Linhas iniciadas com "-" viram lista no PDF.</div>
+    </div>
+  </div>
+
+  <!-- Imagens -->
+  <div class="card">
+    <div class="card-title">Evidências Fotográficas</div>
+    <div class="img-list" id="img-list"></div>
+    <button class="add-img-btn" onclick="addImage()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Adicionar imagem
+    </button>
+  </div>
+
+  <!-- Disposição -->
+  <div class="card">
+    <div class="card-title">3 — Disposição de Engenharia</div>
+    <div class="modelo-bar">
+      <div class="field">
+        <label for="modelo_disp">Disposição padrão (base dos alertas emitidos)</label>
+        <select id="modelo_disp"></select>
+      </div>
+      <button type="button" class="btn-ins" id="ins_disp">Inserir modelo</button>
+    </div>
+    <div class="modelo-info" id="modelo_info"></div>
+    <div class="field">
+      <label>Texto da Disposição</label>
+      <textarea id="disposicao" rows="6" placeholder="Escolha um modelo acima e clique em Inserir, ou escreva livremente."></textarea>
+      <div class="pend" id="pend_disp"></div>
+      <div class="hint">Complete os trechos entre <b>[colchetes]</b> e ajuste o texto se necessário. Ao inserir um segundo modelo, ele é acrescentado ao final.</div>
+    </div>
+    <div class="field" style="margin-top:16px">
+      <label>Encaminhamentos (opcional · só no e-mail, não vai para o PDF)</label>
+      <textarea id="encaminhamentos" rows="2" style="min-height:60px" placeholder="Ex: @Gabriela, favor abrir requisição de compra do pinhão."></textarea>
+    </div>
+  </div>
+
+</div><!-- /editor -->
+
+<!-- ==================== PRINT VIEW ==================== -->
+<div id="print-view">
+  <!-- Pages built dynamically by JS -->
+</div>
+
+<!-- ==================== ACTIONS BAR ==================== -->
+<div class="actions-bar">
+  <a href="alerta-falha.html" class="btn-home" title="Voltar para a seleção de modelo">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Voltar
+  </a>
+  <button class="btn-preview" onclick="togglePreview()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span id="preview-btn-label">Visualizar</span>
+  </button>
+  <button class="btn-pdf" onclick="exportPDF()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2-2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Exportar PDF
+  </button>
+  <span class="actions-hint">Ctrl+P também funciona</span>
+</div>
+
+<!-- ==================== SCRIPT ==================== -->
+<script>
+const LOGO = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaoAAACsCAYAAAAqoehfAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NzhDOUE5OUQ3RDFCMTFFN0I5RENEMUZBMzU0QTg0RDAiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NzhDOUE5OUU3RDFCMTFFN0I5RENEMUZBMzU0QTg0RDAiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxMTg2RTAzODdDMjExMUU3QjlEQ0QxRkEzNTRBODREMCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo3OEM5QTk5QzdEMUIxMUU3QjlEQ0QxRkEzNTRBODREMCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PrH+jUQAAC64SURBVHja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';
+
+// ---- Image management ----
+let images = []; // [{src: null|dataURL, caption: ''}]
+
+function addImage(src, caption) {
+  images.push({ src: src || null, caption: caption || '' });
+  renderImgList();
+}
+
+function removeImage(idx) {
+  images.splice(idx, 1);
+  renderImgList();
+}
+
+function renderImgList() {
+  const list = document.getElementById('img-list');
+  list.innerHTML = '';
+  images.forEach((img, i) => {
+    const num = String(i + 1).padStart(2, '0');
+
+    const item = document.createElement('div');
+    item.className = 'img-item';
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'img-item-header';
+
+    const badge = document.createElement('span');
+    badge.className = 'img-num-badge';
+    badge.textContent = 'Imagem ' + num;
+
+    const captionInput = document.createElement('input');
+    captionInput.className = 'img-caption-input';
+    captionInput.type = 'text';
+    captionInput.placeholder = 'Legenda da imagem ' + num + '...';
+    captionInput.value = img.caption || '';
+    captionInput.addEventListener('input', function() {
+      images[i].caption = this.value;
+    });
+
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'img-remove-btn';
+    removeBtn.textContent = '✕ Remover';
+    removeBtn.onclick = () => removeImage(i);
+
+    header.appendChild(badge);
+    header.appendChild(captionInput);
+    header.appendChild(removeBtn);
+
+    // Body
+    const body = document.createElement('div');
+    body.className = 'img-item-body';
+
+    const zone = document.createElement('div');
+    zone.className = 'img-upload-zone';
+    zone.id = 'zone-' + i;
+
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.addEventListener('change', (e) => handleFile(e, i));
+    zone.appendChild(fileInput);
+
+    if (img.src) {
+      const thumb = document.createElement('img');
+      thumb.className = 'thumb';
+      thumb.src = img.src;
+      zone.appendChild(thumb);
+    } else {
+      const placeholder = document.createElement('div');
+      placeholder.className = 'up-placeholder';
+      placeholder.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#90a4ae" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><br>Clique para<br>carregar foto';
+      zone.appendChild(placeholder);
+    }
+
+    const note = document.createElement('div');
+    note.className = 'img-item-note';
+    note.innerHTML = 'A legenda aparecerá abaixo da imagem no documento exportado como:<br><b>Imagem ' + num + ' – [sua legenda]</b>';
+
+    body.appendChild(zone);
+    body.appendChild(note);
+
+    item.appendChild(header);
+    item.appendChild(body);
+    list.appendChild(item);
+  });
+}
+
+function handleFile(event, idx) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => { reduzirFoto(e.target.result).then(src => { images[idx].src = src; renderImgList(); }); };
+  reader.readAsDataURL(file);
+}
+
+/* Fotos de celular (4–8 MB) deixam a prévia, o PDF e o rascunho lentos.
+   Reduz para no máximo 1600 px no maior lado, JPEG 85% — qualidade de impressão A4. */
+function reduzirFoto(src) {
+  return new Promise(ok => {
+    const im = new Image();
+    im.onload = () => {
+      const max = 1600, k = Math.min(1, max / Math.max(im.naturalWidth, im.naturalHeight, 1));
+      const c = document.createElement('canvas');
+      c.width = Math.round(im.naturalWidth * k); c.height = Math.round(im.naturalHeight * k);
+      const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
+      g.drawImage(im, 0, 0, c.width, c.height);
+      const out = c.toDataURL('image/jpeg', 0.85);
+      ok(out.length < src.length ? out : src);
+    };
+    im.onerror = () => ok(src);
+    im.src = src;
+  });
+}
+function artigoDe(comp) { return /^(gearbox|caixa|multiplicadora|cremalheira)/i.test((comp || '').trim()) ? 'da' : 'do'; }
+function escHtml(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* Converte o texto dos campos em paragrafos e listas estruturadas */
+function formatBody(raw, opts) {
+  opts = opts || {};
+  let txt = (raw || '').trim();
+  if (!txt) return '<div class="body-text">—</div>';
+
+  txt = txt.replace(/\r\n/g, '\n');
+  txt = txt.replace(/\s*([;:.])\s*[-–•]\s+/g, '$1\n- ');
+  txt = txt.replace(/\s+[-–]\s+(?=(Opção|Opcao|Etapa|Passo|Item)\s*\d)/gi, '\n- ');
+  txt = txt.replace(/([^\n\-–*•\s])\s+(?=(?:Opção|Opcao)\s*\d+\s*[:\-–])/gi, '$1\n- ');
+  txt = txt.replace(/^[-–*•]\s*$/gm, '');
+  txt = txt.replace(/([.;])\s+(?=(?:Como recomendação|Diante do exposto|Diante disso|Reforçamos|Ressaltamos|Recomendamos|Portanto|Dessa forma|Desta forma|Sendo assim|Por fim|Vale ressaltar|Adicionalmente)\b)/gi, '$1\n');
+
+  const lines = txt.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+  const listRe  = /^[-–*•]\s*(.+)$/;
+  const numRe   = /^(\d{1,2})\s*[).\-–]\s*(.+)$/;
+  const labelRe = /^((?:Opção|Opcao|Etapa|Passo|Item)\s*\d+|[^:]{1,40}?)\s*:\s*(.+)$/i;
+
+  let html = '';
+  let buffer = [];
+
+  function flushList() {
+    if (!buffer.length) return;
+    html += '<ul class="body-list">';
+    buffer.forEach((it) => {
+      const m = it.text.match(labelRe);
+      if (m && /^(Opção|Opcao|Etapa|Passo|Item)/i.test(m[1])) {
+        html += '<li><span class="li-marker">&bull;</span><span class="li-label">' +
+                escHtml(m[1]) + ':</span> ' + escHtml(m[2]) + '</li>';
+        return;
+      }
+      html += '<li><span class="li-marker">' + escHtml(it.marker) + '</span>' + escHtml(it.text) + '</li>';
+    });
+    html += '</ul>';
+    buffer = [];
+  }
+
+  lines.forEach(line => {
+    const mList = line.match(listRe);
+    const mNum  = line.match(numRe);
+    if (mList) {
+      buffer.push({ marker: '\u2022', text: mList[1].trim() });
+    } else if (mNum) {
+      buffer.push({ marker: mNum[1] + '.', text: mNum[2].trim() });
+    } else {
+      flushList();
+      const cls = opts.noIndent ? 'body-text no-indent' : 'body-text';
+      html += '<div class="' + cls + '">' + escHtml(line) + '</div>';
+    }
+  });
+  flushList();
+  return html;
+}
+
+// Init with 3 empty slots
+addImage(); addImage(); addImage();
+
+// ---- Live objective preview ----
+function updateObjPreview() {
+  const comp = getVal('componente') || '<b>[COMPONENTE]</b>';
+  const wtg  = getVal('wtg')        || '<b>[WTG/TURBINA]</b>';
+  const el = document.getElementById('obj-preview');
+  if (el) el.innerHTML = 'Este documento apresenta o descritivo da falha ' + artigoDe(getVal('componente')) + ' ' + comp + ' da ' + wtg + ', juntamente com a disposição de engenharia recomendada para o caso.';
+}
+
+// ---- Helpers ----
+function fmtDate(val) {
+  if (!val) return '';
+  const [y,m,d] = val.split('-');
+  return d ? d+'/'+m+'/'+y : val;
+}
+
+function getVal(id) { return (document.getElementById(id)||{}).value||''; }
+
+// ---- Build print view ----
+function buildPrintView() {
+  const complexo   = getVal('complexo');
+  const cliente    = getVal('cliente');
+  const dataAlert  = fmtDate(getVal('data_alerta'));
+  const wtg        = getVal('wtg');
+  const comp       = getVal('componente');
+  const modelo     = getVal('modelo_turbina');
+  const fab        = infoVal('fabricante');
+  const dataFab    = infoVal('data_fab');
+  const dataPar    = infoVal('data_parada');
+  const motivo     = infoVal('motivo_parada');
+  const descritivo = getVal('descritivo');
+  const disposicao = getVal('disposicao');
+
+  const headerSub  = [complexo, wtg].filter(Boolean).join(' – ');
+
+  function pageHeader() {
+    return `<div class="page-header">
+      <img class="page-header-logo" src="${LOGO}" alt="Logo">
+      <div class="page-header-text">
+        <div class="hdr-title">RELATÓRIO DE FALHA DE GRANDE COMPONENTE</div>
+        <div class="hdr-sub">${escHtml(headerSub)}</div>
+      </div>
+      <div style="width:30mm"></div>
+    </div>`;
+  }
+
+  // ---- PAGE 1: CAPA ----
+  const page1 = `
+  <div class="doc-page">
+    <div class="page-content">
+      <div class="cover-logo"><img src="${LOGO}" alt="Logo"></div>
+      <div class="cover-title-block">
+        <div class="cover-title">RELATÓRIO DE FALHA DE GRANDE COMPONENTE - <span class="wtg-highlight">${escHtml(wtg||'WTG')}</span></div>
+        <div><div class="cover-component">${escHtml((comp||'COMPONENTE') + (ehAdendo() ? ' – ADENDO' : ''))}</div></div>
+      </div>
+      <div class="cover-meta-block">
+        <div><div class="cover-meta-line">${escHtml(dataAlert||'DD/MM/AAAA')}</div></div>
+        <div><div class="cover-meta-line">${escHtml([complexo, cliente].filter(Boolean).join(' - '))}</div></div>
+      </div>
+    </div>
+    <div class="page-footer"><span class="page-num">1</span></div>
+  </div>`;
+
+  // ---- PAGE 2: SUMÁRIO ----
+  const page2 = `
+  <div class="doc-page">
+    ${pageHeader()}
+    <div class="page-content">
+      <div class="sumario-title">SUMÁRIO</div>
+      <table class="sumario-table">
+        <tr>
+          <td class="sumario-num">1.</td>
+          <td class="sumario-text"><a href="#sec-objetivo" style="color:#000; text-decoration:none;">OBJETIVO</a></td>
+          <td class="sumario-page">3</td>
+        </tr>
+        <tr>
+          <td class="sumario-num">2.</td>
+          <td class="sumario-text"><a href="#sec-analise" style="color:#000; text-decoration:none;">ANÁLISE DA OCORRÊNCIA</a></td>
+          <td class="sumario-page">3</td>
+        </tr>
+        <tr>
+          <td class="sumario-num">3.</td>
+          <td class="sumario-text"><a href="#sec-disposicao" style="color:#000; text-decoration:none;">DISPOSIÇÃO DE ENGENHARIA</a></td>
+          <td class="sumario-page">4</td>
+        </tr>
+      </table>
+    </div>
+    <div class="page-footer"><span class="page-num">2</span></div>
+  </div>`;
+
+  // ---- PAGES 3+: CONTENT ----
+  // Build image blocks — use original index from images array for correct numbering
+  const filledImages = images.filter(img => img.src).map((img, idx) => ({ ...img, originalIdx: idx }));
+
+  let imageBlocks = '';
+  let i = 0;
+  while (i < filledImages.length) {
+    const num1 = String(filledImages[i].originalIdx + 1).padStart(2, '0');
+    const lbl1 = filledImages[i].caption ? 'Imagem ' + num1 + ' – ' + filledImages[i].caption : 'Imagem ' + num1;
+
+    if (i + 1 < filledImages.length) {
+      const num2 = String(filledImages[i+1].originalIdx + 1).padStart(2, '0');
+      const lbl2 = filledImages[i+1].caption ? 'Imagem ' + num2 + ' – ' + filledImages[i+1].caption : 'Imagem ' + num2;
+      imageBlocks += `
+        <div class="doc-img-2col">
+          <div class="img-block">
+            <img src="${filledImages[i].src}" alt="">
+            <div class="img-label">${escHtml(lbl1)}</div>
+          </div>
+          <div class="img-block">
+            <img src="${filledImages[i+1].src}" alt="">
+            <div class="img-label">${escHtml(lbl2)}</div>
+          </div>
+        </div>`;
+      i += 2;
+    } else {
+      imageBlocks += `
+        <div class="doc-img-1col">
+          <div class="img-block">
+            <img src="${filledImages[i].src}" alt="">
+            <div class="img-label">${escHtml(lbl1)}</div>
+          </div>
+        </div>`;
+      i += 1;
+    }
+  }
+
+  // Comp info lines
+  const compLines = `
+    <div class="comp-info-block">
+      <div class="comp-info-line"><b>Modelo da Turbina: </b>${escHtml(modelo||'Sem informação')}</div>
+      <div class="comp-info-line"><b>Componente: </b>${escHtml(comp||'—')}</div>
+      <div class="comp-info-line"><b>Fabricante/Modelo: </b>${escHtml(fab||'—')}</div>
+      <div class="comp-info-line"><b>Data Fabricação: </b>${escHtml(dataFab)}</div>
+      <div class="comp-info-line"><b>Data da Parada: </b>${escHtml(dataPar)}</div>
+      <div class="comp-info-line"><b>Motivo da Parada: </b>${escHtml(motivo||'—')}</div>
+    </div>`;
+
+  const objText = 'Este documento apresenta o descritivo da falha ' + artigoDe(comp) + ' ' + (comp || '[COMPONENTE]') + ' da ' + (wtg || '[WTG/TURBINA]') + ', juntamente com a disposição de engenharia recomendada para o caso.';
+
+  const page3 = `
+  <div class="doc-page-auto">
+    ${pageHeader()}
+    <div class="page-content">
+      <div id="sec-objetivo" class="section-num-header">
+        <div class="section-num-badge">1.</div>
+        <div class="section-heading">OBJETIVO</div>
+      </div>
+      <div class="body-text">${escHtml(objText)}</div>
+
+      <div style="margin-top:8mm;">
+        <div id="sec-analise" style="display:flex; align-items:flex-start; gap:6mm; margin-bottom:4mm;">
+          <div class="section-num-badge">2.</div>
+          <div class="section-heading">ANÁLISE DA OCORRÊNCIA</div>
+        </div>
+      </div>
+
+      <div class="sub-heading-inline">
+        <div class="num">2.1.</div>
+        <div class="txt">Informações do componente</div>
+      </div>
+      ${compLines}
+
+      <div class="sub-heading-inline" style="margin-top:5mm;">
+        <div class="num">2.2.</div>
+        <div class="txt">Descritivo do caso e evidências</div>
+      </div>
+
+      <div style="margin-top:3mm;">${formatBody(descritivo)}</div>
+
+      ${imageBlocks}
+    </div>
+  </div>`;
+
+  const page4 = `
+  <div class="doc-page-auto">
+    ${pageHeader()}
+    <div class="page-content">
+      <div id="sec-disposicao" class="disposicao-heading">
+        <div class="num">3.</div>
+        <div class="txt">DISPOSIÇÃO DE ENGENHARIA</div>
+      </div>
+      ${formatBody(disposicao)}
+    </div>
+    <div class="page-footer"><span class="page-num">4</span></div>
+  </div>`;
+
+  const pv = document.getElementById('print-view');
+  pv.innerHTML = page1 + page2 + page3 + page4;
+}
+
+// ---- Toggle preview ----
+let previewing = false;
+function togglePreview() {
+  previewing = !previewing;
+  if (previewing) buildPrintView();
+  document.getElementById('editor').style.display = previewing ? 'none' : '';
+  document.querySelector('.topbar').style.display = previewing ? 'none' : '';
+  document.querySelector('.page-hero').style.display = previewing ? 'none' : '';
+  const pv = document.getElementById('print-view');
+  if (previewing) pv.classList.add('showing'); else pv.classList.remove('showing');
+  pv.style.display = previewing ? '' : 'none';
+  document.getElementById('preview-btn-label').textContent = previewing ? '← Voltar' : 'Visualizar';
+  window.scrollTo(0,0);
+}
+
+// ---- Export PDF ----
+function exportPDF() {
+  if (window.__afValidar && !window.__afValidar()) return;
+  // 1. Captura os valores dos campos
+  const wtg = (document.getElementById('wtg').value || 'WTG').replace(/\s+/g, '_');
+  const componente = (document.getElementById('componente').value || 'COMPONENTE').replace(/\s+/g, '_');
+  const dataRaw = document.getElementById('data_alerta').value; // Formato YYYY-MM-DD
+  
+  // 2. Formata a data de YYYY-MM-DD para DD-MM-YYYY (opcional, mas comum no Brasil)
+  let dataFormatada = 'DATA';
+  if (dataRaw) {
+    const [y, m, d] = dataRaw.split('-');
+    dataFormatada = `${d}-${m}-${y}`;
+  }
+
+  // 3. Define o novo título do documento (que será o nome do PDF)
+  document.title = `Alerta_de_Falha_${ehAdendo() ? 'Adendo_' : ''}${wtg}_${componente.replace(/\+/g, 'e')}_${dataFormatada}`;
+
+  // 4. Prossegue com a exportação
+  if (!previewing) togglePreview();
+  setTimeout(() => window.print(), 200);
+}
+
+window.addEventListener('beforeprint', () => buildPrintView());
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+    e.preventDefault();
+    exportPDF();
+  }
+});
+</script>
+<!-- ==================== v4: BASE DE DISPOSIÇÕES POR COMPONENTE (AUREN) ==================== -->
+<script>
+/* =====================================================================
+   ALERTA DE FALHA · v4 — Base de disposições por componente (Auren)
+   - Componente: lista fechada (ou "Outro"). Subcomponente só libera
+     depois do componente e filtra as disposições.
+   - Disposição: só aparecem os modelos do componente selecionado
+     (recomendados para o subcomponente primeiro) + situações gerais.
+   - Base levantada dos alertas emitidos (ver campo "Base" de cada modelo).
+   - Trechos entre [COLCHETES] bloqueiam a emissão até serem preenchidos.
+   ===================================================================== */
+(function () {
+  function $(id) { return document.getElementById(id); }
+  function v(id) { return ($(id) && $(id).value || '').trim(); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  var DB = {"comps": [{"nome": "Gerador", "art": "do", "subs": ["Wye Ring", "Cabos do relead", "Wye Ring e cabos do relead", "Estator (enrolamentos)", "Rotor (bandagem / corpo magnético)", "Circuito / caixa de ligação do estator"]}, {"nome": "Gearbox", "art": "da", "subs": ["Estágio planetário", "Estágio intermediário", "HSS (eixo de alta velocidade)", "Rolamento do HSS", "Engrenagem LSIS / HSIS", "Carcaça / parafusos de fechamento", "Contaminação do óleo (limalha no filtro)"]}, {"nome": "Main Bearing", "art": "do", "subs": ["Pista externa", "Roletes", "Borda do rolamento", "Deslocamento axial / contato hub–bedplate"]}, {"nome": "Pitch Bearing", "art": "do", "subs": ["Trinca no anel", "Gaiola (fragmentos)", "Retentor danificado / ausente", "Danos internos (graxa com limalha / ruído)", "Infiltração de água"]}, {"nome": "Pitch Gear", "art": "da", "subs": ["Desgaste avançado (> 7 mm)", "Dente quebrado"]}, {"nome": "Yaw Drive", "art": "do", "subs": ["Pinhão solar do 4º estágio", "Porta-planetas", "Conjunto motor/redutora", "Mais de um yaw drive", "Set completo de yaw drives"]}, {"nome": "Acoplamento Flexível", "art": "do", "subs": ["Lâminas flexíveis", "Espaçador"]}], "disp": [{"id": "GER-01", "comp": "Gerador", "subs": ["Wye Ring", "Cabos do relead", "Wye Ring e cabos do relead", "*"], "titulo": "Avaliação por empresa terceirizada (reparo uptower × substituição)  · caso Auren", "cond": "DT", "texto": "Diante do exposto, esta máquina passa a ser classificada como nova DT (Down Turbine), devendo permanecer fora de operação até a avaliação de uma equipe terceirizada especializada em geradores, a qual irá definir a viabilidade de reparo uptower. Caso o reparo não seja considerado viável, ou caso sua execução não tenha êxito, será necessária a substituição integral do componente.", "origem": "JOA01-02 (09/2026), PEL-03 (08/2026), AMT-02 (09/2026), JOA15-10 (09/2026), JOA09-04 (10/2026), JOA04-11 (10/2026), EBR02-02 (01/2026)", "auren": true}, {"id": "GER-02", "comp": "Gerador", "subs": ["Wye Ring", "Cabos do relead", "Wye Ring e cabos do relead"], "titulo": "Reparo definido após avaliação/laudo  · caso Auren", "cond": "DT", "texto": "Diante desse cenário, a turbina deverá permanecer em condição de Down Turbine (DT) até que sejam concluídos os reparos necessários, incluindo [ESCOPO DO REPARO]. Somente após a conclusão dos reparos e a aprovação dos ensaios elétricos de validação, a turbina deverá ser liberada para retorno à operação.", "origem": "EBR02-02 (09/2026), JOA09-04 – adendo pós-laudo (10/2026)", "auren": true}, {"id": "GER-05", "comp": "Gerador", "subs": ["Circuito / caixa de ligação do estator"], "titulo": "Falha recorrente no circuito do estator  · caso Auren", "cond": "DT", "texto": "Diante do exposto e considerando a recorrência da falha associada ao circuito do estator, esta máquina passa a ser classificada como nova DT (Down Turbine), devendo permanecer fora de operação até [AÇÃO RECOMENDADA].", "origem": "DOU-10 (09/2026)", "auren": true}, {"id": "GBX-01", "comp": "Gearbox", "subs": ["Estágio planetário", "Carcaça / parafusos de fechamento", "*"], "titulo": "Falha catastrófica / colapso → substituição prioritária  · caso Auren", "cond": "DT", "texto": "Diante do exposto, considerando a falha catastrófica identificada na gearbox e a consequente impossibilidade de operação segura do componente, esta máquina passa a ser classificada como nova DT (Down Turbine), devendo permanecer fora de operação até a substituição da gearbox. Adicionalmente, recomenda-se que esta turbina seja incluída de forma prioritária na campanha de troca de grandes componentes.", "origem": "JOA15-11 (07/2026), JOA04-07 (09/2026), EBR07-01 (03/2026)", "auren": true}, {"id": "MBR-01", "comp": "Main Bearing", "subs": ["Roletes", "Borda do rolamento", "Pista externa", "Deslocamento axial / contato hub–bedplate", "*"], "titulo": "Dano crítico → DT até substituição  · caso Auren", "cond": "DT", "texto": "Diante do exposto, considerando a criticidade dos danos identificados no main bearing, recomenda-se a manutenção da turbina em condição de Down Turbine (DT) até que seja realizada a substituição do componente, mitigando o risco de evolução da falha e de danos secundários aos demais componentes associados.", "origem": "PIL-18 (08/2026), JOA16-16 (07/2026)", "auren": true}, {"id": "PBR-04", "comp": "Pitch Bearing", "subs": ["Retentor danificado / ausente", "Danos internos (graxa com limalha / ruído)"], "titulo": "Retentor comprometido + recorrência de falhas → DT  · caso Auren", "cond": "DT", "texto": "Diante do exposto, considerando a criticidade dos danos identificados no rolamento de pitch, a recorrência das falhas operacionais e o comprometimento da capacidade de lubrificação do componente, recomenda-se a manutenção da turbina em condição de Down Turbine (DT) até que seja realizada a substituição do rolamento de pitch da [ÁXIS].", "origem": "EBR02-03 (10/2026), EBR01-07 (08/2026), PEL-07 (08/2026)", "auren": true}, {"id": "ACP-01", "comp": "Acoplamento Flexível", "subs": ["*"], "titulo": "Rompimento → DT até substituição + investigação  · caso Auren", "cond": "DT", "texto": "Diante do exposto, esta máquina passa a ser classificada como nova DT (Down Turbine), devendo permanecer fora de operação até que todos os componentes danificados sejam substituídos. Adicionalmente, recomenda-se a realização de boroscopia da gearbox, com foco no HSS e em seus rolamentos, e a investigação da causa da falha do acoplamento.", "origem": "EBR06-07 (06/2026), AUG05-09 (08/2026)", "auren": true}, {"id": "ACP-02", "comp": "Acoplamento Flexível", "subs": ["*"], "titulo": "Rompimento → reposição fornecida pela Auren + boroscopia do HSS (sem CMS)  · caso Auren", "cond": "DT", "texto": "Diante do exposto, a turbina passa a ser classificada como DT (Down Turbine) e permanecerá indisponível até que todos os componentes danificados sejam substituídos por novos. Os componentes de reposição serão fornecidos pela Auren. Adicionalmente, recomenda-se a realização de boroscopia da gearbox, com foco no High Speed Shaft (HSS) e em seus rolamentos, uma vez que a turbina não dispõe de sistema de monitoramento de condição (CMS).", "origem": "EBR06-07 (09/2026)", "auren": true}, {"id": "GER-03", "comp": "Gerador", "subs": ["Estator (enrolamentos)"], "titulo": "Estator em curto à massa → substituição integral", "cond": "DT", "texto": "Conforme evidenciado nos ensaios apresentados, foi constatada continuidade elétrica entre as fases do estator e a massa do gerador, caracterizando a falha do sistema de isolamento dos enrolamentos estatóricos. Dessa forma, esta máquina passa a ser classificada como nova DT (Down Turbine), devendo permanecer fora de operação até a substituição integral do gerador.", "origem": "JOA16-04 (10/2026), JOA16-15 (09/2026)", "auren": false}, {"id": "GER-04", "comp": "Gerador", "subs": ["Rotor (bandagem / corpo magnético)"], "titulo": "Dano no rotor → substituição integral", "cond": "DT", "texto": "Diante do exposto, esta máquina passa a ser classificada como nova DT (Down Turbine), devendo permanecer fora de operação até a substituição integral do gerador, uma vez que os danos identificados no rotor ([MODO DE FALHA]) não permitem reparo uptower.", "origem": "JOA12-17 (08/2026)", "auren": false}, {"id": "GBX-02", "comp": "Gearbox", "subs": ["Estágio planetário", "Estágio intermediário", "Engrenagem LSIS / HSIS", "*"], "titulo": "Dano severo em boroscopia → DT até substituição", "cond": "DT", "texto": "Diante das condições identificadas durante a boroscopia, a recomendação da Engenharia é pela permanência da turbina em condição de Down Turbine (DT) até a substituição da gearbox. A severidade dos danos identificados no [SUBCOMPONENTE] representa risco de evolução dos danos e de ocorrência de novas fraturas durante a operação.", "origem": "JOA01-14 (09/2026)", "auren": false}, {"id": "GBX-03", "comp": "Gearbox", "subs": ["HSS (eixo de alta velocidade)", "Rolamento do HSS"], "titulo": "Dano no HSS → substituição do subcomponente", "cond": "DT", "texto": "Diante do exposto, esta máquina passa a ser classificada como nova DT (Down Turbine), devendo permanecer fora de operação até a substituição do [SUBCOMPONENTE] da gearbox.", "origem": "JOA16-15 (09/2026)", "auren": false}, {"id": "GBX-04", "comp": "Gearbox", "subs": ["HSS (eixo de alta velocidade)", "Engrenagem LSIS / HSIS"], "titulo": "Troca completa programada + substituição uptower interina do HSS", "cond": "DT", "texto": "Diante do exposto, a turbina é considerada DT (Down Turbine) e permanece na lista para substituição completa da gearbox. Como medida interina, até a mobilização para a troca do componente, será realizada a substituição uptower do [SUBCOMPONENTE], com o objetivo de restabelecer a operação até a execução da atividade de MCE.", "origem": "JOA16-07 (08/2025)", "auren": false}, {"id": "GBX-05", "comp": "Gearbox", "subs": ["Rolamento do HSS", "HSS (eixo de alta velocidade)"], "titulo": "Correção uptower + monitoramento + escalonamento", "cond": "DT", "texto": "Diante do exposto, esta máquina passa a ser classificada como nova DT (Down Turbine), devendo permanecer fora de operação até a correção uptower ([ESCOPO DA CORREÇÃO]). Após o retorno à operação, a gearbox deverá ser monitorada por temperatura, análise de óleo e vibração (CMS). Caso haja evolução do dano ou recorrência do alarme, a recomendação passa a ser a substituição do [SUBCOMPONENTE] e, em último caso, da gearbox.", "origem": "JOA01-08", "auren": false}, {"id": "GBX-06", "comp": "Gearbox", "subs": ["Engrenagem LSIS / HSIS", "Estágio planetário", "Contaminação do óleo (limalha no filtro)", "*"], "titulo": "Opera com limitação de potência até a troca", "cond": "Operação com restrição", "texto": "Diante do exposto, a máquina pode permanecer em operação com limitação de potência a [LIMITE]% da potência nominal, com o objetivo de mitigar a evolução dos danos até a substituição da gearbox. Caso haja evolução do dano ou recorrência de falhas, a turbina passará à condição de DT (Down Turbine).", "origem": "JOA01-01 (08/2026), JOA01-14 – limitada antes da DT (10/2026)", "auren": false}, {"id": "GBX-07", "comp": "Gearbox", "subs": ["*"], "titulo": "Dano categorizado → campanha + monitoramento", "cond": "Operação normal monitorada", "texto": "Diante do exposto, a máquina pode seguir em operação, com o dano classificado como [CATEGORIA], sob monitoramento por CMS, análise de óleo e boroscopias periódicas. Recomenda-se a inclusão da gearbox na campanha de substituição [CAMPANHA]. Caso seja identificada evolução do dano, a disposição será reavaliada.", "origem": "JOA04-07 – histórico CAT03 (2026), JOA01-01 – CAT03 campanha 2027", "auren": false}, {"id": "MBR-02", "comp": "Main Bearing", "subs": ["Borda do rolamento", "Deslocamento axial / contato hub–bedplate", "*"], "titulo": "Estava limitada → passa a DT", "cond": "DT", "texto": "Diante do exposto, considerando a evolução dos danos em relação à condição anterior (turbina limitada a [LIMITE]% desde [DATA]), esta máquina passa a ser classificada como nova DT (Down Turbine), devendo permanecer fora de operação até a completa substituição do main bearing.", "origem": "ASB06-03 (02/2026)", "auren": false}, {"id": "MBR-03", "comp": "Main Bearing", "subs": ["Pista externa", "*"], "titulo": "CAT03 → campanha + monitoramento", "cond": "Operação normal monitorada", "texto": "Diante da recorrência da falha e dos danos identificados no main bearing, a turbina foi classificada como [CATEGORIA] e incluída na campanha de substituição [CAMPANHA]. Até a execução da substituição, será realizado o acompanhamento da condição do componente, considerando o comportamento das temperaturas, a recorrência do alarme EM81, a condição da graxa e a distância hub–bedplate. Caso haja evolução, a disposição será reavaliada.", "origem": "JOA05-08 (10/2026)", "auren": false}, {"id": "MBR-04", "comp": "Main Bearing", "subs": ["Pista externa", "*"], "titulo": "Já em campanha → opera em capacidade nominal com monitoramento remoto", "cond": "Operação normal monitorada", "texto": "Reforçamos a necessidade de substituição deste componente, atualmente contemplado na campanha [CAMPANHA]. Considerando o nível de dano, o histórico de evolução deste tipo de falha e a possibilidade de acompanhamento remoto (análise de vibração e drift do drive train), a turbina poderá operar em capacidade nominal até nova orientação da Engenharia.", "origem": "ASB08-01 (02/2026)", "auren": false}, {"id": "MBR-05", "comp": "Main Bearing", "subs": ["*"], "titulo": "DT + cenários de execução da troca", "cond": "DT", "texto": "Diante do exposto, recomendamos a manutenção da turbina em condição de Down Turbine (DT) até que seja realizada a substituição do main bearing. Para a execução da troca, foram identificados os cenários abaixo, a serem definidos em conjunto sob os aspectos operacional, gerencial e de engenharia:\n- Opção 1: [OPÇÃO 1]\n- Opção 2: [OPÇÃO 2]", "origem": "JOA16-16 (07/2026)", "auren": false}, {"id": "PBR-01", "comp": "Pitch Bearing", "subs": ["Trinca no anel"], "titulo": "Trinca → campanha MCE + prioridade + inspeção mensal", "cond": "Operação normal monitorada", "texto": "Diante do exposto, recomendamos a inclusão deste componente na campanha [CAMPANHA], com a substituição do set de pitch bearings. Quanto à prioridade, considerando o tempo de operação com a trinca, recomendamos [PRIORIDADE]. De forma preventiva, a turbina entrará no ciclo de inspeções mensais para acompanhamento da evolução do dano.", "origem": "AUG04-17 (06/2026)", "auren": false}, {"id": "PBR-02", "comp": "Pitch Bearing", "subs": ["Trinca no anel"], "titulo": "Segunda trinca na mesma áxis → DT", "cond": "DT", "texto": "Diante da identificação de uma segunda trinca na mesma áxis, esta máquina passa a ser classificada como nova DT (Down Turbine), devendo permanecer fora de operação até a substituição do pitch bearing.", "origem": "JOA04-08 – critério definido (04/2026)", "auren": false}, {"id": "PBR-03", "comp": "Pitch Bearing", "subs": ["Gaiola (fragmentos)", "Danos internos (graxa com limalha / ruído)"], "titulo": "Fragmentos / danos internos → substituição na campanha + limitação de pitch", "cond": "Operação com restrição", "texto": "Diante do exposto, recomendamos a substituição do(s) pitch bearing(s) da(s) [ÁXIS], incluído(s) na campanha de substituição [CAMPANHA]. Com o objetivo de reduzir os esforços sobre os componentes, foi implementada a limitação do ângulo de pitch. Até a execução da intervenção, a turbina poderá permanecer em operação sob condição limitada, com acompanhamento da Engenharia para monitoramento da evolução da condição.", "origem": "JOA16-15 (10/2026), JOA01-01 (09/2026)", "auren": false}, {"id": "PBR-05", "comp": "Pitch Bearing", "subs": ["Retentor danificado / ausente", "Infiltração de água"], "titulo": "Ausência de retentor / água → substituição na campanha", "cond": "Operação normal monitorada", "texto": "Diante do exposto, reforçamos a necessidade de substituição do pitch bearing, já contemplada na campanha [CAMPANHA]. Até a substituição, a turbina permanece sob acompanhamento, com relubrificação e inspeção do sistema de pitch por oportunidade.", "origem": "JOA15-02 (03/2026)", "auren": false}, {"id": "PGR-01", "comp": "Pitch Gear", "subs": ["Desgaste avançado (> 7 mm)"], "titulo": "Desgaste avançado → limitação de pitch + reparo por solda", "cond": "Operação com restrição", "texto": "Com o objetivo de mitigar riscos de falha do sistema de pitch e evitar danos adicionais a componentes associados, foi realizada a limitação da angulação de pitch da turbina, de forma a impedir a operação na região desgastada da cremalheira. Diante do estágio avançado do dano e considerando a ausência de outros modos de falha no pitch bearing, a recomendação técnica é o reparo por solda da cremalheira da [ÁXIS].", "origem": "JOA05-10 (06/2026), JOA01-17 (09/2026)", "auren": false}, {"id": "PGR-02", "comp": "Pitch Gear", "subs": ["Dente quebrado", "*"], "titulo": "Dente quebrado → limitação + inspeção completa (preliminar)", "cond": "Operação com restrição", "texto": "Diante dessa condição e com o objetivo de mitigar o risco de falha do sistema de pitch, foi realizada a limitação da angulação de pitch da turbina, impedindo a operação na região danificada da engrenagem. Será realizada inspeção completa dos rolamentos de pitch das três áxis; após a conclusão, será compartilhada a estratégia de reparo, indicando a viabilidade do reparo localizado ou a necessidade de substituição do componente.", "origem": "AUG04-12 (09/2026)", "auren": false}, {"id": "YAW-01", "comp": "Yaw Drive", "subs": ["Conjunto motor/redutora", "Porta-planetas", "*"], "titulo": "Opera com 03 drives → substituição do conjunto", "cond": "Operação com restrição", "texto": "Diante do exposto, recomenda-se a substituição do conjunto motor/redutora do yaw drive de posição [POSIÇÃO]. A turbina permanecerá em operação com os três yaw drives remanescentes até a substituição do componente, sob acompanhamento da condição operacional e da recorrência de alarmes relacionados ao sistema de yaw.", "origem": "ASB04-17 (10/2026)", "auren": false}, {"id": "YAW-02", "comp": "Yaw Drive", "subs": ["Pinhão solar do 4º estágio"], "titulo": "Substituição do pinhão do 4º estágio (aproveitamento da área pulmão)", "cond": "Operação com restrição", "texto": "Diante do exposto, recomendamos a substituição do pinhão do 4º estágio danificado, visando restabelecer a condição operacional com os 04 yaw drives. Na ausência do componente em estoque, será realizada inspeção nos redutores disponíveis na área pulmão, com o objetivo de verificar a disponibilidade de um pinhão em boas condições para utilização na unidade danificada.", "origem": "AUG04-03 (08/2026)", "auren": false}, {"id": "YAW-03", "comp": "Yaw Drive", "subs": ["Mais de um yaw drive", "Pinhão solar do 4º estágio", "Porta-planetas"], "titulo": "Sem número mínimo de drives → DT", "cond": "DT", "texto": "Diante do exposto, a turbina passa a ser classificada como Down Turbine (DT), uma vez que, na condição atual, não possui o número mínimo de yaw drives operacionais para retorno seguro à operação. Como medida corretiva, [AÇÃO CORRETIVA]. Após a conclusão da intervenção, a turbina retornará à condição operacional.", "origem": "JOA12-06 (08/2026)", "auren": false}, {"id": "YAW-04", "comp": "Yaw Drive", "subs": ["*"], "titulo": "Falta de material → alternativas técnicas", "cond": "Operação com restrição", "texto": "Diante do exposto, a máquina pode permanecer em operação com 03 yaw drives operacionais. Para o restabelecimento da condição operacional, as alternativas técnicas avaliadas são:\n- Opção 1: [OPÇÃO 1]\n- Opção 2: [OPÇÃO 2]", "origem": "JOA15-05 (09/2026), JOA12-15 (09/2026), JOA15-02 (08/2026)", "auren": false}, {"id": "YAW-05", "comp": "Yaw Drive", "subs": ["Set completo de yaw drives", "Porta-planetas", "*"], "titulo": "Falha recorrente / pós-reparo → set completo + investigação", "cond": "DT", "texto": "Diante da recorrência de falhas nos yaw drives desta turbina, recomenda-se a substituição do set completo de yaw drives. Paralelamente, será conduzida a investigação de causa raiz da falha, incluindo a avaliação de garantia junto ao fornecedor do reparo.", "origem": "JOA15-12 (05–09/2026)", "auren": false}], "gerais": [{"id": "GER-P", "comp": "*", "subs": ["*"], "titulo": "Preliminar (aguarda desmontagem / abertura / laudo)", "cond": "DT", "texto": "Diante do exposto, esta máquina passa a ser classificada como nova DT (Down Turbine), devendo permanecer fora de operação até a conclusão do diagnóstico. Esta é uma disposição preliminar: como próximo passo, [PRÓXIMO PASSO]. Após a conclusão, a disposição será atualizada por meio de adendo.", "origem": "JOA03-07, EBR04-13, AUG04-12"}, {"id": "GER-D", "comp": "*", "subs": ["*"], "titulo": "Já estava em DT por outro motivo", "cond": "DT", "texto": "Diante do exposto, a máquina permanece em DT (Down Turbine), já parada por [MOTIVO ANTERIOR], e deverá permanecer fora de operação também até [AÇÃO RECOMENDADA].", "origem": "JOA16-15 – HSS com gerador em DT (09/2026)"}, {"id": "GER-F", "comp": "*", "subs": ["*"], "titulo": "Falha prematura → RCA / garantia", "cond": "DT", "texto": "Diante do exposto, esta máquina passa a ser classificada como nova DT (Down Turbine), devendo permanecer fora de operação até a substituição do componente. Considerando tratar-se de falha prematura, recomenda-se a análise de causa raiz (RCA) e o acionamento da garantia junto ao fornecedor.", "origem": "JOA15-12, JOA01-14"}]};
+
+  /* ---------- identificação: nunca trava ---------- */
+  window.infoVal = function (id) {
+    if (id === 'data_parada' && $('sem_parada').checked) return 'Não aplicável';
+    return v(id) || 'Sem informação';
+  };
+  window.ehAdendo = function () { return $('adendo').checked; };
+
+  /* ---------- componente / subcomponente ---------- */
+  var cs = $('comp_sel'), ss = $('sub_sel');
+  cs.innerHTML = '<option value="">Selecione…</option>' + DB.comps.map(function (c) { return '<option>' + esc(c.nome) + '</option>'; }).join('') + '<option value="__outro">Outro (digitar)</option>';
+  function compAtual() { return cs.value === '__outro' ? v('comp_outro') : cs.value; }
+  function subAtual() { return ss.value === '__outro' ? v('sub_outro') : (ss.value === '__na' ? '' : ss.value); }
+  function syncComp(keepSub) {
+    var c = cs.value, def = DB.comps.filter(function (x) { return x.nome === c; })[0];
+    $('w_comp_outro').style.display = c === '__outro' ? '' : 'none';
+    $('componente').value = compAtual();
+    if (!c) { ss.innerHTML = '<option value="">Selecione o componente primeiro</option>'; ss.disabled = true; }
+    else {
+      ss.disabled = false;
+      ss.innerHTML = '<option value="">Selecione…</option>' + (def ? def.subs.map(function (s) { return '<option>' + esc(s) + '</option>'; }).join('') : '') +
+        '<option value="__outro">Outro (digitar)</option><option value="__na">Não identificado</option>';
+      if (keepSub != null) ss.value = keepSub;
+    }
+    syncSub();
+    updateObjPreview();
+  }
+  function syncSub() {
+    $('w_sub_outro').style.display = ss.value === '__outro' ? '' : 'none';
+    montarModelos();
+  }
+  cs.addEventListener('change', function () { syncComp(); });
+  $('comp_outro').addEventListener('input', function () { $('componente').value = compAtual(); updateObjPreview(); montarModelos(); });
+  ss.addEventListener('change', syncSub);
+  $('sub_outro').addEventListener('input', montarModelos);
+
+  /* ---------- modelos filtrados ---------- */
+  var sel = $('modelo_disp'), LISTA = [];
+  function montarModelos() {
+    var c = cs.value, s = ss.value, rec = [], outros = [];
+    DB.disp.forEach(function (d) {
+      if (d.comp !== c) return;
+      if (s && s !== '__outro' && s !== '__na' && d.subs.indexOf(s) >= 0) rec.push(d); else outros.push(d);
+    });
+    LISTA = rec.concat(outros).concat(DB.gerais);
+    var h = '<option value="">' + (c ? 'Selecione…' : 'Selecione o componente no item 1') + '</option>';
+    var g = function (lbl, arr) { if (arr.length) h += '<optgroup label="' + esc(lbl) + '">' + arr.map(function (d) { return '<option value="' + d.id + '">' + esc(d.titulo) + '</option>'; }).join('') + '</optgroup>'; };
+    if (c && c !== '__outro') {
+      if (rec.length) { g('Recomendadas para ' + subAtual(), rec); g('Outras disposições – ' + c, outros); }
+      else g('Disposições – ' + c, outros);
+    }
+    if (c) g('Situações gerais', DB.gerais);
+    sel.innerHTML = h; sel.disabled = !c;
+    $('ins_disp').disabled = !c;
+    infoModelo();
+  }
+  function infoModelo() {
+    var d = LISTA.filter(function (x) { return x.id === sel.value; })[0];
+    $('modelo_info').innerHTML = d ? '<b>' + esc(d.id) + '</b> · Condição: <b>' + esc(d.cond) + '</b> · Base: ' + esc(d.origem) + '<div class="modelo-prev">' + esc(d.texto).replace(/\n/g, '<br>') + '</div>' : '';
+  }
+  sel.addEventListener('change', infoModelo);
+
+  $('ins_disp').onclick = function () {
+    var d = LISTA.filter(function (x) { return x.id === sel.value; })[0];
+    if (!d) { sel.focus(); return; }
+    var txt = d.texto, sub = subAtual();
+    if (sub) txt = txt.replace(/\[SUBCOMPONENTE\]/g, sub.replace(/\s*\(.*\)$/, ''));
+    var t = $('disposicao'), atual = t.value.trim(), ini = 0;
+    if (atual) { txt = txt.replace(/^Diante (do exposto|desse cenário|disso),?\s*/i, 'Adicionalmente, '); t.value = atual + '\n' + txt; ini = atual.length + 1; }
+    else t.value = txt;
+    sel.value = ''; infoModelo();
+    t.dispatchEvent(new Event('input', { bubbles: true }));
+    t.focus();
+    var m = colchetes(t.value.slice(ini))[0];
+    if (m) { var k = t.value.indexOf(m, ini); t.setSelectionRange(k, k + m.length); }
+  };
+
+  /* ---------- pendências [COLCHETES] ---------- */
+  function colchetes(txt) { return (txt.match(/\[[A-ZÀ-Ý0-9ºª][A-ZÀ-Ý0-9ºª \/–-]{1,40}\]/g) || []); }
+  function pendencias() {
+    var c = colchetes($('disposicao').value);
+    $('disposicao').classList.toggle('tem-pend', c.length > 0);
+    $('pend_disp').classList.toggle('on', c.length > 0);
+    $('pend_disp').textContent = c.length ? 'Falta completar: ' + c.join(', ') : '';
+  }
+  $('disposicao').addEventListener('input', pendencias);
+
+  window.__afValidar = function () {
+    var f = [];
+    if (!v('wtg')) f.push('WTG / Turbina');
+    if (!v('componente')) f.push('Componente');
+    if (!v('disposicao')) f.push('Disposição de engenharia');
+    var c = colchetes(v('disposicao') + '\n' + v('descritivo'));
+    if (c.length) f.push('trechos entre colchetes: ' + c.join(', '));
+    if (f.length) { alert('Antes de emitir, preencha:\n- ' + f.join('\n- ')); pendencias(); return false; }
+    return true;
+  };
+
+  /* ---------- rascunho automático ---------- */
+  var LSR = 'plataformaEng.alertaRascunho.' + (window.__AF_CLIENTE__ || (/auren/i.test(document.title) ? 'auren' : 'essentia'));
+  var CAMPOS = ['complexo', 'cliente', 'data_alerta', 'wtg', 'modelo_turbina', 'comp_sel', 'comp_outro', 'sub_sel', 'sub_outro', 'adendo', 'fabricante', 'data_fab',
+    'data_parada', 'sem_parada', 'motivo_parada', 'descritivo', 'disposicao', 'encaminhamentos'];
+  function hora(iso) { var d = new Date(iso); return ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
+  var tSalvar = null;
+  function salvarRascunho() {
+    clearTimeout(tSalvar);
+    tSalvar = setTimeout(function () {
+      var o = { em: new Date().toISOString(), f: {}, img: images.map(function (i) { return { src: i.src, caption: i.caption }; }) };
+      CAMPOS.forEach(function (id) { var el = $(id); o.f[id] = el.type === 'checkbox' ? el.checked : el.value; });
+      var nota = '';
+      try { localStorage.setItem(LSR, JSON.stringify(o)); }
+      catch (e) {
+        o.img = images.map(function (i) { return { src: null, caption: i.caption }; }); nota = ' (fotos não couberam no rascunho)';
+        try { localStorage.setItem(LSR, JSON.stringify(o)); } catch (e2) { nota = ' (não foi possível salvar)'; }
+      }
+      $('rasc-txt').innerHTML = 'Rascunho salvo automaticamente às <b>' + hora(o.em).slice(6) + '</b>' + nota + '.';
+    }, 500);
+  }
+  function restaurar() {
+    var o; try { o = JSON.parse(localStorage.getItem(LSR)); } catch (e) {}
+    if (!o || !o.f) return false;
+    CAMPOS.forEach(function (id) { if (id === 'sub_sel') return; var el = $(id); if (!(id in o.f)) return; if (el.type === 'checkbox') el.checked = !!o.f[id]; else el.value = o.f[id]; });
+    if (!o.f.comp_sel && o.f.componente) { cs.value = '__outro'; $('comp_outro').value = o.f.componente; }
+    syncComp(o.f.sub_sel || '');
+    if (Array.isArray(o.img) && o.img.length) { images.length = 0; o.img.forEach(function (i) { images.push({ src: i.src, caption: i.caption || '' }); }); renderImgList(); }
+    updateObjPreview(); pendencias();
+    $('rasc-txt').innerHTML = 'Rascunho de <b>' + hora(o.em) + '</b> restaurado. Para começar outro alerta, use "Novo alerta".';
+    return true;
+  }
+  $('rasc-novo').onclick = function () {
+    if (!confirm('Apagar todo o preenchimento atual e começar um novo alerta?')) return;
+    try { localStorage.removeItem(LSR); } catch (e) {}
+    location.reload();
+  };
+  if (!restaurar()) {
+    syncComp();
+    var d = new Date(); $('data_alerta').value = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+  }
+  $('editor').addEventListener('input', salvarRascunho);
+  $('editor').addEventListener('change', salvarRascunho);
+  var _rIL = window.renderImgList;
+  window.renderImgList = function () { _rIL(); salvarRascunho(); };
+})();
+
+</script>
+<!-- ==================== E-MAIL (Outlook) ==================== -->
+<script>window.__AF_CLIENTE__='auren';
+/* =====================================================================
+   ALERTA DE FALHA · E-MAIL PRONTO PARA ENVIO (Outlook)
+   Gera um rascunho .eml (X-Unsent) com o mesmo conteúdo do PDF:
+   descritivo, informações do componente, imagens no corpo (inline)
+   com legendas e disposição de engenharia. Destinatários por complexo,
+   editáveis e salvos neste navegador.
+   ===================================================================== */
+(function () {
+  var CLIENTE = window.__AF_CLIENTE__;           // 'essentia' | 'auren'
+  var LS = 'plataformaEng.alertaEmail.v1';
+  var PADRAO = {
+    'Chapada': {
+      para: 'natielisson.silva@essentiaenergia.com.br; joao.aysllan@essentiaenergia.com.br; antonio.ney@essentiaenergia.com.br; sandro.andrade@essentiaenergia.com.br; marcelo.guedes@essentiaenergia.com.br; marcelo.oliveira@essentiaenergia.com.br; gustavo.bettoni@essentiaenergia.com.br; paulo.angelo@essentiaenergia.com.br; augusto.prestes@essentiaenergia.com.br; erick.albuquerque@essentiaenergia.com.br; paulo.pinheiro@essentiaenergia.com.br; vinicius.modesto@essentiaenergia.com.br; breitner.tavares@essentiaenergia.com.br; joao.carvalho@essentiaenergia.com.br; pcm@essentiaenergia.com.br; performance@essentiaenergia.com.br',
+      cc: 'MxSouza@invenergy.com; WFe@invenergy.com; ADosSantos@invenergy.com; MDaSilva@invenergy.com; EssentiaAssetManagers@invenergy.com; BrazilEngineering@invenergy.com; RPatricio@invenergy.com; BFortes@invenergy.com; TMaia@invenergy.com; VCaires@invenergy.com; HPachelli@invenergy.com; Brazilicc@invenergy.com; GxSouza@invenergy.com; ASalgado@invenergy.com; RSouza@invenergy.com; VDeSouza@invenergy.com; rlucio@invenergy.com; rbsilva@invenergy.com; CNogueira@invenergy.com; rsoares@invenergy.com'
+    },
+    'Asa Branca': {
+      para: 'breitner.tavares@essentiaenergia.com.br; paulo.angelo@essentiaenergia.com.br; antonio.ney@essentiaenergia.com.br; sandro.andrade@essentiaenergia.com.br; marcelo.guedes@essentiaenergia.com.br; joao.aysllan@essentiaenergia.com.br; bruno.oliveira@essentiaenergia.com.br; erick.albuquerque@essentiaenergia.com.br; paulo.pinheiro@essentiaenergia.com.br; gustavo.bettoni@essentiaenergia.com.br; augusto.prestes@essentiaenergia.com.br; paulo.oliveira@essentiaenergia.com.br; marcelo.oliveira@essentiaenergia.com.br; joao.carvalho@essentiaenergia.com.br; edivaldo.oliveira@essentiaenergia.com.br; pcm@essentiaenergia.com.br; performance@essentiaenergia.com.br',
+      cc: 'CDeMoura@invenergy.com; MCavalcanti@invenergy.com; EssentiaAssetManagers@invenergy.com; BrazilEngineering@invenergy.com; BFortes@invenergy.com; TMaia@invenergy.com; VCaires@invenergy.com; HPachelli@invenergy.com; Brazilicc@invenergy.com; RPatricio@invenergy.com; ASalgado@invenergy.com; GxSouza@invenergy.com; RSouza@invenergy.com; VDeSouza@invenergy.com; rbsilva@invenergy.com; rlucio@invenergy.com; rsoares@invenergy.com; CNogueira@invenergy.com'
+    },
+    'Caetés': {
+      para: 'cecilia.alencar@aurenenergia.com.br; leonardo.alves@aurenenergia.com.br; israel.pavani@aurenenergia.com.br; marcos.santos@aurenenergia.com.br; jose.neto@aurenenergia.com.br',
+      cc: 'alex.silva@aurenenergia.com.br; andre.schaskos@aurenenergia.com.br; gabriel.silva@aurenenergia.com.br; alisson.marciano@aurenenergia.com.br; BrazilEngineering@invenergy.com; LVentura@invenergy.com; ARossine@invenergy.com; TMaia@invenergy.com; TDeCarvalho@invenergy.com; TLima@invenergy.com; BFortes@invenergy.com; MPaolini@invenergy.com; RPatricio@invenergy.com; ASalgado@invenergy.com; GxSouza@invenergy.com; RSouza@invenergy.com; AxDaSilva@invenergy.com; Brazilicc@invenergy.com'
+    },
+    'Alto Sertão II': {
+      para: 'gustavo.novaes@aurenenergia.com.br; leonardo.alves@aurenenergia.com.br; israel.pavani@aurenenergia.com.br; marcos.santos@aurenenergia.com.br; evanilson.santos@aurenenergia.com.br',
+      cc: 'daniela.santos@aurenenergia.com.br; ivan.fidelis@aurenenergia.com.br; andre.schaskos@aurenenergia.com.br; BrazilEngineering@invenergy.com; LPaixao@invenergy.com; TMaia@invenergy.com; TDeCarvalho@invenergy.com; TLima@invenergy.com; BFortes@invenergy.com; MPaolini@invenergy.com; RPatricio@invenergy.com; ASalgado@invenergy.com; GxSouza@invenergy.com; RSouza@invenergy.com; AxDaSilva@invenergy.com; VLima@invenergy.com; Brazilicc@invenergy.com'
+    }
+  };
+  var COMPLEXOS = CLIENTE === 'auren' ? ['Caetés', 'Alto Sertão II'] : ['Chapada', 'Asa Branca'];
+
+  function cfg() { try { return JSON.parse(localStorage.getItem(LS)) || {}; } catch (e) { return {}; } }
+  function salvarCfg(o) { try { localStorage.setItem(LS, JSON.stringify(o)); } catch (e) {} }
+  function lista(cx) { var c = cfg(); return (c.listas && c.listas[cx]) || PADRAO[cx]; }
+  function $(id) { return document.getElementById(id); }
+  function e(s) { return escHtml(String(s == null ? '' : s)); }
+  function low(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+  function detectar() {
+    var t = low(getVal('complexo') + ' ' + getVal('wtg'));
+    if (/asa|\bab\s?\d|asb/.test(t)) return 'Asa Branca';
+    if (/chapada|joa|aug/.test(t)) return 'Chapada';
+    if (/alto|sertao|as2|amt|bor|cae-|dou|esp|mar|pel|pil|sep/.test(t) && !/caet|ebr/.test(t)) return 'Alto Sertão II';
+    if (/caet|ebr/.test(t)) return 'Caetés';
+    return COMPLEXOS[0];
+  }
+  function saudacao() { var h = new Date().getHours(); return (h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite') + ', Prezados!'; }
+  function assuntoPadrao() {
+    var comp = getVal('componente') || '[COMPONENTE]', wtg = getVal('wtg') || '[WTG]';
+    return (ehAdendo() ? 'Adendo - ' : '') + (CLIENTE === 'auren' ? 'Relatório de Falha de Grande Componente - ' + comp + ' - ' + wtg : 'Alerta de Falha de ' + comp + ' - ' + wtg);
+  }
+
+  /* ---------- corpo do e-mail (mesmo conteúdo do PDF) ---------- */
+  var P = 'margin:0 0 12px 0;';
+  function paragrafos(raw) {
+    var txt = String(raw || '').replace(/\r\n/g, '\n').trim();
+    if (!txt) return '<p style="' + P + '">—</p>';
+    var linhas = txt.split('\n').map(function (l) { return l.trim(); }).filter(Boolean), h = '', lista = [];
+    function flush() { if (!lista.length) return; h += '<ul style="margin:0 0 12px 0;padding-left:24px">' + lista.map(function (x) { return '<li style="margin-bottom:4px">' + e(x) + '</li>'; }).join('') + '</ul>'; lista = []; }
+    linhas.forEach(function (l) {
+      var m = l.match(/^[-–*•]\s*(.+)$/) || l.match(/^\d{1,2}\s*[).\-–]\s*(.+)$/);
+      if (m) lista.push(m[1]); else { flush(); h += '<p style="' + P + '">' + e(l) + '</p>'; }
+    });
+    flush();
+    return h;
+  }
+  function imagensPreenchidas() {
+    return images.filter(function (i) { return i.src; }).map(function (img, idx) { return { src: img.src, caption: img.caption, n: idx + 1 }; });
+  }
+  function reduzir(src) {
+    return new Promise(function (ok) {
+      var im = new Image();
+      im.onload = function () {
+        var max = 560, w = im.naturalWidth, h = im.naturalHeight, k = Math.min(1, max / Math.max(w, 1));
+        var c = document.createElement('canvas'); c.width = Math.round(w * k); c.height = Math.round(h * k);
+        var g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(im, 0, 0, c.width, c.height);
+        ok({ data: c.toDataURL('image/jpeg', 0.85), w: c.width, h: c.height });
+      };
+      im.onerror = function () { ok(null); };
+      im.src = src;
+    });
+  }
+  async function montarCorpo(modoCid) {
+    var imgs = imagensPreenchidas(), anexos = [], blocos = '';
+    for (var i = 0; i < imgs.length; i++) {
+      var r = await reduzir(imgs[i].src); if (!r) continue;
+      var num = ('0' + imgs[i].n).slice(-2), leg = 'Imagem ' + num + (imgs[i].caption ? ' - ' + imgs[i].caption : '');
+      var cid = 'img' + num + '.' + Date.now() + '@plataforma';
+      anexos.push({ cid: cid, nome: 'imagem' + num + '.jpg', b64: r.data.split(',')[1] });
+      blocos += '<p style="margin:14px 0 4px 0"><img src="' + (modoCid ? 'cid:' + cid : r.data) + '" width="' + r.w + '" height="' + r.h + '" alt="' + e(leg) + '" style="display:block;max-width:100%;height:auto;border:0"></p>' +
+        '<p style="margin:0 0 14px 0"><b>' + e(leg) + '</b></p>';
+    }
+    var linha = function (k, v) { return '<b>' + k + ': </b>' + e(v || '—') + '<br>'; };
+    var html = '<div style="font-family:Aptos,Calibri,Arial,sans-serif;font-size:11pt;color:#000;line-height:1.4">' +
+      '<p style="' + P + '">' + e($('em-sau').value) + '</p>' +
+      paragrafos(getVal('descritivo')) +
+      '<p style="margin:16px 0 12px 0"><b>Informações do componente</b><br>' +
+      linha('Modelo da Turbina', getVal('modelo_turbina') || 'Sem informação') +
+      linha('Componente', getVal('componente')) +
+      linha('Fabricante/Modelo', infoVal('fabricante')) +
+      linha('Data Fabricação', infoVal('data_fab')) +
+      linha('Data da Parada', infoVal('data_parada')) +
+      linha('Motivo da Parada', infoVal('motivo_parada')) + '</p>' +
+      blocos +
+      '<p style="margin:16px 0 8px 0"><b>Disposição da Engenharia:</b></p>' +
+      paragrafos(getVal('disposicao')) +
+      (getVal('encaminhamentos').trim() ? '<p style="margin:16px 0 8px 0"><b>Encaminhamentos:</b></p>' + paragrafos(getVal('encaminhamentos')) : '') +
+      '<p style="margin:16px 0 0 0">' + e($('em-ass').value).replace(/\n/g, '<br>') + '</p>' +
+      '</div>';
+    return { html: html, anexos: anexos };
+  }
+
+  /* ---------- .eml (rascunho não enviado) ---------- */
+  function b64utf8(s) { return btoa(unescape(encodeURIComponent(s))); }
+  function quebra76(s) { return s.replace(/(.{76})/g, '$1\r\n'); }
+  function enderecos(s) { return String(s || '').split(/[;,\n]/).map(function (x) { return x.trim(); }).filter(Boolean).join(', '); }
+  async function gerarEml() {
+    var c = await montarCorpo(true), b = 'rel_' + Date.now().toString(36), a = 'alt_' + Date.now().toString(36);
+    var texto = $('em-sau').value + '\r\n\r\n' + getVal('descritivo') + '\r\n\r\nDisposição da Engenharia:\r\n' + getVal('disposicao') + (getVal('encaminhamentos').trim() ? '\r\n\r\nEncaminhamentos:\r\n' + getVal('encaminhamentos') : '');
+    var L = [
+      'X-Unsent: 1',
+      'To: ' + enderecos($('em-para').value),
+      'Cc: ' + enderecos($('em-cc').value),
+      'Subject: =?UTF-8?B?' + b64utf8($('em-ass-t').value) + '?=',
+      'MIME-Version: 1.0',
+      'Content-Type: multipart/related; boundary="' + b + '"; type="multipart/alternative"',
+      '',
+      '--' + b,
+      'Content-Type: multipart/alternative; boundary="' + a + '"',
+      '',
+      '--' + a,
+      'Content-Type: text/plain; charset="UTF-8"',
+      'Content-Transfer-Encoding: base64',
+      '',
+      quebra76(b64utf8(texto)),
+      '--' + a,
+      'Content-Type: text/html; charset="UTF-8"',
+      'Content-Transfer-Encoding: base64',
+      '',
+      quebra76(b64utf8('<html><head><meta charset="UTF-8"></head><body>' + c.html + '</body></html>')),
+      '--' + a + '--'
+    ];
+    c.anexos.forEach(function (x) {
+      L.push('--' + b, 'Content-Type: image/jpeg; name="' + x.nome + '"', 'Content-Transfer-Encoding: base64',
+        'Content-ID: <' + x.cid + '>', 'Content-Disposition: inline; filename="' + x.nome + '"', '', quebra76(x.b64));
+    });
+    L.push('--' + b + '--', '');
+    var nome = ($('em-ass-t').value || 'Alerta de Falha').replace(/[\\/:*?"<>|]+/g, '-').slice(0, 120) + '.eml';
+    var a2 = document.createElement('a'); a2.href = URL.createObjectURL(new Blob([L.join('\r\n')], { type: 'message/rfc822' }));
+    a2.download = nome; document.body.appendChild(a2); a2.click(); a2.remove();
+    setTimeout(function () { URL.revokeObjectURL(a2.href); }, 3000);
+    aviso('E-mail gerado: abra o arquivo <b>' + e(nome) + '</b> (barra de downloads). O Outlook abre o rascunho pronto para revisar e enviar. Lembre de anexar o PDF.');
+  }
+  async function copiarCorpo() {
+    var c = await montarCorpo(false);
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([c.html], { type: 'text/html' }), 'text/plain': new Blob([$('em-sau').value], { type: 'text/plain' }) })]);
+      aviso('Corpo copiado. No Outlook, clique no corpo da mensagem e cole (Ctrl+V).');
+    } catch (err) {
+      var d = document.createElement('div'); d.contentEditable = 'true'; d.style.position = 'fixed'; d.style.left = '-9999px'; d.innerHTML = c.html; document.body.appendChild(d);
+      var r = document.createRange(); r.selectNodeContents(d); var s = getSelection(); s.removeAllRanges(); s.addRange(r); document.execCommand('copy'); s.removeAllRanges(); d.remove();
+      aviso('Corpo copiado. No Outlook, clique no corpo da mensagem e cole (Ctrl+V).');
+    }
+  }
+  function abrirOutlookWeb() {
+    var u = 'https://outlook.office.com/mail/deeplink/compose?to=' + encodeURIComponent(enderecos($('em-para').value).replace(/, /g, ';')) +
+      '&cc=' + encodeURIComponent(enderecos($('em-cc').value).replace(/, /g, ';')) + '&subject=' + encodeURIComponent($('em-ass-t').value);
+    copiarCorpo().then(function () { window.open(u, '_blank', 'noopener'); aviso('Abrimos o Outlook na Web com destinatários e assunto. O corpo já está copiado: clique no corpo e cole (Ctrl+V).'); });
+  }
+  function aviso(h) { $('em-msg').innerHTML = h; $('em-msg').style.display = 'block'; }
+
+  /* ---------- interface ---------- */
+  var css = '.em-bd{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;display:none}.em-bd.on{display:block}' +
+    '.em-md{position:fixed;top:4vh;left:50%;transform:translateX(-50%);width:min(780px,94vw);max-height:92vh;background:#fff;border-radius:12px;z-index:10001;display:none;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.35);font-family:Inter,Arial,sans-serif}.em-md.on{display:flex}' +
+    '.em-h{padding:16px 20px;background:var(--navy);color:#fff;border-radius:12px 12px 0 0}.em-h h3{font-size:16px}.em-h p{font-size:12px;opacity:.75;margin-top:3px}' +
+    '.em-b{padding:16px 20px;overflow:auto;flex:1}.em-f{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}' +
+    '.em-b .field{margin-bottom:12px}.em-b textarea{min-height:64px;font-size:12px}.em-row{display:flex;gap:10px;align-items:flex-end}.em-row .field{flex:1}' +
+    '.em-btn{border:1px solid var(--border);background:#fff;color:var(--navy);padding:9px 14px;border-radius:7px;font-weight:600;font-size:12.5px;cursor:pointer;font-family:inherit}' +
+    '.em-btn.pri{background:var(--brand);border-color:var(--brand);color:#fff}.em-btn.lnk{border:0;background:none;text-decoration:underline;padding:4px}' +
+    '.em-msg{display:none;background:var(--brand-soft);border:1px solid var(--brand-soft-bd);color:var(--brand-soft-tx);border-radius:7px;padding:10px 12px;font-size:12.5px;margin-top:6px}' +
+    '.em-cnt{font-size:11px;color:var(--muted);font-weight:500;text-transform:none;letter-spacing:0}' +
+    '.btn-mail{background:#fff;color:var(--navy);border:none;padding:10px 20px;border-radius:7px;font-family:Inter,Arial,sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:7px}.btn-mail:hover{filter:brightness(.95)}' +
+    '@media print{.em-bd,.em-md{display:none!important}}';
+  var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+
+  var bar = document.querySelector('.actions-bar'), hint = bar.querySelector('.actions-hint');
+  var btn = document.createElement('button'); btn.className = 'btn-mail'; btn.type = 'button';
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Gerar e-mail';
+  bar.insertBefore(btn, hint);
+
+  var bd = document.createElement('div'); bd.className = 'em-bd';
+  var md = document.createElement('div'); md.className = 'em-md'; md.setAttribute('role', 'dialog');
+  md.innerHTML = '<div class="em-h"><h3>E-mail do alerta</h3><p>O corpo repete o conteúdo do PDF (descritivo, informações do componente, imagens com legenda e disposição de engenharia) e acrescenta os encaminhamentos operacionais, que não vão para o PDF.</p></div>' +
+    '<div class="em-b">' +
+    '<div class="em-row"><div class="field"><label for="em-cx">Lista de distribuição</label><select id="em-cx">' + COMPLEXOS.map(function (c) { return '<option>' + c + '</option>'; }).join('') + '</select></div>' +
+    '<button type="button" class="em-btn lnk" id="em-salvar">Salvar listas como padrão</button><button type="button" class="em-btn lnk" id="em-rest">Restaurar lista original</button></div>' +
+    '<div class="field"><label for="em-para">Para <span class="em-cnt" id="em-np"></span></label><textarea id="em-para"></textarea></div>' +
+    '<div class="field"><label for="em-cc">Cc <span class="em-cnt" id="em-nc"></span></label><textarea id="em-cc"></textarea></div>' +
+    '<div class="field"><label for="em-ass-t">Assunto</label><input type="text" id="em-ass-t"></div>' +
+    '<div class="em-row"><div class="field"><label for="em-sau">Saudação</label><input type="text" id="em-sau"></div></div>' +
+    '<div class="field"><label for="em-ass">Assinatura</label><textarea id="em-ass" placeholder="Atenciosamente,&#10;Nome | Cargo&#10;Invenergy | Al. Rio Negro, 1477, 4 andar - Barueri/SP - BR"></textarea></div>' +
+    '<div class="em-msg" id="em-msg"></div></div>' +
+    '<div class="em-f"><button type="button" class="em-btn" id="em-x">Fechar</button><button type="button" class="em-btn" id="em-copy">Copiar corpo</button><button type="button" class="em-btn" id="em-web">Outlook na Web</button><button type="button" class="em-btn pri" id="em-eml">Gerar e-mail para o Outlook</button></div>';
+  document.body.appendChild(bd); document.body.appendChild(md);
+
+  function contar() { $('em-np').textContent = '(' + enderecos($('em-para').value).split(', ').filter(Boolean).length + ')'; $('em-nc').textContent = '(' + enderecos($('em-cc').value).split(', ').filter(Boolean).length + ')'; }
+  function carregarLista() { var l = lista($('em-cx').value); $('em-para').value = l.para; $('em-cc').value = l.cc; contar(); }
+  function abrir() {
+    if (window.__afValidar && !window.__afValidar()) return;
+    var c = cfg();
+    $('em-cx').value = detectar(); carregarLista();
+    $('em-ass-t').value = assuntoPadrao(); $('em-sau').value = saudacao();
+    $('em-ass').value = c.assinatura || 'Atenciosamente,\n';
+    $('em-msg').style.display = 'none';
+    bd.classList.add('on'); md.classList.add('on');
+  }
+  function fechar() { bd.classList.remove('on'); md.classList.remove('on'); }
+  btn.onclick = abrir; $('em-x').onclick = fechar; bd.onclick = fechar;
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && md.classList.contains('on')) fechar(); });
+  $('em-cx').onchange = carregarLista;
+  $('em-para').oninput = contar; $('em-cc').oninput = contar;
+  $('em-ass').onchange = function () { var c = cfg(); c.assinatura = this.value; salvarCfg(c); };
+  $('em-salvar').onclick = function () { var c = cfg(); c.listas = c.listas || {}; c.listas[$('em-cx').value] = { para: $('em-para').value, cc: $('em-cc').value }; salvarCfg(c); aviso('Lista de <b>' + e($('em-cx').value) + '</b> salva como padrão neste navegador.'); };
+  $('em-rest').onclick = function () { var c = cfg(); if (c.listas) delete c.listas[$('em-cx').value]; salvarCfg(c); carregarLista(); aviso('Lista original de <b>' + e($('em-cx').value) + '</b> restaurada.'); };
+  $('em-eml').onclick = gerarEml; $('em-copy').onclick = copiarCorpo; $('em-web').onclick = abrirOutlookWeb;
+})();
+</script>
+</body>
+</html>
