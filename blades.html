@@ -594,8 +594,10 @@ function notasHmSZ(K) {
   cells.sort(function (a, b) { return b.ic - a.ic; });
   var tot = cells.reduce(function (s, c) { return s + c.ic; }, 0), top = cells.slice(0, 4), topv = top.reduce(function (s, c) { return s + c.ic; }, 0);
   var raiz = K.hm.SS ? (K.hm.SS[K.zonas[0]] || { ic: 0 }).ic + (K.hm.SS[K.zonas[1]] || { ic: 0 }).ic : 0;
+  if (!tot) return ['Sem danos com seção e Location válidas para calcular o heatmap.'];
+  var s5r = K.D.filter(function (x) { return x.sev === 5 && x.sec === 'SS' && (x.zona === K.zonas[0] || x.zona === K.zonas[1]); }).length;
   var a = ['Quatro zonas concentram ' + pc(topv, tot) + ' do IC: ' + top.map(function (c) { return c.s + ' ' + c.z.replace(/ \(.*\)/, ''); }).join(', ') + '.'];
-  if (K.s5) a.push('A raiz do lado SS pesa só ' + pc(raiz, tot, 1) + ' do IC, mas concentra ' + K.s5ss + ' dos ' + K.s5 + ' danos Sev 5: risco de baixa frequência e alta consequência.');
+  if (s5r) a.push('A raiz do lado SS (0–15 m) pesa só ' + pc(raiz, tot, 1) + ' do IC, mas concentra ' + s5r + ' dos ' + K.s5 + ' danos Sev 5: risco de baixa frequência e alta consequência.');
   return a;
 }
 function notasHmPq(K) {
@@ -603,8 +605,9 @@ function notasHmPq(K) {
   if (!ks.length) return [];
   var s5 = ks.slice().sort(function (a, b) { return cl[b].s5 - cl[a].s5; })[0], inc = ks.slice().sort(function (a, b) { return cl[b].inc - cl[a].inc; })[0];
   var a = [];
+  if (ks.length === 1 && !ks[0]) return [];
   if (cl[s5].s5) a.push(s5 + ' concentra ' + cl[s5].s5 + ' dos ' + K.s5 + ' Sev 5 e tem IC médio por WTG de ' + nf(cl[s5].ic / cl[s5].n) + ', contra ' + nf(K.icMed) + ' da frota.');
-  if (cl[inc].inc) { var p2 = cl[inc].w.filter(function (w) { return w.nivel === 'P2'; }).length; a.push(inc + ' concentra ' + cl[inc].inc + ' dos ' + K.inc + ' INCREASED, e ' + p2 + ' das ' + cl[inc].n + ' WTGs do grupo estão na P2.'); }
+  if (cl[inc].inc) { var p2 = cl[inc].w.filter(function (w) { return w.nivel === 'P2'; }).length; a.push(inc + ' concentra ' + cl[inc].inc + ' dos ' + K.inc + ' INCREASED' + (p2 ? ', e ' + p2 + ' das ' + cl[inc].n + ' WTGs do grupo estão na P2.' : '.')); }
   return a;
 }
 
@@ -720,23 +723,30 @@ function tabRankB(list, off, mxIc) {
       return '<tr><td>' + (off + i + 1) + '</td><td><b>' + esc(b.blade.replace(' - ', ' · ')) + '</b> <span class="fonte">' + esc(b.sn) + '</span></td><td class="n">' + (b.s5 ? '<span class="lvl P1">' + b.s5 + '</span>' : '–') + '</td><td class="n">' + b.s4 + '</td><td class="n"><b>' + nf(b.ic) + '</b></td><td><div class="icbar" style="width:' + (b.ic / mxIc * 100) + '%"></div></td></tr>';
     }).join('') + '</tbody></table>';
 }
+function avisoBase(K) {
+  var semSec = K.D.filter(function (x) { return !K.hm[x.sec]; }).length, semLoc = K.D.filter(function (x) { return x.zona === '—'; }).length;
+  var semCl = K.W.filter(function (w) { return !w.cl; }).length;
+  return { semSec: semSec, semLoc: semLoc, semCl: semCl };
+}
 function htmlHmSZ(K) {
+  var A = avisoBase(K), av = (A.semSec || A.semLoc) ? '<div class="aviso warn">' + nf(Math.max(A.semSec, A.semLoc)) + ' de ' + nf(K.danos) + ' danos estão sem ' + [A.semSec ? 'seção (LE/PS/SS/TE)' : '', A.semLoc ? 'Location (m)' : ''].filter(Boolean).join(' e ') + ' e não entram neste heatmap. Isso acontece quando a planilha foi importada com o mapeamento antigo: <b>reimporte a inspeção</b> em "Atualizar com inspeção ArthWind".</div>' : '';
   var mx = 0; Object.keys(K.hm).forEach(function (s) { K.zonas.forEach(function (z) { mx = Math.max(mx, K.hm[s][z].ic); }); });
   var h = '<div class="leg">' + HM_CORES.map(function (c) { return '<span style="background:#' + c[1] + ';color:#' + c[2] + '">' + c[0] + '</span>'; }).join('') + '</div><table class="hm"><thead><tr><th></th>' + K.zonas.map(function (z) { return '<th class="c">' + esc(z.replace('(Raiz)', '· raiz').replace('(Ponta)', '· ponta')) + '</th>'; }).join('') + '</tr></thead><tbody>';
   ['LE', 'PS', 'SS', 'TE'].forEach(function (s) {
     h += '<tr><td class="rh">' + s + '<small>' + SEC_DESC[s] + '</small></td>' + K.zonas.map(function (z) { var c = K.hm[s][z], l = HM_CORES[nivelHm(c.ic, mx)]; return '<td style="background:#' + l[1] + ';color:#' + l[2] + '">' + nf(c.ic) + '<small>Sev ≥ 4: ' + c.s4 + '</small></td>'; }).join('') + '</tr>';
   });
-  return h + '</tbody></table>';
+  return av + h + '</tbody></table>';
 }
 function htmlHmPq(K) {
-  var F = faixasPq(K), n = colsPq(K), cls = Object.keys(K.clusters).sort();
+  var F = faixasPq(K), n = colsPq(K), cls = Object.keys(K.clusters).sort(), A = avisoBase(K);
+  var av = A.semCl ? '<div class="aviso warn">' + A.semCl + ' WTG(s) sem grupo identificado (ID sem prefixo, ex.: "04" em vez de "EBR 3-04"). WTGs de grupos diferentes com o mesmo número ficam somadas. <b>Reimporte a inspeção</b> em "Atualizar com inspeção ArthWind".</div>' : '';
   var lg = ['< ' + F[0], F[0] + '–' + (F[1] - 1), F[1] + '–' + (F[2] - 1), F[2] + '–' + (F[3] - 1), '≥ ' + F[3]];
-  var h = '<div class="leg">' + HM_CORES.map(function (c, i) { return '<span style="background:#' + c[1] + ';color:#' + c[2] + '">' + lg[i] + '</span>'; }).join('') + '<span style="outline:2px solid #111;outline-offset:-2px">borda = P1</span></div><div style="overflow:auto"><table class="hm hm2"><thead><tr><th></th>';
+  var h = av + '<div class="leg">' + HM_CORES.map(function (c, i) { return '<span style="background:#' + c[1] + ';color:#' + c[2] + '">' + lg[i] + '</span>'; }).join('') + '<span style="outline:2px solid #111;outline-offset:-2px">borda = P1</span></div><div style="overflow:auto"><table class="hm hm2"><thead><tr><th></th>';
   for (var i = 1; i <= n; i++) h += '<th class="c">' + pad(i) + '</th>';
   h += '</tr></thead><tbody>';
   cls.forEach(function (c) {
     var m = {}; K.clusters[c].w.forEach(function (w) { m[+w.num] = w; });
-    h += '<tr><td class="rh">' + esc(c) + '</td>';
+    h += '<tr><td class="rh">' + (c ? esc(c) : '<span style="color:#b3261e">sem grupo</span>') + '</td>';
     for (var j = 1; j <= n; j++) { var w = m[j]; if (!w) { h += '<td style="background:#fff"></td>'; continue; } var l = HM_CORES[nivelPq(w.ic, F)]; h += '<td class="' + (w.nivel === 'P1' ? 'p1' : '') + '" style="background:#' + l[1] + ';color:#' + l[2] + ';cursor:pointer" title="' + esc(w.wtg + ' · IC ' + w.ic + ' · ' + nivelTxt(w.nivel)) + '" data-wtg="' + esc(w.wtg) + '">' + nf(w.ic) + '</td>'; }
     h += '</tr>';
   });
@@ -1010,21 +1020,48 @@ async function lerAbas(buf) {
 
 /* ---------------- mapeamento do formato ArthWind ---------------- */
 var ALIAS = {
-  wtg: ['wtg', 'turbine', 'turbine id', 'turbina', 'asset', 'wtg id', 'wtg name'],
-  letra: ['blade (letra)', 'blade', 'blade position', 'blade letter', 'pa', 'blade id'],
+  /* ordem = prioridade. Cabeçalhos são comparados sem espaços ("Location(m)" = "Location (m)").
+     Campos com validador (VALIDA) usam a 1ª coluna cujos valores passam no teste. */
+  wtg: ['wtg', 'wtg name', 'wtg sn', 'wtg identification', 'turbine', 'turbine id', 'asset', 'wtg id', 'turbina'],
+  letra: ['blade (letra)', 'blade letter', 'blade', 'blade position', 'pa', 'blade id'],
   sn: ['blade sn', 'blade serial', 'blade serial number', 'serial number', 'sn', 'blade s/n'],
-  secao: ['secao', 'side', 'section', 'surface', 'face', 'blade side'],
+  secao: ['secao', 'seção', 'section', 'blade section', 'side', 'blade side', 'face', 'surface'],
   loc: ['location (m)', 'location', 'distance (m)', 'distance', 'radius', 'position (m)', 'distance from root (m)', 'distance from root'],
   tipo: ['tipo', 'type', 'defect type', 'damage type'],
   sev: ['sev', 'severity', 'severidade'],
-  status: ['status', 'defect status', 'status kin'],
+  status: ['status kin', 'defect status', 'status'],
   comp: ['comprimento (mm)', 'length (mm)', 'length', 'size (mm)', 'size'],
   id: ['defect id', 'defect', 'id'],
   img: ['image url', 'image', 'photo', 'url', 'picture']
 };
-function mapearCab(cab) {
-  var m = {};
-  Object.keys(ALIAS).forEach(function (k) { var i = -1; ALIAS[k].some(function (a) { i = cab.indexOf(a); return i >= 0; }); if (i >= 0) m[k] = i; });
+var VALIDA = {
+  wtg: function (v) { return /[A-Za-z]/.test(v) && /\d+\s*$/.test(v); },            // "EBR 3-04" (não "04" nem "15490")
+  secao: function (v) { return /^(LE|TE|PS|SS)$/.test(secaoDe(v)); },
+  loc: function (v) { return v !== '' && !isNaN(+String(v).replace(',', '.')); },
+  comp: function (v) { return v !== '' && !isNaN(+String(v).replace(',', '.')); }
+};
+function chaveCab(h) { return low(h).replace(/\s+/g, ''); }
+function mapearCab(cab, linhas) {
+  var m = {}, C = cab.map(chaveCab), amostra = (linhas || []).slice(0, 300);
+  Object.keys(ALIAS).forEach(function (k) {
+    var cand = []; ALIAS[k].forEach(function (a) { var i = C.indexOf(chaveCab(a)); if (i >= 0 && cand.indexOf(i) < 0) cand.push(i); });
+    if (!cand.length) return;
+    if (!VALIDA[k] || !amostra.length) { m[k] = cand[0]; return; }
+    var melhor = null;
+    cand.some(function (i) {
+      var vs = amostra.map(function (r) { return norm((r || [])[i]); }).filter(function (v) { return v !== '' && !/^n\/?a$/i.test(v); });
+      var ok = vs.filter(VALIDA[k]).length;
+      if (vs.length && ok / vs.length >= 0.9) { melhor = i; return true; }
+      return false;
+    });
+    if (melhor != null) m[k] = melhor;
+  });
+  // WTG: sem coluna com o nome completo, monta "Complexo" + "Turbina" (ex.: EBR 3 + 04 = EBR 3-04)
+  if (m.wtg == null) {
+    var ic = C.indexOf('complexo'), it = C.indexOf('turbina');
+    if (ic >= 0 && it >= 0) m.wtgPartes = [ic, it];
+    else { var i0 = -1; ALIAS.wtg.some(function (a) { i0 = C.indexOf(chaveCab(a)); return i0 >= 0; }); if (i0 >= 0) m.wtg = i0; }
+  }
   return m;
 }
 function letraDe(v) { var s = norm(v).toUpperCase(), m = s.match(/([ABC])$/) || s.match(/\b([ABC])\b/); if (m) return m[1]; var n = s.match(/([123])$/); return n ? 'ABC'[+n[1] - 1] : s; }
@@ -1036,28 +1073,35 @@ async function lerInspecao(buf, nomeArq) {
     if (A.nomes.indexOf(pref[i]) < 0) continue;
     var T = await A.ler(pref[i]); if (!T) continue;
     for (var r = 0; r < Math.min(T.length, 12); r++) {
-      var c = (T[r] || []).map(function (h) { return low(h); }), m = mapearCab(c);
-      if (m.wtg != null && m.tipo != null && m.sev != null && m.id != null) { alvo = pref[i]; L = T; map = m; cab = c; ln = r; break; }
+      var c = (T[r] || []).map(function (h) { return low(h); }), m = mapearCab(c, T.slice(r + 1));
+      if ((m.wtg != null || m.wtgPartes) && m.tipo != null && m.sev != null && m.id != null) { alvo = pref[i]; L = T; map = m; cab = c; ln = r; break; }
     }
   }
   if (!alvo) throw new Error('Não encontrei uma aba no formato de inspeção (colunas WTG, Type, Severity e Defect ID). Abas do arquivo: ' + A.nomes.join(', '));
-  var regs = {}, semDano = 0, dup = 0, tot = 0, tiposNovos = {};
+  var regs = {}, semDano = 0, dup = 0, tot = 0, tiposNovos = {}, sevInv = 0, secInv = 0;
   L.slice(ln + 1).forEach(function (row) {
     if (!row || !row.length) return;
-    var g = function (k) { return map[k] == null ? '' : norm(row[map[k]]); };
+    var g = function (k) {
+      if (k === 'wtg' && map.wtgPartes) { var a = norm(row[map.wtgPartes[0]]), b = norm(row[map.wtgPartes[1]]); return a && b ? a + '-' + b : a || b; }
+      return map[k] == null ? '' : norm(row[map[k]]);
+    };
     if (!g('wtg') && !g('id')) return;
     tot++;
     var sev = parseInt(g('sev'), 10);
     if (!(sev >= 1)) { semDano++; return; }
-    var o = { wtg: g('wtg'), letra: letraDe(g('letra')), sn: g('sn'), secao: secaoDe(g('secao')), loc: g('loc') === '' ? null : +String(g('loc')).replace(',', '.'), tipo: g('tipo'), sev: Math.min(5, sev), status: g('status').toUpperCase(), comp: g('comp') === '' ? null : Math.round(+String(g('comp')).replace(',', '.')), id: g('id'), img: g('img') };
+    if (sev > 5) { sevInv++; return; }                        // ex.: 300 (erro de digitação) não vira Sev 5
+    var st = g('status').toUpperCase(); if (/^(N\/?A|-)$/.test(st)) st = '';
+    var sc = secaoDe(g('secao')); if (sc && !/^(LE|TE|PS|SS)$/.test(sc)) { secInv++; sc = ''; }
+    var o = { wtg: g('wtg'), letra: letraDe(g('letra')), sn: g('sn'), secao: sc, loc: g('loc') === '' ? null : +String(g('loc')).replace(',', '.'), tipo: g('tipo'), sev: sev, status: st, comp: g('comp') === '' ? null : Math.round(+String(g('comp')).replace(',', '.')), id: g('id'), img: g('img') };
     Object.keys(o).forEach(function (k) { if (o[k] === '' || o[k] == null || (typeof o[k] === 'number' && isNaN(o[k]))) delete o[k]; });
     if (!o.id) return;
     if (o.tipo && !DB.premissas.familias[o.tipo]) tiposNovos[o.tipo] = 1;
     if (regs[o.id]) dup++;
     regs[o.id] = o;
   });
-  var faltando = Object.keys(ALIAS).filter(function (k) { return map[k] == null; });
-  return { aba: alvo, regs: regs, total: tot, semDano: semDano, dup: dup, faltando: faltando, tiposNovos: Object.keys(tiposNovos) };
+  var faltando = Object.keys(ALIAS).filter(function (k) { return map[k] == null && !(k === 'wtg' && map.wtgPartes); });
+  var colunas = {}; Object.keys(map).forEach(function (k) { colunas[k] = k === 'wtgPartes' ? map[k].map(function (i) { return cab[i]; }).join(' + ') : cab[map[k]]; });
+  return { aba: alvo, regs: regs, total: tot, semDano: semDano, dup: dup, faltando: faltando, tiposNovos: Object.keys(tiposNovos), sevInv: sevInv, secInv: secInv, colunas: colunas };
 }
 async function hashArq(buf) { try { var d = await crypto.subtle.digest('SHA-256', buf); return Array.from(new Uint8Array(d)).map(function (x) { return ('0' + x.toString(16)).slice(-2); }).join(''); } catch (e) { return ''; } }
 
@@ -1145,7 +1189,9 @@ async function processar(f) {
     var buf = await f.arrayBuffer(), nv = await lerInspecao(buf, f.name), hs = await hashArq(buf);
     if (hs && DB.historico.some(function (h) { return h.hash === hs; })) toast('Atenção: este mesmo arquivo já foi importado antes.');
     DIFF = { nv: nv, f: f, hash: hs };
-    $('imp-b').innerHTML = '<div class="aviso info">Aba <b>' + esc(nv.aba) + '</b> reconhecida: ' + nf(Object.keys(nv.regs).length) + ' danos. Confirme o parque e a inspeção.</div>' + formMeta(f, nv);
+    $('imp-b').innerHTML = '<div class="aviso info">Aba <b>' + esc(nv.aba) + '</b> reconhecida: ' + nf(Object.keys(nv.regs).length) + ' danos. Confirme o parque e a inspeção.<br><span style="font-size:11.5px">Colunas usadas: WTG = <b>' + esc(nv.colunas.wtg || nv.colunas.wtgPartes || '—') + '</b> · Seção = <b>' + esc(nv.colunas.secao || '—') + '</b> · Location = <b>' + esc(nv.colunas.loc || '—') + '</b> · Sev = <b>' + esc(nv.colunas.sev || '—') + '</b></span></div>' +
+      (nv.faltando.length ? '<div class="aviso warn">Colunas não encontradas: <b>' + esc(nv.faltando.map(function (k) { return NOME_C[k] || k; }).join(', ')) + '</b>.' + (nv.faltando.indexOf('loc') >= 0 || nv.faltando.indexOf('secao') >= 0 ? ' Sem Seção/Location o heatmap seção × zona fica vazio.' : '') + '</div>' : '') +
+      (nv.sevInv || nv.secInv ? '<div class="aviso warn">' + [nv.sevInv ? nv.sevInv + ' linha(s) com severidade fora de 1–5 ignorada(s)' : '', nv.secInv ? nv.secInv + ' dano(s) com seção diferente de LE/PS/SS/TE (ficam sem seção)' : ''].filter(Boolean).join(' · ') + '.</div>' : '') + formMeta(f, nv);
     $('im-cmp').onclick = function () {
       var pq = norm($('im-pq').value); if (!pq) { toast('Informe o parque.'); return; }
       DIFF.pq = pq; DIFF.meta = { cli: $('im-cli').value, id: norm($('im-id').value) || f.name, ini: $('im-ini').value, fim: $('im-fim').value };
